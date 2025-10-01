@@ -35,20 +35,12 @@ public class CategoryController {
                                                    @RequestBody Category category) {
         Category updatedCategory = categoryService.updateCategory(categoryId, category);
 
-        if (updatedCategory == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
         return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/categories/{categoryId}")
     public ResponseEntity<Category> deleteCategory(@PathVariable long categoryId) {
         Category category = categoryService.deleteCategory(categoryId);
-
-        if (category == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(category, HttpStatus.OK);
     }

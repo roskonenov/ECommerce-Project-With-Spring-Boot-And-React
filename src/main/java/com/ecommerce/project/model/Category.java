@@ -1,16 +1,22 @@
 package com.ecommerce.project.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "categories")
 public class Category {
 
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public Category setId(long id) {
+    public Category setId(Long id) {
         this.id = id;
         return this;
     }

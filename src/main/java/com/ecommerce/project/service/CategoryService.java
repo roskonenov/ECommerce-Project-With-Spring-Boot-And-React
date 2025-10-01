@@ -10,7 +10,7 @@ public interface CategoryService {
 
     Category addCategory(Category category);
 
-    Category updateCategory(long categoryId, Category category);
+    Category updateCategory(Long categoryId, Category category);
 
-    Category deleteCategory(long categoryId);
+    Category deleteCategory(Long categoryId);
 }
