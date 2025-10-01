@@ -1,9 +1,13 @@
 package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(name = "categories")
+@Data
+@Accessors(chain = true)
 public class Category {
 
     @Id
@@ -11,23 +15,5 @@ public class Category {
     private Long id;
 
     private String name;
-
-    public Long getId() {
-        return id;
-    }
-
-    public Category setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Category setName(String name) {
-        this.name = name;
-        return this;
-    }
 }
 

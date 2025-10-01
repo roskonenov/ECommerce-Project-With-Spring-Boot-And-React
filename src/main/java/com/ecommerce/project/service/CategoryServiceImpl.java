@@ -30,20 +30,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category updateCategory(Long categoryId, Category category) {
-        return categoryRepository.save(
-                categoryRepository
-                        .findById(categoryId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"))
-                        .setName(category.getName())
-        );
+        return categoryRepository.findById(categoryId)
+                .map(c -> c.setName(category.getName()))
+                .map(categoryRepository::save)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
     }
 
     @Override
     public Category deleteCategory(Long categoryId) {
-        return categoryRepository.deleteByCategory(
-                categoryRepository
-                        .findById(categoryId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"))
-        );
+        return categoryRepository.findById(categoryId)
+                .map(categoryRepository::deleteByCategory)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
     }
 }
