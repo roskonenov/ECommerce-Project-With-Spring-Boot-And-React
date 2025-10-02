@@ -21,28 +21,39 @@ public class CategoryController {
 
     @GetMapping("/public/categories")
     public ResponseEntity<List<Category>> getAllCategories() {
-        List<Category> categories = categoryService.getAll();
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+
+        return new ResponseEntity<>(
+                categoryService.getAll(),
+                HttpStatus.OK
+        );
     }
 
     @PostMapping("/admin/categories")
     public ResponseEntity<Category> addCategory(@Valid @RequestBody Category category) {
-        Category savedCategory = categoryService.addCategory(category);
-        return new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(
+                categoryService.addCategory(category),
+                HttpStatus.CREATED
+        );
     }
 
     @PutMapping("/admin/categories/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@PathVariable long categoryId,
+    public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId,
                                                    @RequestBody Category category) {
-        Category updatedCategory = categoryService.updateCategory(categoryId, category);
 
-        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
+        return new ResponseEntity<>(
+                categoryService.updateCategory(categoryId, category),
+                HttpStatus.OK
+        );
     }
 
-    @DeleteMapping("/admin/categories/{categoryId}")
-    public ResponseEntity<Category> deleteCategory(@PathVariable long categoryId) {
-        Category category = categoryService.deleteCategory(categoryId);
+    @DeleteMapping("/admin/categories/{categoryI" +
+            "d}")
+    public ResponseEntity<Category> deleteCategory(@PathVariable Long categoryId) {
 
-        return new ResponseEntity<>(category, HttpStatus.OK);
+        return new ResponseEntity<>(
+                categoryService.deleteCategory(categoryId),
+                HttpStatus.OK
+        );
     }
 }

@@ -1,8 +1,11 @@
 package com.ecommerce.project.repositories;
 
 import com.ecommerce.project.model.Category;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
@@ -11,4 +14,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
         deleteById(category.getId());
         return category;
     }
+
+    Optional<Category> findByName(String name);
 }
