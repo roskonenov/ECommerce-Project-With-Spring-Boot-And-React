@@ -1,13 +1,12 @@
 package com.ecommerce.project.controller;
 
-import com.ecommerce.project.model.Category;
+import com.ecommerce.project.payload.CategoryDTO;
+import com.ecommerce.project.payload.CategoryResponse;
 import com.ecommerce.project.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -20,7 +19,7 @@ public class CategoryController {
     }
 
     @GetMapping("/public/categories")
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<CategoryResponse> getAllCategories() {
 
         return new ResponseEntity<>(
                 categoryService.getAll(),
@@ -29,27 +28,26 @@ public class CategoryController {
     }
 
     @PostMapping("/admin/categories")
-    public ResponseEntity<Category> addCategory(@Valid @RequestBody Category category) {
+    public ResponseEntity<CategoryDTO> addCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
 
         return new ResponseEntity<>(
-                categoryService.addCategory(category),
+                categoryService.addCategory(categoryDTO),
                 HttpStatus.CREATED
         );
     }
 
     @PutMapping("/admin/categories/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId,
-                                                   @RequestBody Category category) {
-
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long categoryId,
+                                                   @Valid @RequestBody CategoryDTO categoryDTO) {
         return new ResponseEntity<>(
-                categoryService.updateCategory(categoryId, category),
+                categoryService.updateCategory(categoryId, categoryDTO),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping("/admin/categories/{categoryI" +
             "d}")
-    public ResponseEntity<Category> deleteCategory(@PathVariable Long categoryId) {
+    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoryId) {
 
         return new ResponseEntity<>(
                 categoryService.deleteCategory(categoryId),
