@@ -7,7 +7,12 @@ import com.ecommerce.project.payload.CategoryDTO;
 import com.ecommerce.project.payload.CategoryResponse;
 import com.ecommerce.project.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -22,15 +27,30 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse getAll() {
-        return new CategoryResponse()
-                .setContent(
+    public CategoryResponse getAll(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+
+        Sort sorting = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Page<Category> categoryPage = Optional.of(
                         categoryRepository
-                                .findAll()
-                                .stream()
-                                .map(category -> modelMapper.map(category, CategoryDTO.class))
-                                .toList()
-                );
+                                .findAll(PageRequest.of(pageNumber, pageSize, sorting))
+                )
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new APIException("No categories found!"));
+
+        return new CategoryResponse()
+                .setContent(categoryPage
+                        .stream()
+                        .map(category -> modelMapper.map(category, CategoryDTO.class))
+                        .toList()
+                )
+                .setPageNumber(categoryPage.getNumber())
+                .setPageSize(categoryPage.getSize())
+                .setTotalElements(categoryPage.getTotalElements())
+                .setTotalPages(categoryPage.getTotalPages())
+                .setLastPage(categoryPage.isLast());
     }
 
     @Override
