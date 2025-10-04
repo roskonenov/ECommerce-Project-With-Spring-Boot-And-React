@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
                                 .findAll(PageRequest.of(pageNumber, pageSize, sorting))
                 )
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No categories found!"));
+                .orElseThrow(() -> new APIException("No categories found!", HttpStatus.OK));
 
         return new CategoryResponse()
                 .setContent(categoryPage

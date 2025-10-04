@@ -30,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
                 productRepository.save(
                         modelMapper.map(productDTO, Product.class)
                                 .setImage("defaultImage")
-                                .setSpecialPrice(productDTO.getPrice() - ((productDTO.getDiscount() * 0.01) * productDTO.getPrice()))
+                                .setSpecialPrice(calculateSpecialPrice(productDTO.getPrice(), productDTO.getDiscount()))
                                 .setCategory(categoryRepository.findById(categoryId)
                                         .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId)))
                 ),
@@ -48,5 +48,37 @@ public class ProductServiceImpl implements ProductService {
                         .map(product -> modelMapper.map(product, ProductDTO.class))
                         .toList()
                 );
+    }
+
+    @Override
+    public ProductResponse getAllProductsByCategory(Long categoryId) {
+
+        List<Product> products = productRepository.findByCategoryOrderByPriceAsc(
+                categoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId))
+        );
+
+        return new ProductResponse()
+                .setContent(products
+                        .stream()
+                        .map(product -> modelMapper.map(product, ProductDTO.class))
+                        .toList()
+                );
+    }
+
+    @Override
+    public ProductResponse getAllProductsByKeyword(String keyword) {
+
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(keyword);
+        return new ProductResponse()
+                .setContent(products
+                        .stream()
+                        .map(product -> modelMapper.map(product, ProductDTO.class))
+                        .toList()
+                );
+    }
+
+    private double calculateSpecialPrice(double price, double discount) {
+        return price - (discount * 0.01) * price;
     }
 }

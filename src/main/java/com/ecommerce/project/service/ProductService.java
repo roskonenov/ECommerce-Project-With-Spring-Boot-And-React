@@ -7,4 +7,8 @@ public interface ProductService {
     ProductDTO createProduct(Long categoryId, ProductDTO productDTO);
 
     ProductResponse getAllProducts();
+
+    ProductResponse getAllProductsByCategory(Long categoryId);
+
+    ProductResponse getAllProductsByKeyword(String keyword);
 }

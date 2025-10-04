@@ -35,4 +35,24 @@ public class ProductController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/public/categories/{categoryId}/products")
+    public ResponseEntity<ProductResponse> getProductsByCategory(
+            @PathVariable Long categoryId
+    ) {
+        return new ResponseEntity<>(
+                productService.getAllProductsByCategory(categoryId),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/public/products/keyword/{keyword}")
+    public ResponseEntity<ProductResponse> getProductsByKeyword(
+            @PathVariable String keyword
+    ) {
+        return new ResponseEntity<>(
+                productService.getAllProductsByKeyword(keyword),
+                HttpStatus.OK
+        );
+    }
 }
