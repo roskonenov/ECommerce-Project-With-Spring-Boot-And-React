@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepository.findByName(categoryDTO.getName())
                 .ifPresent(existingCategory -> {
-                    throw new APIException("Category with name \"" + categoryDTO.getName() + "\" already exists");
+                    throw new APIException(String.format("Category with name '%s' already exists", existingCategory.getName()));
                 });
 
         return modelMapper.map(
