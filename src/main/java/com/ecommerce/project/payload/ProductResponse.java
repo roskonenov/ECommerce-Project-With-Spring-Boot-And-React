@@ -5,13 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDTO {
+public class ProductResponse {
 
-    private Long id;
-
-    private String name;
+    private List<ProductDTO> content;
 }
