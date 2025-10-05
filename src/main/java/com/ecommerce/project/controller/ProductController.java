@@ -6,6 +6,9 @@ import com.ecommerce.project.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
@@ -18,10 +21,8 @@ public class ProductController {
     }
 
     @PostMapping("/admin/categories/{categoryId}/product")
-    public ResponseEntity<ProductDTO> createProduct(
-            @PathVariable Long categoryId,
-            @RequestBody ProductDTO productDTO
-    ) {
+    public ResponseEntity<ProductDTO> createProduct(@PathVariable Long categoryId,
+                                                    @RequestBody ProductDTO productDTO) {
         return new ResponseEntity<>(
                 productService.createProduct(categoryId, productDTO),
                 HttpStatus.CREATED
@@ -37,9 +38,7 @@ public class ProductController {
     }
 
     @GetMapping("/public/categories/{categoryId}/products")
-    public ResponseEntity<ProductResponse> getProductsByCategory(
-            @PathVariable Long categoryId
-    ) {
+    public ResponseEntity<ProductResponse> getProductsByCategory(@PathVariable Long categoryId) {
         return new ResponseEntity<>(
                 productService.getAllProductsByCategory(categoryId),
                 HttpStatus.OK
@@ -47,9 +46,7 @@ public class ProductController {
     }
 
     @GetMapping("/public/products/keyword/{keyword}")
-    public ResponseEntity<ProductResponse> getProductsByKeyword(
-            @PathVariable String keyword
-    ) {
+    public ResponseEntity<ProductResponse> getProductsByKeyword(@PathVariable String keyword) {
         return new ResponseEntity<>(
                 productService.getAllProductsByKeyword(keyword),
                 HttpStatus.OK
@@ -57,12 +54,27 @@ public class ProductController {
     }
 
     @PutMapping("/admin/products/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(
-            @PathVariable Long productId,
-            @RequestBody ProductDTO productDTO
-    ) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId,
+                                                    @RequestBody ProductDTO productDTO) {
         return new ResponseEntity<>(
                 productService.updateProduct(productId, productDTO),
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/admin/products/{productId}")
+    public ResponseEntity<ProductDTO> removeProduct(@PathVariable Long productId) {
+        return new ResponseEntity<>(
+                productService.deleteProduct(productId),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/products/{productId}/image")
+    public ResponseEntity<ProductDTO> updateProductImage(@PathVariable Long productId,
+                                                         @RequestParam MultipartFile image) throws IOException {
+        return new ResponseEntity<>(
+                productService.updateProductImage(productId, image),
                 HttpStatus.OK
         );
     }

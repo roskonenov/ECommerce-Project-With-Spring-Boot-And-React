@@ -8,7 +8,9 @@ import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -17,11 +19,13 @@ public class ProductServiceImpl implements ProductService {
     private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ImageService imageService;
 
-    public ProductServiceImpl(ModelMapper modelMapper, ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductServiceImpl(ModelMapper modelMapper, ProductRepository productRepository, CategoryRepository categoryRepository, ImageService imageService) {
         this.modelMapper = modelMapper;
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.imageService = imageService;
     }
 
     @Override
@@ -95,6 +99,29 @@ public class ProductServiceImpl implements ProductService {
                         .orElseThrow(() -> new ResourceNotFoundException("Product", "product id", productId)),
                 ProductDTO.class
         );
+    }
+
+    @Override
+    public ProductDTO deleteProduct(Long productId) {
+        return modelMapper.map(
+                productRepository.findById(productId)
+                        .map(productRepository::deleteByProduct)
+                        .orElseThrow(() -> new ResourceNotFoundException("Product", "product id", productId)),
+                ProductDTO.class
+        );
+    }
+
+    @Override
+    public ProductDTO updateProductImage(Long productId, MultipartFile image) throws IOException {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "product id", productId));
+
+        String imagePath = imageService.uploadImage(image);
+
+        return modelMapper.map(
+                productRepository.save(product.setImage(imagePath)),
+                ProductDTO.class);
     }
 
     private double calculateSpecialPrice(double price, double discount) {

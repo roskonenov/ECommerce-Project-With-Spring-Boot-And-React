@@ -10,6 +10,11 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    default Product deleteByProduct(Product product) {
+        deleteById(product.getId());
+        return product;
+    }
+
     List<Product> findByCategoryOrderByPriceAsc(Category category);
 
     List<Product> findByNameContainingIgnoreCase(String name);
