@@ -1,5 +1,6 @@
 package com.ecommerce.project.service;
 
+import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Product;
 import com.ecommerce.project.payload.ProductDTO;
@@ -7,11 +8,16 @@ import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -30,6 +36,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO createProduct(Long categoryId, ProductDTO productDTO) {
+
+        checkIfProductExist(productDTO.getName());
+
         return modelMapper.map(
                 productRepository.save(
                         modelMapper.map(productDTO, Product.class)
@@ -43,47 +52,83 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse getAllProducts() {
-        List<Product> products = productRepository.findAll();
+    public ProductResponse getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sorting = getSorting(sortBy, sortOrder);
+
+        Page<Product> categoryPage = Optional.of(
+                        productRepository
+                                .findAll(PageRequest.of(pageNumber, pageSize, sorting))
+                )
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
 
         return new ProductResponse()
-                .setContent(products
+                .setContent(categoryPage
                         .stream()
                         .map(product -> modelMapper.map(product, ProductDTO.class))
                         .toList()
-                );
+                ).setPageNumber(categoryPage.getNumber())
+                .setPageSize(categoryPage.getSize())
+                .setTotalElements(categoryPage.getTotalElements())
+                .setTotalPages(categoryPage.getTotalPages())
+                .setLastPage(categoryPage.isLast());
     }
 
     @Override
-    public ProductResponse getAllProductsByCategory(Long categoryId) {
+    public ProductResponse getAllProductsByCategory(Long categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
-        List<Product> products = productRepository.findByCategoryOrderByPriceAsc(
-                categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId))
-        );
+        Sort sorting = getSorting(sortBy, sortOrder);
+
+        Page<Product> productPage = Optional.of(
+                        productRepository.findByCategoryOrderByPriceAsc(
+                                categoryRepository.findById(categoryId)
+                                        .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId)),
+                                PageRequest.of(pageNumber, pageSize, sorting)
+                        ))
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
 
         return new ProductResponse()
-                .setContent(products
+                .setContent(productPage
                         .stream()
                         .map(product -> modelMapper.map(product, ProductDTO.class))
                         .toList()
-                );
+                ).setPageNumber(productPage.getNumber())
+                .setPageSize(productPage.getSize())
+                .setTotalElements(productPage.getTotalElements())
+                .setTotalPages(productPage.getTotalPages())
+                .setLastPage(productPage.isLast());
     }
 
     @Override
-    public ProductResponse getAllProductsByKeyword(String keyword) {
+    public ProductResponse getAllProductsByKeyword(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
-        List<Product> products = productRepository.findByNameContainingIgnoreCase(keyword);
+        Sort sorting = getSorting(sortBy, sortOrder);
+
+        Page<Product> productPage = Optional.of(
+                        productRepository.findByNameContainingIgnoreCase(
+                                keyword,
+                                PageRequest.of(pageNumber, pageSize, sorting)
+                        )
+                )
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
+
         return new ProductResponse()
-                .setContent(products
+                .setContent(productPage
                         .stream()
                         .map(product -> modelMapper.map(product, ProductDTO.class))
                         .toList()
-                );
+                ).setPageNumber(productPage.getNumber())
+                .setPageSize(productPage.getSize())
+                .setTotalElements(productPage.getTotalElements())
+                .setTotalPages(productPage.getTotalPages())
+                .setLastPage(productPage.isLast());
     }
 
     @Override
     public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
+        checkIfProductExist(productDTO.getName());
         return modelMapper.map(
                 productRepository.findById(productId)
                         .map(product -> {
@@ -126,5 +171,18 @@ public class ProductServiceImpl implements ProductService {
 
     private double calculateSpecialPrice(double price, double discount) {
         return price - (discount * 0.01) * price;
+    }
+
+    private void checkIfProductExist(String name) {
+        productRepository.findByName(name)
+                .ifPresent(existingProduct -> {
+                    throw new APIException("Product with name " + existingProduct.getName() + " already exists");
+                });
+    }
+
+    private static Sort getSorting(String sortBy, String sortOrder) {
+        return sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
     }
 }

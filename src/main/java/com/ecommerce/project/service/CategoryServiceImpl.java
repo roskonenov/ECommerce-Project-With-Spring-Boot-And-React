@@ -57,10 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDTO addCategory(CategoryDTO categoryDTO) {
 
-        categoryRepository.findByName(categoryDTO.getName())
-                .ifPresent(existingCategory -> {
-                    throw new APIException(String.format("Category with name '%s' already exists", existingCategory.getName()));
-                });
+        chekIfCategoryExist(categoryDTO.getName());
 
         return modelMapper.map(
                 categoryRepository.save(modelMapper.map(categoryDTO, Category.class)),
@@ -70,6 +67,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO updateCategory(Long categoryId, CategoryDTO categoryDTO) {
+
+        chekIfCategoryExist(categoryDTO.getName());
+
         return modelMapper.map(
                 categoryRepository.findById(categoryId)
                         .map(c -> c.setName(categoryDTO.getName()))
@@ -86,5 +86,12 @@ public class CategoryServiceImpl implements CategoryService {
                         .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId)),
                 CategoryDTO.class
         );
+    }
+
+    private void chekIfCategoryExist(String name) {
+        categoryRepository.findByName(name)
+                .ifPresent(existingCategory -> {
+                    throw new APIException(String.format("Category with name '%s' already exists", existingCategory.getName()));
+                });
     }
 }

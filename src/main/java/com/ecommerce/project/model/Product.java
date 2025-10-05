@@ -1,6 +1,7 @@
 package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,20 +19,26 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
     private String image;
 
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
+    @PositiveOrZero(message = "Product quantity must be greater than or equal to 0")
     private Integer quantity;
 
-    private double price;
 
-    private double discount;
+    @Column(nullable = false)
+    private Double price;
 
-    private double specialPrice;
+    private Double discount;
+
+    private Double specialPrice;
 
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 }

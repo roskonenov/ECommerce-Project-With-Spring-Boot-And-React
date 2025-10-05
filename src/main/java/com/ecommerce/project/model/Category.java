@@ -20,7 +20,6 @@ public class Category {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @NotBlank(message = "Category name cannot be blank")
     private String name;
 }
 
