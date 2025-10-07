@@ -2,6 +2,7 @@ package com.ecommerce.project.service;
 
 import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
+import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
 import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.payload.ProductResponse;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -78,15 +78,16 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse getAllProductsByCategory(Long categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
         Sort sorting = getSorting(sortBy, sortOrder);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId));
 
         Page<Product> productPage = Optional.of(
                         productRepository.findByCategoryOrderByPriceAsc(
-                                categoryRepository.findById(categoryId)
-                                        .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId)),
+                                category,
                                 PageRequest.of(pageNumber, pageSize, sorting)
                         ))
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
+                .orElseThrow(() -> new APIException(String.format("Category '%s' does not have any products!", category.getName()), HttpStatus.OK));
 
         return new ProductResponse()
                 .setContent(productPage
@@ -112,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
                         )
                 )
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
+                .orElseThrow(() -> new APIException(String.format("No products found by keyword '%s'!", keyword), HttpStatus.OK));
 
         return new ProductResponse()
                 .setContent(productPage
