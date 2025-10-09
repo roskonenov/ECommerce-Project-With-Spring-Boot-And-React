@@ -2,6 +2,7 @@ package com.ecommerce.project.security.service;
 
 import com.ecommerce.project.repositories.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Data
+@AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private UserRepository userRepository;
