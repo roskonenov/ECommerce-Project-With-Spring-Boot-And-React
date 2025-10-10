@@ -48,4 +48,10 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "address_id"))
     @ToString.Exclude
     private List<Address> addresses;
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 }

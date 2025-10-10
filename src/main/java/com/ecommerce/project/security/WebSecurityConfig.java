@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,7 @@ public class WebSecurityConfig {
     private static final String[] AUTH_WHITELIST = {
             "/api/auth/**",
             "/v3/api-docs/**",
+            "/h2-console/**",
             "/swagger-ui/**",
             "/api/public/**",
             "/api/admin/**",
@@ -51,13 +53,15 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exseption ->
-                        exseption.authenticationEntryPoint(unauthorizedHandler()))
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(unauthorizedHandler()))
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(AUTH_WHITELIST).permitAll()
                                 .anyRequest().authenticated())
+                .headers(headers ->
+                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
