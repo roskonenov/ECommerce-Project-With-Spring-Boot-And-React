@@ -81,7 +81,6 @@ public class JwtUtils {
     }
 
     public void validateJwtToken(String token) throws JwtException {
-
             Jwts.parser()
                     .verifyWith(getSigningKey())
                     .build()

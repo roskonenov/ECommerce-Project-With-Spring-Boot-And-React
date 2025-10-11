@@ -1,12 +1,12 @@
 package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -28,9 +28,7 @@ public class Product {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @PositiveOrZero(message = "Product quantity must be greater than or equal to 0")
     private Integer quantity;
-
 
     @Column(nullable = false)
     private Double price;
@@ -39,13 +37,15 @@ public class Product {
 
     private Double specialPrice;
 
-    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private User user;
+
+    @OneToMany(mappedBy = "product",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private Set<CartItem> cartItems;
 }
