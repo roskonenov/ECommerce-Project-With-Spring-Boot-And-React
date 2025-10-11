@@ -87,4 +87,11 @@ public class JwtUtils {
                     .build()
                     .parseSignedClaims(token);
     }
+
+    public ResponseCookie getCleanJwtCookie() {
+        return ResponseCookie
+                .from(jwtCookie, null)
+                .path("/api")
+                .build();
+    }
 }

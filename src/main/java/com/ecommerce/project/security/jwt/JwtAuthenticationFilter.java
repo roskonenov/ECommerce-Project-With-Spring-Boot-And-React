@@ -35,8 +35,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         LOGGER.debug("JwtAuthenticationFilter called for URI: {}", request.getRequestURI());
             String jwtToken = jwtUtils.getJwtFromCookie(request);
 
-            if (jwtToken != null
-                    && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (jwtToken != null &&
+                    !jwtToken.isBlank() &&
+                    SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 jwtUtils.validateJwtToken(jwtToken);
 
