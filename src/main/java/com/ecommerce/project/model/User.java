@@ -2,6 +2,7 @@ package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
+@EqualsAndHashCode(exclude = {"cart", "products", "addresses"})
 public class User {
 
     @Id
@@ -53,6 +55,7 @@ public class User {
     @OneToOne(mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
             orphanRemoval = true)
+    @ToString.Exclude
     private Cart cart;
 
     public User(String username, String password, String email) {
