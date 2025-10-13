@@ -40,4 +40,14 @@ public class CartController {
                 HttpStatus.OK
         );
     }
+
+    @PutMapping("/products/{productId}/quantity/{operation}")
+    public ResponseEntity<CartDTO> updateCartProduct(@PathVariable Long productId,
+                                                     @PathVariable String operation) {
+        return new ResponseEntity<>(
+                cartService.updateProductQuantityInCart(productId,
+                        operation.equalsIgnoreCase("update") ? 1 : -1),
+                HttpStatus.OK
+        );
+    }
 }
