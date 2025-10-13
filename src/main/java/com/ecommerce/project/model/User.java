@@ -43,14 +43,14 @@ public class User {
             cascade = {CascadeType.MERGE, CascadeType.PERSIST},
             orphanRemoval = true)
     @ToString.Exclude
-    private Set<Product> products;
+    private List<Product> products;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "user_address",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id"))
     @ToString.Exclude
-    private Set<Address> addresses;
+    private List<Address> addresses;
 
     @OneToOne(mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
@@ -63,7 +63,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.roles = new HashSet<>();
-        this.products = new HashSet<>();
-        this.addresses = new HashSet<>();
+        this.products = new ArrayList<>();
+        this.addresses = new ArrayList<>();
     }
 }

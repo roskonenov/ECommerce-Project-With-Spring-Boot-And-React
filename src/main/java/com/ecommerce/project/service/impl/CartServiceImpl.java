@@ -17,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -69,6 +72,20 @@ public class CartServiceImpl implements CartService {
         cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProductPrice() * quantity));
         cartRepository.save(cart);
 
+        return mapCartToDTO(cart);
+    }
+
+    @Override
+    public List<CartDTO> getAll() {
+        return Optional.of(cartRepository.findAll()
+                        .stream()
+                        .map(this::mapCartToDTO)
+                        .toList()
+                ).filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new APIException("There are no existing carts"));
+    }
+
+    private CartDTO mapCartToDTO(Cart cart) {
         return modelMapper.map(cart, CartDTO.class)
                 .setProducts(cart
                         .getCartItems()

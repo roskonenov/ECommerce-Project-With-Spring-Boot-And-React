@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/carts")
 @RequiredArgsConstructor
@@ -20,6 +22,14 @@ public class CartController {
         return new ResponseEntity<>(
                 cartService.addProductToCart(productId, quantity),
                 HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CartDTO>> getAllCarts() {
+        return new ResponseEntity<>(
+                cartService.getAll(),
+                HttpStatus.OK
         );
     }
 }

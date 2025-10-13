@@ -31,5 +31,5 @@ public class Cart {
     private List<CartItem> cartItems = new ArrayList<>();
 
     @Column(name = "total_price")
-    private double totalPrice;
+    private Double totalPrice = 0.0;
 }

@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO createProduct(Long categoryId, ProductDTO productDTO) {
 
-        checkIfProductExist(productDTO.getName());
+        checkIfProductExist(productDTO);
 
         return modelMapper.map(
                 productRepository.save(
@@ -131,7 +131,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
-        checkIfProductExist(productDTO.getName());
+        checkIfProductExist(productDTO);
         return modelMapper.map(
                 productRepository.findById(productId)
                         .map(product -> {
@@ -176,8 +176,9 @@ public class ProductServiceImpl implements ProductService {
         return price - (discount * 0.01) * price;
     }
 
-    private void checkIfProductExist(String name) {
-        productRepository.findByName(name)
+    private void checkIfProductExist(ProductDTO productDTO) {
+        productRepository.findByName(productDTO.getName())
+                .filter(product -> !product.getId().equals(productDTO.getId()))
                 .ifPresent(existingProduct -> {
                     throw new APIException("Product with name " + existingProduct.getName() + " already exists");
                 });

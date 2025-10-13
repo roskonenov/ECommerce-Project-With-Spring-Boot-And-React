@@ -26,9 +26,9 @@ public class CartItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private int quantity;
+    private Integer quantity;
 
-    private double discount;
+    private Double discount;
 
-    private double productPrice;
+    private Double productPrice;
 }
