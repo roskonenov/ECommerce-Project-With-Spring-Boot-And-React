@@ -45,12 +45,12 @@ public class CartServiceImpl implements CartService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "product id", productId));
 
+        if (product.getQuantity() <= 0) {
+            throw new APIException(product.getName() + " is not available");
+        }
         if (product.getQuantity() < quantity) {
             throw new APIException("Please make an order of the " + product.getName()
                     + " quantity less than or equal to " + product.getQuantity() + ".");
-        }
-        if (product.getQuantity() <= 0) {
-            throw new APIException(product.getName() + " is not available");
         }
 
         cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
@@ -66,7 +66,7 @@ public class CartServiceImpl implements CartService {
                         .setDiscount(product.getDiscount())
                         .setProductPrice(product.getSpecialPrice()));
 
-//        Optional reducing to quantity, depends on application logic!!!
+//        Optional reducing to product quantity, depends on application logic!!!
 //        product.setQuantity(product.getQuantity() - quantity);
         cart.getCartItems().add(cartItem);
         cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProductPrice() * quantity));
@@ -83,6 +83,14 @@ public class CartServiceImpl implements CartService {
                         .toList()
                 ).filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new APIException("There are no existing carts"));
+    }
+
+    @Override
+    public CartDTO getUsersCart() {
+        return cartRepository
+                .findByUserEmail(authUtil.loggedInUserEmail())
+                .map(this::mapCartToDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "user email", authUtil.loggedInUserEmail()));
     }
 
     private CartDTO mapCartToDTO(Cart cart) {

@@ -32,4 +32,12 @@ public class CartController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/users/cart")
+    public ResponseEntity<CartDTO> getLoggedUsersCart() {
+        return new ResponseEntity<>(
+                cartService.getUsersCart(),
+                HttpStatus.OK
+        );
+    }
 }
