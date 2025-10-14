@@ -102,13 +102,29 @@ public class CartServiceImpl implements CartService {
                 .setDiscount(product.getDiscount()));
 
         if (savedCartItem.getQuantity() <= 0) {
-            cartItemRepository.deleteByCartItem(savedCartItem);
             cart.getCartItems().remove(savedCartItem);
         }
 
         return mapCartToDTO(
                 cartRepository.save(cart
                         .setTotalPrice(cart.getTotalPrice() + savedCartItem.getProductPrice() * quantity))
+        );
+    }
+
+    @Override
+    @Transactional
+    public CartDTO deleteProductFromCart(Long cartId, Long productId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "cart id", cartId));
+
+        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cartId, productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "product id", productId));
+
+        cart.getCartItems().remove(cartItem);
+
+        return mapCartToDTO(
+                cartRepository.save(cart
+                        .setTotalPrice(cart.getTotalPrice() - cartItem.getProductPrice() * cartItem.getQuantity()))
         );
     }
 
