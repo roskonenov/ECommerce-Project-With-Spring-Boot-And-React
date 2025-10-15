@@ -31,6 +31,7 @@ public class CartServiceImpl implements CartService {
     private final ModelMapper modelMapper;
 
     private final AuthUtil authUtil;
+
     private final ProductRepository productRepository;
 
     @Override
@@ -87,11 +88,11 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartDTO updateProductQuantityInCart(Long productId, int quantity) {
-        Product product = getValidProduct(productId, quantity);
-
         Cart cart = cartRepository
                 .findByUserEmail(authUtil.loggedInUserEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Cart", "user email", authUtil.loggedInUserEmail()));
+
+        Product product = getValidProduct(productId, quantity);
 
         CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
                 .orElseThrow(() -> new APIException("Product " + product.getName() + " does not exist in cart!"));
@@ -120,12 +121,28 @@ public class CartServiceImpl implements CartService {
         CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cartId, productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "product id", productId));
 
+        cart.setTotalPrice(cart.getTotalPrice() - cartItem.getProductPrice() * cartItem.getQuantity());
+
         cart.getCartItems().remove(cartItem);
 
-        return mapCartToDTO(
-                cartRepository.save(cart
-                        .setTotalPrice(cart.getTotalPrice() - cartItem.getProductPrice() * cartItem.getQuantity()))
-        );
+        return mapCartToDTO(cartRepository.save(cart));
+    }
+
+    @Override
+    @Transactional
+    public void updateCartWithChangedProduct(Product product, Cart cart) {
+
+        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId())
+                .orElseThrow(() -> new APIException("Product " + product.getName() + " does not exist in cart!"));
+
+        cartRepository.save(cart.setTotalPrice(
+                cart.getTotalPrice() - (cartItem.getProductPrice() * cartItem.getQuantity())
+                + (product.getSpecialPrice() * cartItem.getQuantity())
+        ));
+
+        cartItemRepository.save(cartItem
+                .setProductPrice(product.getSpecialPrice())
+                .setDiscount(product.getDiscount()));
     }
 
     private Product getValidProduct(Long productId, Integer quantity) {

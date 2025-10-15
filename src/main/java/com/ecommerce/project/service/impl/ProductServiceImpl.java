@@ -6,8 +6,10 @@ import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
 import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.payload.ProductResponse;
+import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.repositories.ProductRepository;
+import com.ecommerce.project.service.CartService;
 import com.ecommerce.project.service.ImageService;
 import com.ecommerce.project.service.ProductService;
 import org.modelmapper.ModelMapper;
@@ -28,18 +30,22 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ImageService imageService;
+    private final CartService cartService;
+    private final CartRepository cartRepository;
 
-    public ProductServiceImpl(ModelMapper modelMapper, ProductRepository productRepository, CategoryRepository categoryRepository, ImageService imageService) {
+    public ProductServiceImpl(ModelMapper modelMapper, ProductRepository productRepository, CategoryRepository categoryRepository, ImageService imageService, CartService cartService, CartRepository cartRepository) {
         this.modelMapper = modelMapper;
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.imageService = imageService;
+        this.cartService = cartService;
+        this.cartRepository = cartRepository;
     }
 
     @Override
     public ProductDTO createProduct(Long categoryId, ProductDTO productDTO) {
 
-        checkIfProductExist(productDTO);
+        checkIfProductExist(productDTO, null);
 
         return modelMapper.map(
                 productRepository.save(
@@ -131,7 +137,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
-        checkIfProductExist(productDTO);
+        checkIfProductExist(productDTO, productId);
         return modelMapper.map(
                 productRepository.findById(productId)
                         .map(product -> {
@@ -141,6 +147,12 @@ public class ProductServiceImpl implements ProductService {
                                     .setPrice(productDTO.getPrice())
                                     .setDiscount(productDTO.getDiscount())
                                     .setSpecialPrice(calculateSpecialPrice(productDTO.getPrice(), productDTO.getDiscount()));
+
+                            cartRepository.findCartsByProductId(productId)
+                                    .ifPresent(carts -> carts
+                                            .forEach(cart -> cartService
+                                                    .updateCartWithChangedProduct(product, cart)));
+
                             return product;
                         })
                         .map(productRepository::save)
@@ -153,7 +165,13 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO deleteProduct(Long productId) {
         return modelMapper.map(
                 productRepository.findById(productId)
-                        .map(productRepository::deleteByProduct)
+                        .map(product -> {
+                            cartRepository.findCartsByProductId(productId)
+                                    .ifPresent(carts ->
+                                            carts.forEach(cart -> cartService.deleteProductFromCart(cart.getId(), productId)));
+                            productRepository.delete(product);
+                            return product;
+                        })
                         .orElseThrow(() -> new ResourceNotFoundException("Product", "product id", productId)),
                 ProductDTO.class
         );
@@ -176,9 +194,9 @@ public class ProductServiceImpl implements ProductService {
         return price - (discount * 0.01) * price;
     }
 
-    private void checkIfProductExist(ProductDTO productDTO) {
+    private void checkIfProductExist(ProductDTO productDTO, Long productId) {
         productRepository.findByName(productDTO.getName())
-                .filter(product -> !product.getId().equals(productDTO.getId()))
+                .filter(product -> !product.getId().equals(productId))
                 .ifPresent(existingProduct -> {
                     throw new APIException("Product with name " + existingProduct.getName() + " already exists");
                 });
