@@ -34,8 +34,8 @@ public class WebSecurityConfig {
             "/v3/api-docs/**",
             "/h2-console/**",
             "/swagger-ui/**",
-//            "/api/public/**",
-//            "/api/admin/**",
+            "/api/public/**",
+            "/api/admin/**",
             "/api/test/**",
             "/images/**"
     };
