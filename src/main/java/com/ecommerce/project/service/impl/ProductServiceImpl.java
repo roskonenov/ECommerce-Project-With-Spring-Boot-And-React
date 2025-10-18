@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.ecommerce.project.util.AppUtil.getSorting;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -200,11 +202,5 @@ public class ProductServiceImpl implements ProductService {
                 .ifPresent(existingProduct -> {
                     throw new APIException("Product with name " + existingProduct.getName() + " already exists");
                 });
-    }
-
-    private static Sort getSorting(String sortBy, String sortOrder) {
-        return sortOrder.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
     }
 }

@@ -15,9 +15,14 @@ public class AddressDTO {
 
     private String city;
 
+    private String state;
+
     private String street;
+
+    private String building;
+
+    private String apartment;
 
     private String postalCode;
 
-    private String state;
 }
