@@ -20,8 +20,6 @@ public class OrderItem {
 
     private Integer quantity;
 
-    private Double price;
-
     private Double discount;
 
     private Double orderedProductPrice;

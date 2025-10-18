@@ -21,22 +21,18 @@ public class Payment {
     @OneToOne(mappedBy = "payment", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Order order;
 
-    @Column(nullable = false)
+    @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
 
+    @Column(name = "pg_payment_id", nullable = false)
     private String pgPaymentId;
 
+    @Column(name = "pg_status", nullable = false)
     private String pgStatus;
 
+    @Column(name = "pg_response_message", nullable = false)
     private String pgResponseMessage;
 
+    @Column(name = "pg_name", nullable = false)
     private String pgName;
-
-    public Payment(Long id, String pgPaymentId, String pgStatus, String pgResponseMessage, String pgName) {
-        this.id = id;
-        this.pgPaymentId = pgPaymentId;
-        this.pgStatus = pgStatus;
-        this.pgResponseMessage = pgResponseMessage;
-        this.pgName = pgName;
-    }
 }

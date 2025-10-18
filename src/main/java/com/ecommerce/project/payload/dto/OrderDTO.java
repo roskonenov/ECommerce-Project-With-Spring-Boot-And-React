@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class OrderDTO {
 
     private Long id;
@@ -26,7 +28,7 @@ public class OrderDTO {
 
     private Double totalAmount;
 
-    private String orderStatus;
+    private String status;
 
     private Long addressId;
 }
