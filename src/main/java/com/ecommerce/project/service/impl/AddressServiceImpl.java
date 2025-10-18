@@ -1,16 +1,16 @@
 package com.ecommerce.project.service.impl;
 
 import com.ecommerce.project.exceptions.APIException;
+import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Address;
-import com.ecommerce.project.model.Product;
 import com.ecommerce.project.model.User;
 import com.ecommerce.project.payload.AddressDTO;
 import com.ecommerce.project.payload.AddressResponse;
-import com.ecommerce.project.payload.ProductDTO;
-import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.repositories.AddressRepository;
+import com.ecommerce.project.repositories.UserRepository;
 import com.ecommerce.project.service.AddressService;
 import com.ecommerce.project.util.AuthUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -30,6 +30,7 @@ public class AddressServiceImpl implements AddressService {
     private final ModelMapper modelMapper;
     private final AddressRepository addressRepository;
     private final AuthUtil authUtil;
+    private final UserRepository userRepository;
 
     @Override
     public AddressDTO createAddress(AddressDTO addressDTO) {
@@ -61,5 +62,70 @@ public class AddressServiceImpl implements AddressService {
                 .setTotalElements(addressPage.getTotalElements())
                 .setTotalPages(addressPage.getTotalPages())
                 .setLastPage(addressPage.isLast());
+    }
+
+    @Override
+    public AddressDTO getAddressById(Long addressId) {
+        return modelMapper.map(
+                addressRepository.findById(addressId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Address", "address id", addressId)),
+                AddressDTO.class
+        );
+    }
+
+    @Override
+    public List<AddressDTO> getUsersAddresses() {
+        return Optional.of(authUtil.loggedInUser()
+                .getAddresses())
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new APIException("This user has no addresses!", HttpStatus.OK))
+                .stream()
+                .map(address -> modelMapper.map(address, AddressDTO.class))
+                .toList();
+    }
+
+    @Override
+    public AddressDTO updateAddress(Long addressId, AddressDTO addressDTO) {
+        return modelMapper.map(
+                addressRepository.findById(addressId)
+                        .map(address -> {
+                            address
+                                    .setCountry(addressDTO.getCountry())
+                                    .setState(addressDTO.getState())
+                                    .setCity(addressDTO.getCity())
+                                    .setStreet(addressDTO.getStreet())
+                                    .setBuilding(addressDTO.getBuilding())
+                                    .setApartment(addressDTO.getApartment())
+                                    .setPostalCode(addressDTO.getPostalCode());
+
+                            User user = authUtil.loggedInUser();
+                            List<Address> addresses = user.getAddresses();
+
+                            if (addresses.removeIf(a -> a.getId().equals(addressId))) {
+                                addresses.add(address);
+                                userRepository.save(user);
+                            }
+                            return address;
+                        })
+                        .map(addressRepository::save)
+                        .orElseThrow(() -> new ResourceNotFoundException("Address", "address id", addressId)),
+                AddressDTO.class
+        );
+    }
+
+    @Override
+    public AddressDTO removeAddress(Long addressId) {
+        return modelMapper.map(
+                addressRepository.findById(addressId)
+                        .map(address -> {
+                            addressRepository.delete(address);
+                            authUtil.loggedInUser()
+                                    .getAddresses()
+                                    .removeIf(a -> a.getId().equals(addressId));
+
+                            return address;
+                        }).orElseThrow(() -> new ResourceNotFoundException("Address", "address id", addressId )),
+                AddressDTO.class
+        );
     }
 }
