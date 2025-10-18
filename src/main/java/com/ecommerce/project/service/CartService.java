@@ -2,8 +2,7 @@ package com.ecommerce.project.service;
 
 import com.ecommerce.project.model.Cart;
 import com.ecommerce.project.model.Product;
-import com.ecommerce.project.payload.CartDTO;
-import com.ecommerce.project.payload.ProductDTO;
+import com.ecommerce.project.payload.dto.CartDTO;
 
 import java.util.List;
 

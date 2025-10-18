@@ -4,13 +4,12 @@ import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Address;
 import com.ecommerce.project.model.User;
-import com.ecommerce.project.payload.AddressDTO;
-import com.ecommerce.project.payload.AddressResponse;
+import com.ecommerce.project.payload.dto.AddressDTO;
+import com.ecommerce.project.payload.response.AddressResponse;
 import com.ecommerce.project.repositories.AddressRepository;
 import com.ecommerce.project.repositories.UserRepository;
 import com.ecommerce.project.service.AddressService;
 import com.ecommerce.project.util.AuthUtil;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -89,14 +88,7 @@ public class AddressServiceImpl implements AddressService {
         return modelMapper.map(
                 addressRepository.findById(addressId)
                         .map(address -> {
-                            address
-                                    .setCountry(addressDTO.getCountry())
-                                    .setState(addressDTO.getState())
-                                    .setCity(addressDTO.getCity())
-                                    .setStreet(addressDTO.getStreet())
-                                    .setBuilding(addressDTO.getBuilding())
-                                    .setApartment(addressDTO.getApartment())
-                                    .setPostalCode(addressDTO.getPostalCode());
+                            modelMapper.map(addressDTO, address);
 
                             User user = authUtil.loggedInUser();
                             List<Address> addresses = user.getAddresses();

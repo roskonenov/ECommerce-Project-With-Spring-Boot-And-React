@@ -1,8 +1,7 @@
 package com.ecommerce.project.service;
 
-import com.ecommerce.project.payload.AddressDTO;
-import com.ecommerce.project.payload.AddressResponse;
-import jakarta.validation.Valid;
+import com.ecommerce.project.payload.dto.AddressDTO;
+import com.ecommerce.project.payload.response.AddressResponse;
 
 import java.util.List;
 

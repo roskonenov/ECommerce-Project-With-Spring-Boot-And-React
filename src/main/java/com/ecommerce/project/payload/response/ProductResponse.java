@@ -1,5 +1,6 @@
-package com.ecommerce.project.payload;
+package com.ecommerce.project.payload.response;
 
+import com.ecommerce.project.payload.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,12 +9,12 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors(chain = true)
-public class AddressResponse {
+public class ProductResponse {
 
-    private List<AddressDTO> content;
+    private List<ProductDTO> content;
 
     private Integer pageNumber;
 

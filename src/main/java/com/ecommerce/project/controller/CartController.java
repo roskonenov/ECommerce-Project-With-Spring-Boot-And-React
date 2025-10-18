@@ -1,6 +1,6 @@
 package com.ecommerce.project.controller;
 
-import com.ecommerce.project.payload.CartDTO;
+import com.ecommerce.project.payload.dto.CartDTO;
 import com.ecommerce.project.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

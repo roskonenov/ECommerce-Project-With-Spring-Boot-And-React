@@ -1,8 +1,8 @@
 package com.ecommerce.project.controller;
 
 import com.ecommerce.project.config.AppConstants;
-import com.ecommerce.project.payload.AddressDTO;
-import com.ecommerce.project.payload.AddressResponse;
+import com.ecommerce.project.payload.dto.AddressDTO;
+import com.ecommerce.project.payload.response.AddressResponse;
 import com.ecommerce.project.service.AddressService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
