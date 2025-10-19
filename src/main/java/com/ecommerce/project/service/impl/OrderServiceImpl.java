@@ -10,6 +10,7 @@ import com.ecommerce.project.repositories.*;
 import com.ecommerce.project.service.CartService;
 import com.ecommerce.project.service.OrderService;
 import com.ecommerce.project.util.AuthUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public OrderDTO placeOrder(String paymentMethod, OrderRequestDTO orderRequestDTO) {
 
         Cart cart = getUserCart();
@@ -43,7 +45,9 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderItem> orderItems = createOrderItems(cart, savedOrder);
 
-        updateProductSockAndClearCart(cart);
+        updateProductSock(cart);
+        cart.getCartItems().clear();
+        cartRepository.save(cart);
 
         return mapOrderToDTO(orderRequestDTO.getAddressId(), savedOrder, orderItems);
     }
@@ -107,13 +111,11 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cart", "email", authUtil.loggedInUserEmail()));
     }
 
-    private void updateProductSockAndClearCart(Cart cart) {
+    private void updateProductSock(Cart cart) {
         cart.getCartItems()
                 .forEach(item -> {
                     productRepository.save(item.getProduct()
                             .setQuantity(item.getProduct().getQuantity() - item.getQuantity()));
-                    //Clear the Cart
-                    cartService.deleteProductFromCart(cart.getId(), item.getProduct().getId());
                 });
     }
 }

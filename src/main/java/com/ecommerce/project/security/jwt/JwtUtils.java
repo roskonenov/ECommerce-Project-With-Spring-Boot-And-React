@@ -37,16 +37,16 @@ public class JwtUtils {
                         .getBytes(StandardCharsets.UTF_8));
     }
 
-//    public String getJwtTokenFromHeader(HttpServletRequest request) {
-//        String authHeader = request.getHeader("Authorization");
-//        LOGGER.debug("authHeader: {}", authHeader);
-//
-//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-//            return null;
-//        }
-//        return authHeader
-//                .replace("Bearer ", "");
-//    }
+    public String getJwtTokenFromHeader(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        LOGGER.debug("authHeader: {}", authHeader);
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+        return authHeader
+                .replace("Bearer ", "");
+    }
 
     public String generateJwtFromUsername(UserDetails userDetails) {
         return Jwts.builder()

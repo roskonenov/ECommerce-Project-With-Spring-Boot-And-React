@@ -33,7 +33,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         LOGGER.debug("JwtAuthenticationFilter called for URI: {}", request.getRequestURI());
-            String jwtToken = jwtUtils.getJwtFromCookie(request);
+            String jwtToken = jwtUtils.getJwtFromCookie(request) != null
+                    ?
+                    jwtUtils.getJwtFromCookie(request)
+                    :
+                    jwtUtils.getJwtTokenFromHeader(request);
 
             if (jwtToken != null &&
                     !jwtToken.isBlank() &&
