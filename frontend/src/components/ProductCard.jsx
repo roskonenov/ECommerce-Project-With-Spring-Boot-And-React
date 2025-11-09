@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FaShoppingCart } from 'react-icons/fa';
+import ProductViewModal from './ProductViewModal';
 
 const ProductCard = ({
   id,
@@ -23,7 +24,7 @@ const ProductCard = ({
   return (
     <div className='border rounded-lg shadow-xl overflow-hidden transition-shadow duration-300'>
 
-      <div onClick={() => handleSelectedProduct(
+      <div onClick={() => handleSelectedProduct({
         id,
         name,
         image,
@@ -32,7 +33,7 @@ const ProductCard = ({
         price,
         discount,
         specialPrice,
-      )}
+      })}
         className='w-full overflow-hidden aspect-3/2'>
         <img className='w-full h- h-full cursor-pointer transition-transform duration-300 transform hover:scale-105'
           src={image}
@@ -41,7 +42,7 @@ const ProductCard = ({
 
       <div className='p-4'>
 
-        <h2 onClick={() => handleSelectedProduct(
+        <h2 onClick={() => handleSelectedProduct({
           id,
           name,
           image,
@@ -50,7 +51,7 @@ const ProductCard = ({
           price,
           discount,
           specialPrice,
-        )}
+        })}
           className='text-lg font-semibold mb-2 cursor-pointer'>
           {name}
         </h2>
@@ -73,13 +74,18 @@ const ProductCard = ({
           <button
             disabled={!isAvailable || btnLoader}
             onClick={() => { }}
-            className={`bg-blue-500 ${isAvailable ? 'hover:bg-blue-600' : 'opacity-70'} text-white py-2 px-3 rounded-lg flex justify-center items-center transition-colors duration-300 w-36 text-center`}>
+            className={`bg-blue-500 ${isAvailable ? 'hover:bg-blue-600' : 'opacity-70'} text-white py-2 px-3 rounded-lg flex justify-center items-center transition-colors duration-300 w-36 text-center cursor-pointer`}>
             <FaShoppingCart className='mr-2' />
             {isAvailable ? 'Add to Cart' : 'Out of Stock'}
           </button>
 
         </div>
       </div>
+      <ProductViewModal
+        open={openProductModal}
+        setOpen={setOpenProductModal}
+        product={selectedProduct}
+        isAvailable={isAvailable} />
     </div>
   )
 }
