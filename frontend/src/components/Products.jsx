@@ -4,23 +4,23 @@ import { FaExclamationTriangle } from 'react-icons/fa';
 
 const Products = () => {
 
-    const isLoading = true;
-    const errorMesage = 'Error fetchig data';
+    const isLoading = false;
+    const errorMesage = '';
 
     const products = [
         {
-            productId: 652,
-            productName: "Iphone Xs max",
+            id: 652,
+            name: "Iphone Xs max",
             image: "https://placehold.co/600x400",
             description: "Experience the latest in mobile technology with advanced cameras, powerful processing, and an all-day battery.",
-            quantity: 0,
+            quantity: 1,
             price: 1450.0,
             discount: 10.0,
-            specialPrice: 1305.0,
+            specialPrice: 0,
         },
         {
-            productId: 654,
-            productName: "MacBook Air M2s",
+            id: 654,
+            name: "MacBook Air M2s",
             image: "https://placehold.co/600x400",
             description: "Ultra-thin laptop with Apple's M2 chip, providing fast performance in a lightweight, portable design.",
             quantity: 0,
