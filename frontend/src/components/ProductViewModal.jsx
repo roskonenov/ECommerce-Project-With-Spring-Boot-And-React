@@ -19,7 +19,7 @@ export default function ProductViewModal({ open, setOpen, product, isAvailable }
                         >
                             {image && (
                                 <div className='flex justify-center aspect-3/2'>
-                                    <img src={image} alt={name} />
+                                    <img src={image} alt={name} className='object-fill w-full'/>
                                 </div>
                             )}
 

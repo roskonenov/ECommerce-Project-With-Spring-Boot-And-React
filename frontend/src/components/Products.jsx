@@ -3,11 +3,11 @@ import ProductCard from './ProductCard';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../store/actions';
+import Spinner from './Spinner';
 
 const Products = () => {
 
-    const isLoading = false;
-    const errorMesage = '';
+    const { isLoading,  errorMessage } = useSelector(state => state.errors);
     const { products } = useSelector(state => state.products);
     const dispatch = useDispatch();
 
@@ -15,17 +15,15 @@ const Products = () => {
         dispatch(fetchProducts());
     }, [dispatch]);
 
-    console.log(products);
-    
     return (
         <div className='lg:px-14 sm:px-8 px-4 py-14 2xl:w-[90%] 2xl:mx-auto'>
             {isLoading ? (
-                <p>It is Loading...</p>
-            ) : errorMesage ? (
+                <Spinner />
+            ) : errorMessage ? (
                 <div className='flex justify-center items-center h-[200px]'>
                     <FaExclamationTriangle className='text-slate-800 text-3xl mr-2' />
                     <span className='text-lg font-medium text-slate-800'>
-                        {errorMesage}
+                        {errorMessage}
                     </span>
                 </div>
             ) : (

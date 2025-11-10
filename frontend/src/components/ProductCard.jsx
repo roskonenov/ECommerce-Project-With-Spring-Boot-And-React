@@ -35,7 +35,7 @@ const ProductCard = ({
         specialPrice,
       })}
         className='w-full overflow-hidden aspect-3/2'>
-        <img className='w-full h- h-full cursor-pointer transition-transform duration-300 transform hover:scale-105'
+        <img className='w-full h-full cursor-pointer transition-transform duration-300 transform hover:scale-105 object-cover'
           src={image}
           alt={name} />
       </div>
