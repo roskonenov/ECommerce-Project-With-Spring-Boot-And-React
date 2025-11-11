@@ -1,7 +1,8 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, Tooltip } from '@mui/material';
-import React, { useState } from 'react'
-import { FaArrowUp, FaSearch  } from 'react-icons/fa';
-import {  FiRefreshCw  } from 'react-icons/fi';
+import React, { useEffect, useState } from 'react'
+import { FaArrowDown, FaArrowUp, FaSearch } from 'react-icons/fa';
+import { FiRefreshCw } from 'react-icons/fi';
+import { useSearchParams } from 'react-router-dom';
 
 
 const Filter = () => {
@@ -13,16 +14,62 @@ const Filter = () => {
         { id: 5, name: 'Toys' },
     ];
 
+    // const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [category, setCategory] = useState('all');
+    const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        setCategory(searchParams.get('category') || 'all');
+        setSearchTerm(searchParams.get('keyword') || '');
+    }, [searchParams]);
+
+    useEffect(() => {
+       const handler = setTimeout(() => {
+            setSearchParams(s => {
+                const params = new URLSearchParams(s);
+                searchTerm
+                ? params.set('keyword', searchTerm)
+                : params.delete('keyword');
+                return params;
+            });
+        }, 700);
+
+        return () => clearTimeout(handler);
+    }, [searchTerm, setSearchParams]);
 
     const handleCategoryChange = (e) => {
+        const selectedCategory = e.target.value;
+
+        setSearchParams(s => {
+            const params = new URLSearchParams(s);
+
+            selectedCategory === 'all'
+                ? params.delete('category')
+                : params.set('category', selectedCategory);
+            return params;
+        });
         setCategory(e.target.value);
     };
+
+    const toggleSortByPrice = () => {
+        setSearchParams(s => {
+            const params = new URLSearchParams(s);
+            params.get('sortby') === 'asc'
+                ? params.set('sortby', 'desc')
+                : params.set('sortby', 'asc');
+            return params;
+        });
+    };
+
     return (
         <div className='flex lg:flex-row flex-col-reverse lg:justify-between place-items-center'>
             {/* Search Bar */}
             <div className='relative flex items-center 2xl:w-[450px] sm:w-[420px] w-full'>
-                <input type="text"
+                <input
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    type="text"
                     placeholder='Search Products'
                     className='border border-gray-400 text-slate-800 rounded-md py-2 pl-10 pr-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-400' />
                 <FaSearch className='absolute left-3 text-slate-800' size={20} />
@@ -50,15 +97,21 @@ const Filter = () => {
 
                 {/* Sort Button & Sort Filter */}
                 <Tooltip title='Sorted by price: asc'>
-                        <Button variant='contained' color='primary'
-                        className='flex items-center gap-2 h-10'>
-                            Sort By
-                            <FaArrowUp size={20}/>
-                        </Button>
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        className='flex items-center gap-2 h-10'
+                        onClick={toggleSortByPrice}>
+                        Sort By Price
+                        {searchParams.get('sortby') === 'asc'
+                            ? <FaArrowUp />
+                            : <FaArrowDown />}
+
+                    </Button>
                 </Tooltip>
                 <button
-                className='flex items-center gap-2 bg-rose-900 text-white px-3 py-2 rounded-md transition duration-300 ease-in shadow-md focus:outline-none'>
-                    <FiRefreshCw className='font-semibold' size={16}/>
+                    className='flex items-center gap-2 bg-rose-900 text-white px-3 py-2 rounded-md transition duration-300 ease-in shadow-md focus:outline-none cursor-pointer'>
+                    <FiRefreshCw className='font-semibold' size={16} />
                     <span className='font-semibold'>Clear Filter</span>
                 </button>
             </div>
