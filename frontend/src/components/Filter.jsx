@@ -2,6 +2,7 @@ import { Button, FormControl, InputLabel, MenuItem, Select, Tooltip } from '@mui
 import React, { useEffect, useState } from 'react'
 import { FaArrowDown, FaArrowUp, FaSearch } from 'react-icons/fa';
 import { FiRefreshCw } from 'react-icons/fi';
+import { BsCoin } from "react-icons/bs";
 import { useSearchParams } from 'react-router-dom';
 
 
@@ -14,9 +15,7 @@ const Filter = () => {
         { id: 5, name: 'Toys' },
     ];
 
-    // const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-
     const [category, setCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -26,12 +25,12 @@ const Filter = () => {
     }, [searchParams]);
 
     useEffect(() => {
-       const handler = setTimeout(() => {
+        const handler = setTimeout(() => {
             setSearchParams(s => {
                 const params = new URLSearchParams(s);
-                searchTerm
-                ? params.set('keyword', searchTerm)
-                : params.delete('keyword');
+                searchTerm.trim()
+                    ? params.set('keyword', searchTerm.trim())
+                    : params.delete('keyword');
                 return params;
             });
         }, 700);
@@ -63,11 +62,18 @@ const Filter = () => {
         });
     };
 
+    const handleClearFilters = () => {
+        setSearchParams(s => {
+            s.forEach(param => s.delete(param));
+        });
+    };
+
     return (
         <div className='flex lg:flex-row flex-col-reverse lg:justify-between place-items-center'>
             {/* Search Bar */}
             <div className='relative flex items-center 2xl:w-[450px] sm:w-[420px] w-full'>
                 <input
+                    value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     type="text"
                     placeholder='Search Products'
@@ -96,21 +102,24 @@ const Filter = () => {
                 </FormControl>
 
                 {/* Sort Button & Sort Filter */}
-                <Tooltip title='Sorted by price: asc'>
+                <Tooltip title={`Sort by price: ${searchParams.get('sortby') === 'asc' ? 'desc' : 'asc'}`}>
                     <Button
                         variant='contained'
                         color='primary'
                         className='flex items-center gap-2 h-10'
                         onClick={toggleSortByPrice}>
                         Sort By Price
-                        {searchParams.get('sortby') === 'asc'
-                            ? <FaArrowUp />
-                            : <FaArrowDown />}
+                        {searchParams.get('sortby')
+                            ? searchParams.get('sortby') === 'asc'
+                                ? <FaArrowDown />
+                                : <FaArrowUp />
+                            : <BsCoin />}
 
                     </Button>
                 </Tooltip>
                 <button
-                    className='flex items-center gap-2 bg-rose-900 text-white px-3 py-2 rounded-md transition duration-300 ease-in shadow-md focus:outline-none cursor-pointer'>
+                    className='flex items-center gap-2 bg-rose-900 text-white px-3 py-2 rounded-md transition duration-300 ease-in shadow-md focus:outline-none cursor-pointer'
+                    onClick={handleClearFilters}>
                     <FiRefreshCw className='font-semibold' size={16} />
                     <span className='font-semibold'>Clear Filter</span>
                 </button>
