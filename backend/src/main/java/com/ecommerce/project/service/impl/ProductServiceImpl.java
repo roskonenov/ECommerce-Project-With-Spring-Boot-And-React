@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -62,26 +63,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+    public ProductResponse getAllProducts(String category, String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Sort sorting = getSorting(sortBy, sortOrder);
 
-        Page<Product> categoryPage = Optional.of(
+        Specification<Product> spec = generateProductQuerySpecification(category, keyword);
+
+        Page<Product> productPage = Optional.of(
                         productRepository
-                                .findAll(PageRequest.of(pageNumber, pageSize, sorting))
+                                .findAll(spec, PageRequest.of(pageNumber, pageSize, sorting))
                 )
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
 
         return new ProductResponse()
-                .setContent(categoryPage
+                .setContent(productPage
                         .stream()
                         .map(product -> modelMapper.map(product, ProductDTO.class))
                         .toList()
-                ).setPageNumber(categoryPage.getNumber())
-                .setPageSize(categoryPage.getSize())
-                .setTotalElements(categoryPage.getTotalElements())
-                .setTotalPages(categoryPage.getTotalPages())
-                .setLastPage(categoryPage.isLast());
+                ).setPageNumber(productPage.getNumber())
+                .setPageSize(productPage.getSize())
+                .setTotalElements(productPage.getTotalElements())
+                .setTotalPages(productPage.getTotalPages())
+                .setLastPage(productPage.isLast());
     }
 
     @Override
@@ -202,5 +205,29 @@ public class ProductServiceImpl implements ProductService {
                 .ifPresent(existingProduct -> {
                     throw new APIException("Product with name " + existingProduct.getName() + " already exists");
                 });
+    }
+
+    private static Specification<Product> generateProductQuerySpecification(String category, String keyword) {
+        Specification<Product> spec = Specification.unrestricted();
+
+        spec = spec.and((root, query, criteriaBuilder) -> {
+            if (keyword == null || keyword.isBlank()) return criteriaBuilder.conjunction();
+
+            String escapedKeyword = keyword.toLowerCase()
+                    .replace("\\", "\\\\")
+                    .replace("%", "\\%")
+                    .replace("_", "\\_");
+
+            return criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("name")),
+                    "%" + escapedKeyword + "%",
+                    '\\'
+            );
+        }).and((root, query, criteriaBuilder) -> {
+            if (category == null || category.isBlank()) return criteriaBuilder.conjunction();
+
+            return criteriaBuilder.equal(root.get("category").get("name"), category);
+        });
+        return spec;
     }
 }

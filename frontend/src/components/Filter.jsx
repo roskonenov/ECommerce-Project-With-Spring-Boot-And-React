@@ -34,7 +34,6 @@ const Filter = () => {
                 return params;
             });
         }, 700);
-
         return () => clearTimeout(handler);
     }, [searchTerm, setSearchParams]);
 
