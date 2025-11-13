@@ -6,15 +6,7 @@ import { BsCoin } from "react-icons/bs";
 import { useSearchParams } from 'react-router-dom';
 
 
-const Filter = () => {
-    const categories = [
-        { id: 1, name: 'Electronics' },
-        { id: 2, name: 'Clothing' },
-        { id: 3, name: 'Furniture' },
-        { id: 4, name: 'Books' },
-        { id: 5, name: 'Toys' },
-    ];
-
+const Filter = ({categories}) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [category, setCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');

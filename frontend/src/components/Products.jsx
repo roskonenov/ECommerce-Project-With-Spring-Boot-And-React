@@ -1,20 +1,28 @@
 import ProductCard from './ProductCard';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Spinner from './Spinner';
 import Filter from './Filter';
 import useProductFilter from '../hooks/useProductsFilter';
+import { useEffect } from 'react';
+import { fetchCategories } from '../store/actions';
 
 const Products = () => {
 
-    const { isLoading,  errorMessage } = useSelector(state => state.errors);
-    const { products } = useSelector(state => state.products);
+    const { isLoading, errorMessage } = useSelector(state => state.errors);
+    const { products, categories } = useSelector(state => state.products);
+    const dispatch = useDispatch();
 
     useProductFilter();
 
+    useEffect(() => {
+        dispatch(fetchCategories());
+    }, [dispatch]);
+
     return (
         <div className='lg:px-14 sm:px-8 px-4 py-14 2xl:w-[90%] 2xl:mx-auto'>
-            <Filter /> 
+            {categories &&
+                <Filter categories={categories} />}
             {isLoading ? (
                 <Spinner />
             ) : errorMessage ? (
