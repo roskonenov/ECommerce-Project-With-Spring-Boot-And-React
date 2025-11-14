@@ -2,7 +2,7 @@ import React from 'react'
 
 const Spinner = () => {
     return (
-        <div className="loader mx-auto my-50 w-8 aspect-square grid animate-[spin_4s_infinite]
+        <div className="mx-auto my-50 w-15 aspect-square grid animate-[spin_4s_infinite]
         before:content-[''] before:col-start-1 before:row-start-1 before:border-8 
         before:rounded-full before:border-t-red-700 before:border-l-red-700 
         before:border-b-transparent before:border-r-transparent

@@ -6,11 +6,12 @@ import Filter from './Filter';
 import useProductFilter from '../hooks/useProductsFilter';
 import { useEffect } from 'react';
 import { fetchCategories } from '../store/actions';
+import Paginations from './Paginations';
 
 const Products = () => {
 
     const { isLoading, errorMessage } = useSelector(state => state.errors);
-    const { products, categories } = useSelector(state => state.products);
+    const { products, categories, pagination } = useSelector(state => state.products);
     const dispatch = useDispatch();
 
     useProductFilter();
@@ -38,6 +39,7 @@ const Products = () => {
                         {products &&
                             products.map((item, i) => <ProductCard key={i} {...item} />)}
                     </div>
+                    <Paginations {...pagination}/>
                 </div>
             )}
         </div>
