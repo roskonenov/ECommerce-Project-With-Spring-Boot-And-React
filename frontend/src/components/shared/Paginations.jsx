@@ -2,16 +2,12 @@ import { Pagination } from '@mui/material'
 import { useSearchParams } from 'react-router-dom';
 
 const Paginations = ({
-  pageNumber,
-  pageSize,
-  totalElements,
   totalPages,
-  lastPage
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (_e, value) => {
     setSearchParams(s => {
       const params = new URLSearchParams(s);
       params.set('page', value.toString());
