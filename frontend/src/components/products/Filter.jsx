@@ -49,6 +49,7 @@ const Filter = ({categories}) => {
             params.get('sortby') === 'asc'
                 ? params.set('sortby', 'desc')
                 : params.set('sortby', 'asc');
+                
             return params;
         });
     };

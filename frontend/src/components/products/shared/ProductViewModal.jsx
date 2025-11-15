@@ -29,7 +29,7 @@ export default function ProductViewModal({ open, setOpen, product, isAvailable }
                                 </DialogTitle>
                                 <div className='space-y-2 text-gray-700 pb-4 flex justify-between items-end'>
                                     <div className='flex flex-col gap-2'>
-                                        <span className={`text-gray-400 line-through ${specialPrice ? '' : 'invisible'}`}>
+                                        <span className={`text-gray-400 line-through ${discount ? '' : 'invisible'}`}>
                                             ${Number(price).toFixed(2)}
                                         </span>
                                         <span className='text-lg font-bold text-slate-700'>
