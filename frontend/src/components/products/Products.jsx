@@ -37,7 +37,7 @@ const Products = () => {
                 <div className='min-h-[700px]'>
                     <div className='pb-6 pt-14 grid 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-6'>
                         {products &&
-                            products.map((item, i) => <ProductCard key={i} {...item} />)}
+                            products.map((item, i) => <ProductCard key={i} index={i} {...item} />)}
                     </div>
                     <Paginations {...pagination}/>
                 </div>

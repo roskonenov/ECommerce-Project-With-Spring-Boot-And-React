@@ -11,8 +11,16 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/effect-fade';
 
-const HeroBaner = () => {
+const HeroBaner = ({onCategoryChange}) => {
   const colors = ['bg-banner-color1', 'bg-banner-color2', 'bg-banner-color3', 'bg-banner-color4', 'bg-banner-color5', 'bg-banner-color6',]
+  
+  const handleSlideChange = (swiper) => {
+    const currentSlide = slidesData[swiper.activeIndex];
+    if (currentSlide) {
+      onCategoryChange(currentSlide.id);
+    }
+  };
+
   return (
     <div className='py-2 rounded-md'>
       <Swiper
@@ -20,13 +28,14 @@ const HeroBaner = () => {
         navigation={{ prevEl: '.prev', nextEl: '.next' }}
         pagination={{ clickable: true }}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
-        fadeEffect={{crossFade: true}}
+        fadeEffect={{ crossFade: true }}
         effect='fade'
         spaceBetween={50}
         slidesPerView={1}
+        onSlideChange={handleSlideChange}
       >
         {slidesData.map((slide, i) => (
-          <SwiperSlide>
+          <SwiperSlide key={i}>
             <div className={`carousel-item rounded-md sm:h-[500px] h-96 ${colors[i]}`}>
               <div className='h-full flex items-center justify-center'>
                 <div className='hidden lg:flex justify-center w-1/2 p-8'>
@@ -40,7 +49,9 @@ const HeroBaner = () => {
                     <p className='text-white font-bold mt-4'>
                       {slide.description}
                     </p>
-                    <Link className='mt-6 inline-block bg-black text-white py-2 px-4 rounded hover:bg-gray-700'>
+                    <Link
+                      to={slide.categoryLink}
+                      className='mt-6 inline-block bg-black text-white py-2 px-4 rounded hover:bg-gray-700 duration-200'>
                       Shop Now
                     </Link>
                   </div>

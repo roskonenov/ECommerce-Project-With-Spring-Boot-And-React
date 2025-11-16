@@ -12,6 +12,7 @@ const ProductCard = ({
   price,
   discount,
   specialPrice,
+  index = 0,
 }) => {
   const [openProductModal, setOpenProductModal] = useState(false);
   const btnLoader = false;
@@ -23,7 +24,9 @@ const ProductCard = ({
     setSelectedProduct(product);
   };
   return (
-    <div className='border rounded-lg shadow-xl overflow-hidden transition-shadow duration-300'>
+    <div
+      style={{ animationDelay: `${index * 50}ms` }}
+      className={'border rounded-lg shadow-xl overflow-hidden transition-shadow duration-300 animate-fade-up'}>
 
       <div onClick={() => handleSelectedProduct({
         id,

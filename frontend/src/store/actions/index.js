@@ -2,9 +2,14 @@ import api from "../../api/api";
 
 export const fetchProducts = (params) => async (dispatch) => {
     try {
-        dispatch({type: 'IS_FETCHING'});
+        dispatch({ type: 'IS_FETCHING' });
 
-        const { data } = await api.get(`/public/products?${params}`);
+        let endpoint = '';
+        typeof params === 'number'
+            ? endpoint = `/public/categories/${params}/products`
+            : endpoint = `/public/products?${params}`
+
+        const { data } = await api.get(endpoint);
         dispatch({
             type: 'FETCH_PRODUCTS',
             payload: data.content,
@@ -15,7 +20,7 @@ export const fetchProducts = (params) => async (dispatch) => {
             lastPage: data.lastPage,
         });
 
-        dispatch({type: 'IS_SUCCESS'});
+        dispatch({ type: 'IS_SUCCESS' });
     } catch (error) {
         console.log(error);
         dispatch({
@@ -27,7 +32,7 @@ export const fetchProducts = (params) => async (dispatch) => {
 
 export const fetchCategories = () => async (dispatch) => {
     try {
-        dispatch({type: 'IS_FETCHING'});
+        dispatch({ type: 'IS_FETCHING' });
 
         const { data } = await api.get(`/public/categories`);
         dispatch({
@@ -40,7 +45,7 @@ export const fetchCategories = () => async (dispatch) => {
             lastPage: data.lastPage,
         });
 
-        dispatch({type: 'IS_SUCCESS'});
+        dispatch({ type: 'IS_SUCCESS' });
     } catch (error) {
         console.log(error);
         dispatch({

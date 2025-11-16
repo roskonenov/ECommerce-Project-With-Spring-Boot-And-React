@@ -6,6 +6,7 @@ export const slidesData =
             title: "Entertainment Hub",
             subtitle: "Smart TVs and Audio",
             description: "Experience the latest in home entertainment",
+            categoryLink: '/products?category=TV+%26+Audio'
         },
         {
             id: 2,
@@ -13,6 +14,7 @@ export const slidesData =
             title: "Stay Connected",
             subtitle: "Latest Smartphones",
             description: "Discover cutting-edge mobile technology",
+            categoryLink: '/products?category=Mobile+Phones'
         },
         {
             id: 3,
@@ -20,6 +22,7 @@ export const slidesData =
             title: "Power & Productivity",
             subtitle: "Modern Laptops",
             description: "Boost your workflow with high-performance machines",
+            categoryLink: '/products?category=Laptops'
         },
         {
             id: 4,
@@ -27,6 +30,7 @@ export const slidesData =
             title: "Smart Living",
             subtitle: "Smartwatches & Fitness Bands",
             description: "Track your health and stay connected everywhere",
+            categoryLink: '/products?category=Wearables'
         },
         {
             id: 5,
@@ -34,6 +38,7 @@ export const slidesData =
             title: "Home Comfort",
             subtitle: "Appliances for Everyday Life",
             description: "Upgrade your home with smart and efficient solutions",
+            categoryLink: '/products?category=Home+Appliances'
         },
         {
             id: 6,
@@ -41,6 +46,7 @@ export const slidesData =
             title: "Level Up",
             subtitle: "Consoles & Gaming Gear",
             description: "Immerse yourself in next-gen gaming experiences",
+            categoryLink: '/products?category=Gaming'
         },
 
     ]
