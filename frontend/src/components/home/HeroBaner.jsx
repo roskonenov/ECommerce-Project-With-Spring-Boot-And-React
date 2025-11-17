@@ -65,7 +65,6 @@ const HeroBaner = ({onCategoryChange}) => {
         ))}
         <div className='prev absolute top-1/2 left-4 z-10 -translate-y-1/2 cursor-pointer text-2xl text-black'><FaArrowAltCircleLeft /></div>
         <div className='next absolute top-1/2 right-4 z-10 -translate-y-1/2 cursor-pointer text-2xl text-black'><FaArrowAltCircleRight /></div>
-
       </Swiper>
     </div>
   );

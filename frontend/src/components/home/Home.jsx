@@ -10,10 +10,10 @@ const Home = () => {
   const { isLoading, errorMessage } = useSelector(state => state.errors);
   const { products } = useSelector(state => state.products);
   const dispatch = useDispatch();
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(1); // Category IDs on backend (development) starts from 1
 
   useEffect(() => {
-    dispatch(fetchProducts(selectedCategoryId));
+    dispatch(fetchProducts(selectedCategoryId)); 
   }, [dispatch, selectedCategoryId]);
 
   return (

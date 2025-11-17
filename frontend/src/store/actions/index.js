@@ -1,15 +1,40 @@
 import api from "../../api/api";
 
-export const fetchProducts = (params) => async (dispatch) => {
+const CACHE_TTL = 60 * 10000 // 10 minutes
+
+export const fetchProducts = (params) => async (dispatch, getState) => {
     try {
+        const state = getState().products;
+        const cache = state.productsCache;
+        const timestamps = state.productsCacheTimeStamps;
+
+        const isCategory = typeof params === 'number';
+        const categoryId = isCategory ? params : null;
+
+        if (categoryId) {
+            const cachedData = cache[categoryId];
+            const cachedTime = timestamps[categoryId];
+
+            const isCacheValid = cachedData && cachedTime && Date.now() - cachedTime < CACHE_TTL;
+
+            if (isCacheValid) {
+                dispatch({
+                    type: 'FETCH_PRODUCTS_FROM_CACHE',
+                    payload: cachedData
+                });
+                dispatch({type: 'IS_SUCCESS'});
+                return;
+            }
+        }
+
         dispatch({ type: 'IS_FETCHING' });
 
-        let endpoint = '';
-        typeof params === 'number'
-            ? endpoint = `/public/categories/${params}/products`
-            : endpoint = `/public/products?${params}`
+        const endpoint = isCategory 
+            ?  `/public/categories/${params}/products`
+            :  `/public/products?${params}`
 
         const { data } = await api.get(endpoint);
+
         dispatch({
             type: 'FETCH_PRODUCTS',
             payload: data.content,
@@ -18,9 +43,11 @@ export const fetchProducts = (params) => async (dispatch) => {
             totalElements: data.totalElements,
             totalPages: data.totalPages,
             lastPage: data.lastPage,
+            categoryId,
         });
 
         dispatch({ type: 'IS_SUCCESS' });
+        
     } catch (error) {
         console.log(error);
         dispatch({

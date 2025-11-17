@@ -25,8 +25,8 @@ const ProductCard = ({
   };
   return (
     <div
-      style={{ animationDelay: `${index * 50}ms` }}
-      className={'border rounded-lg shadow-xl overflow-hidden transition-shadow duration-300 animate-fade-up'}>
+      style={{ animationDelay: `${index * 70}ms` }}
+      className={'border rounded-lg shadow-xl overflow-hidden transition-shadow duration-300 opacity-0 animate-fade-up min-h-[360px]'}>
 
       <div onClick={() => handleSelectedProduct({
         id,
