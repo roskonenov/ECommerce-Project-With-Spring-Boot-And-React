@@ -15,7 +15,7 @@ const Navbar = () => {
         <Link
           to='/'
           className='flex items-center font-bold text-2xl font-montserrat'>
-          <GiShop className='mr-2 text-3xl' />
+          <GiShop className='mr-2 text-3xl text-gray-400' />
           <span className='text-custom-blue text-3xl'>E</span>
           <span className='text-pink-400 ml-1 first-letter:text-green-300 uppercase'>- Shop</span>
         </Link>

@@ -40,6 +40,10 @@
     opacity: 0;
     transform: translateX(3rem);
   }
+  70% {
+    opacity: 0.9;
+    transform: translateX(-0.3rem);
+  }
   100% {
     opacity: 1;
     transform: translateX(0);

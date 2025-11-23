@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import HeroBaner from './HeroBaner'
+import HeroBanner from './HeroBanner.jsx'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../../store/actions';
 import Spinner from '../shared/Spinner';
@@ -19,7 +19,7 @@ const Home = () => {
   return (
     <div className='px-4 sm:px-8 lg:px-16'>
       <div className='py-6'>
-        <HeroBaner onCategoryChange={setSelectedCategoryId} />
+        <HeroBanner onCategoryChange={setSelectedCategoryId} />
       </div>
       <div className='text-center'>
         <h1 className='font-extrabold text-5xl text-slate-800 pt-4'>

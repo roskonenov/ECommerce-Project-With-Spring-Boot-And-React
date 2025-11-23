@@ -11,7 +11,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/effect-fade';
 
-const HeroBaner = ({onCategoryChange}) => {
+const HeroBanner = ({onCategoryChange}) => {
   const colors = ['bg-banner-color1', 'bg-banner-color2', 'bg-banner-color3', 'bg-banner-color4', 'bg-banner-color5', 'bg-banner-color6',]
   
   const handleSlideChange = (swiper) => {
@@ -36,7 +36,7 @@ const HeroBaner = ({onCategoryChange}) => {
       >
         {slidesData.map((slide, i) => (
           <SwiperSlide key={i}>
-            <div className={`carousel-item rounded-md sm:h-[500px] h-96 ${colors[i]}`}>
+            <div className={`carousel-item rounded-md sm:h-125 h-96 ${colors[i]}`}>
               <div className='h-full flex items-center justify-center'>
                 <div className='hidden lg:flex justify-center w-1/2 p-8'>
                   <div className='text-center'>
@@ -70,4 +70,4 @@ const HeroBaner = ({onCategoryChange}) => {
   );
 };
 
-export default HeroBaner;
+export default HeroBanner;

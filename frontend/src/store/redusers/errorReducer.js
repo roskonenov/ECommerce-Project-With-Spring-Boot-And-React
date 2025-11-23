@@ -21,7 +21,7 @@ export const errorReducer = (state = initialState, action) => {
                 errorMessage: action.payload
             };
         default:
-            return state;;
+            return state;
     }
 
 };
