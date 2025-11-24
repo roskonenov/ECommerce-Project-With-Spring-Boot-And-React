@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
-import { AboutImages } from "../../utils/slidesData";
+import { aboutImages } from "../../utils/slidesData";
 
 const About = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
-        if (!AboutImages || AboutImages.length === 0) return;
+        if (!aboutImages || aboutImages.length === 0) return;
 
         const id = setInterval(() => {
-            setCurrentIndex(prev => (prev + 1) % AboutImages.length);
+            setCurrentIndex(prev => (prev + 1) % aboutImages.length);
         }, 5000);
 
         return () => clearInterval(id);
     }, []);
+
+    useEffect(() => {
+        const nextImage = new window.Image();
+        nextImage.src = aboutImages[currentIndex + 1 % aboutImages.length];
+    }, [currentIndex]);
 
     return (
         <div className="mx-auto w-full flex flex-col p-8">
@@ -29,7 +34,7 @@ const About = () => {
                 <div className="w-full min-h-110 max-w-[45%] md:w-1/2 rounded-md flex items-center justify-center">
                     <img
                         key={currentIndex}
-                        src={AboutImages[currentIndex]}
+                        src={aboutImages[currentIndex]}
                         alt="E-Commerce image"
                         className="transform transition-transform duration-300 animate-slide-right rounded-md w-full h-full object-cover shadow-lg" />
                 </div>

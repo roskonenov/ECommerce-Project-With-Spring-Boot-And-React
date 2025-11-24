@@ -33,7 +33,7 @@ const Contacts = () => {
         </div>
         <div className='space-y-1'>
           <label htmlFor="message" className='block text-gray-800 text-lg text-left'>
-            Name
+            Message
           </label>
           <textarea 
           required

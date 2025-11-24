@@ -51,7 +51,7 @@ export const slidesData =
 
     ]
 
-export const AboutImages = [
+export const aboutImages = [
     'https://i.ibb.co/NdypDvXB/digital-marketing-ecommerce-optimized.webp',
     'https://i.ibb.co/NdrQBNrz/e-Commerce-Business.webp',
     'https://i.ibb.co/MDT1jjXY/360-F-348054737-Tv5fl9-LQn-Znz-DUwsk-KVKd5-Mzj4-Sj-GFxa.jpg',
