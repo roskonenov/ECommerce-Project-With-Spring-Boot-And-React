@@ -82,7 +82,7 @@ export const fetchCategories = () => async (dispatch) => {
     }
 };
 
-export const addToCart = (data, qty = 1) =>
+export const addToCart = (data, toast, qty = 1) =>
     (dispatch, getState) => {
         const state = getState().products;
         const productToAdd = state.products.find(
@@ -92,8 +92,9 @@ export const addToCart = (data, qty = 1) =>
 
         if (isQuantityExist) {
             dispatch({ type: 'ADD_CART', payload: { ...data, quantity: qty } });
+            toast.success(`${productToAdd.name} added to cart!`)
             localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
         } else {
-            console.log('error');
+            toast.error('Out of Stock!')
         }
     };
