@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { FaShoppingCart } from 'react-icons/fa';
 import ProductViewModal from './ProductViewModal';
 import truncateText from '../../utils/truncateText';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../store/actions';
 
 const ProductCard = ({
   id,
@@ -18,11 +20,17 @@ const ProductCard = ({
   const btnLoader = false;
   const [selectedProduct, setSelectedProduct] = useState('');
   const isAvailable = quantity && Number(quantity) > 0;
+  const dispatch = useDispatch();
 
   const handleSelectedProduct = (product) => {
     setOpenProductModal(true);
     setSelectedProduct(product);
   };
+
+  const handleAddProductToCart = (product) => {
+    dispatch(addToCart(product));
+  };
+
   return (
     <div
       style={{ animationDelay: `${index * 70}ms` }}
@@ -77,7 +85,16 @@ const ProductCard = ({
 
           <button
             disabled={!isAvailable || btnLoader}
-            onClick={() => { }}
+            onClick={() => handleAddProductToCart({
+              id,
+              name,
+              image,
+              description,
+              quantity,
+              price,
+              discount,
+              specialPrice,
+            })}
             className={`bg-blue-500 ${isAvailable ? 'hover:bg-blue-600' : 'opacity-70'} text-white py-2 px-3 rounded-lg flex justify-center items-center transition-colors duration-300 w-36 text-center cursor-pointer`}>
             <FaShoppingCart className='mr-2' />
             {isAvailable ? 'Add to Cart' : 'Out of Stock'}

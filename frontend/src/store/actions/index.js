@@ -22,16 +22,16 @@ export const fetchProducts = (params) => async (dispatch, getState) => {
                     type: 'FETCH_PRODUCTS_FROM_CACHE',
                     payload: cachedData
                 });
-                dispatch({type: 'IS_SUCCESS'});
+                dispatch({ type: 'IS_SUCCESS' });
                 return;
             }
         }
 
         dispatch({ type: 'IS_FETCHING' });
 
-        const endpoint = isCategory 
-            ?  `/public/categories/${params}/products`
-            :  `/public/products?${params}`
+        const endpoint = isCategory
+            ? `/public/categories/${params}/products`
+            : `/public/products?${params}`
 
         const { data } = await api.get(endpoint);
 
@@ -47,7 +47,7 @@ export const fetchProducts = (params) => async (dispatch, getState) => {
         });
 
         dispatch({ type: 'IS_SUCCESS' });
-        
+
     } catch (error) {
         console.log(error);
         dispatch({
@@ -81,3 +81,19 @@ export const fetchCategories = () => async (dispatch) => {
         });
     }
 };
+
+export const addToCart = (data, qty = 1) =>
+    (dispatch, getState) => {
+        const state = getState().products;
+        const productToAdd = state.products.find(
+            item => item.id === data.id
+        );
+        const isQuantityExist = productToAdd.quantity >= qty;
+
+        if (isQuantityExist) {
+            dispatch({ type: 'ADD_CART', payload: { ...data, quantity: qty } });
+            localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
+        } else {
+            console.log('error');
+        }
+    };
