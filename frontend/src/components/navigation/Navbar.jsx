@@ -20,8 +20,8 @@ const Navbar = () => {
           <span className='text-pink-400 ml-1 first-letter:text-green-300 uppercase'>- Shop</span>
         </Link>
 
-        <ul className={`flex sm:gap-10 gap-4 sm:items-center sm:static absolute left-0 top-16 sm:shadow-none shadow-md
-        ${navOpen ? 'h-fit sm:pb-0 pb-5' : 'h-0 overflow-hidden'} transition-all duration-100 sm:h-fit sm:bg-none bg-custom-gradient text-white sm:w-fit w-full sm:flex-row flex-col px-4 sm:px-0`}>
+        <ul className={`flex sm:gap-10 gap-4 sm:items-center sm:static absolute left-1/2 top-16 sm:shadow-none shadow-md
+        ${navOpen ? 'h-fit sm:pb-0 pb-5' : 'h-0 overflow-hidden'} transition-all duration-100 sm:h-fit sm:bg-none bg-custom-gradient text-white sm:w-fit w-1/2 sm:flex-row flex-col px-4 sm:px-0`}>
 
 
           <li className='font-medium transition-all duration-150'>
@@ -78,7 +78,7 @@ const Navbar = () => {
 
         <button
         onClick={() => setNavOpen(!navOpen)}
-        className='sm:hidden flex items-center sm:mt-0 mt-2'>
+        className='sm:hidden flex items-center sm:mt-0 mt-2 cursor-pointer'>
           {navOpen ? (
             <RxCross2 className='text-white text-3xl'/>
           ) : (

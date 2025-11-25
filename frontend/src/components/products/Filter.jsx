@@ -61,9 +61,9 @@ const Filter = ({categories}) => {
     };
 
     return (
-        <div className='flex lg:flex-row flex-col-reverse lg:justify-between place-items-center'>
+        <div className='flex lg:flex-row flex-col-reverse lg:justify-between place-items-center gap-4'>
             {/* Search Bar */}
-            <div className='relative flex items-center 2xl:w-[450px] sm:w-[420px] w-full'>
+            <div className='relative flex items-center 2xl:w-[450px] sm:w-[445px] md:w- w-full'>
                 <input
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}

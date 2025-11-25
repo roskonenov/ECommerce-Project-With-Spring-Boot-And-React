@@ -2,11 +2,12 @@ import './App.css';
 import Home from './components/home/Home';
 import Navbar from './components/navigation/Navbar';
 import Products from './components/products/Products';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import About from "./components/about/About.jsx";
 import Contacts from './components/contact/Contacts.jsx';
-import { Toaster } from 'react-hot-toast';
 import React from 'react';
+import Cart from './components/cart/Cart.jsx';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path='/products' element={<Products />} />
           <Route path='/about' element={<About />} />
           <Route path='/contacts' element={<Contacts />} />
+          <Route path='/cart' element={<Cart />} />
         </Routes>
       </Router>
     </React.Fragment>
