@@ -1,8 +1,17 @@
 import React from 'react'
 import { MdArrowBack, MdShoppingCart, MdShoppingCartCheckout } from 'react-icons/md'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import ItemContent from './ItemContent'
 
 const Cart = () => {
+    const {cart} = useSelector(state => state.carts);
+    const cartCopy = {...cart};
+
+    cartCopy.totalPrice = cart.reduce((acc, current) => {
+        return acc + Number(current?.specialPrice) * Number(current?.quantity);
+    }, 0);
+
     return (
         <div className='px-4 sm:px-8 lg:px-16 py-10'>
             <header className='flex flex-col items-center mb-12 gap-4'>
@@ -33,6 +42,10 @@ const Cart = () => {
                     Total
                 </div>
                 
+            </div>
+
+            <div>
+                {cart?.length > 0 && cart.map((product, i) => <ItemContent key={i} {...product}/>)}
             </div>
 
             <div className='border-t-2 border-slate-300 py-4 flex sm:flex-row flex-col sm:px-0 px-2 sm:justify-between gap-4'>
