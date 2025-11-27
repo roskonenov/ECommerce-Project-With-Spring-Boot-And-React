@@ -45,7 +45,7 @@ const Cart = () => {
             </div>
 
             <div>
-                {cart?.length > 0 && cart.map((product, i) => <ItemContent key={i} {...product}/>)}
+                {cart?.length > 0 && cart.map((product, i) => <ItemContent key={i} item={product}/>)}
             </div>
 
             <div className='border-t-2 border-slate-300 py-4 flex sm:flex-row flex-col sm:px-0 px-2 sm:justify-between gap-4'>

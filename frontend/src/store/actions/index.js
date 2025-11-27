@@ -4,16 +4,14 @@ const CACHE_TTL = 60 * 10000 // 10 minutes
 
 export const fetchProducts = (params) => async (dispatch, getState) => {
     try {
-        const state = getState().products;
-        const cache = state.productsCache;
-        const timestamps = state.productsCacheTimeStamps;
+        const { productsCache, productsCacheTimeStamps } = getState().products;
 
         const isCategory = typeof params === 'number';
         const categoryId = isCategory ? params : null;
 
         if (categoryId) {
-            const cachedData = cache[categoryId];
-            const cachedTime = timestamps[categoryId];
+            const cachedData = productsCache[categoryId];
+            const cachedTime = productsCacheTimeStamps[categoryId];
 
             const isCacheValid = cachedData && cachedTime && Date.now() - cachedTime < CACHE_TTL;
 
@@ -84,17 +82,42 @@ export const fetchCategories = () => async (dispatch) => {
 
 export const addToCart = (data, toast, qty = 1) =>
     (dispatch, getState) => {
-        const state = getState().products;
-        const productToAdd = state.products.find(
+        const { products } = getState().products;
+        const productToAdd = products.find(
             item => item.id === data.id
         );
         const isQuantityExist = productToAdd.quantity >= qty;
 
         if (isQuantityExist) {
-            dispatch({ type: 'ADD_CART', payload: { ...data, quantity: qty } });
+            dispatch({ type: 'ADD_CART', payload: { ...data, cartQuantity: qty } });
             toast.success(`${productToAdd.name} added to cart!`)
             localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
         } else {
             toast.error('Out of Stock!')
         }
     };
+
+export const increaseCartItemQuantity = (data, toast, currentQuantity, setCurrentQuantity) =>
+    (dispatch, getState) => {
+
+        const { cart } = getState().carts;
+        const getProduct = cart.find(
+            item => item.id === data.id
+        );
+
+        const newQuantity = currentQuantity + 1;
+        const isQuantityExist = getProduct.quantity >= newQuantity;
+
+        if (isQuantityExist) {
+            setCurrentQuantity(newQuantity);
+
+            dispatch({
+                type: 'ADD_CART',
+                payload: {...data, cartQuantity: newQuantity}
+            });
+
+            localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
+        } else {
+            toast.error('Item\'s quantity limit reached!')
+        }
+    }
