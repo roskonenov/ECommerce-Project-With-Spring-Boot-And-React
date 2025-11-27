@@ -3,7 +3,7 @@ import SetQuantity from './SetQuantity';
 import { HiOutlineTrash } from "react-icons/hi";
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
-import { increaseCartItemQuantity } from '../../store/actions';
+import { decreaseCartItemQuantity, increaseCartItemQuantity } from '../../store/actions';
 
 
 const ItemContent = ({item}) => {
@@ -12,6 +12,13 @@ const ItemContent = ({item}) => {
 
     const handleQtyIncrease = (cartItem) => {
         dispatch(increaseCartItemQuantity(cartItem, toast, currentQuantity, setCurrentQuantity));
+    }
+
+    const handleQtyDecrease = (cartItem) => {
+        const newQuantity = cartItem.cartQuantity - 1;
+        if (newQuantity <= 0) return;
+        setCurrentQuantity(newQuantity);
+        dispatch(decreaseCartItemQuantity(cartItem, newQuantity))
     }
 
     return (
@@ -49,10 +56,11 @@ const ItemContent = ({item}) => {
 
             <div className='justify-self-center'>
                 <SetQuantity 
-                quantity={currentQuantity}
+                quantity={item.quantity}
+                cartQuantity={currentQuantity}
                 cardCounter={true}
                 handleQtyIncrease={() => handleQtyIncrease(item)}
-                handleQtyDecrease={() => {}}
+                handleQtyDecrease={() => handleQtyDecrease(item)}
                 />
             </div>
 

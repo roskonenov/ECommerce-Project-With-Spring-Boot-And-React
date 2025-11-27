@@ -113,11 +113,20 @@ export const increaseCartItemQuantity = (data, toast, currentQuantity, setCurren
 
             dispatch({
                 type: 'ADD_CART',
-                payload: {...data, cartQuantity: newQuantity}
+                payload: { ...data, cartQuantity: newQuantity }
             });
 
             localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
         } else {
             toast.error('Item\'s quantity limit reached!')
         }
+    }
+
+export const decreaseCartItemQuantity = (data, newQuantity) =>
+    (dispatch, getState) => {
+        dispatch({
+            type: 'ADD_CART',
+            payload: { ...data, cartQuantity: newQuantity }
+        });
+        localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
     }
