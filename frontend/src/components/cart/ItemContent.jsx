@@ -4,9 +4,11 @@ import { HiOutlineTrash } from "react-icons/hi";
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { decreaseCartItemQuantity, increaseCartItemQuantity, removeFromCart } from '../../store/actions';
+import { currencyFormatter } from '../../utils/CurrencyFormatter';
+import truncateText from '../../utils/truncateText';
 
 
-const ItemContent = ({item}) => {
+const ItemContent = ({ item }) => {
     const [currentQuantity, setCurrentQuantity] = useState(item.cartQuantity);
     const dispatch = useDispatch();
 
@@ -36,23 +38,23 @@ const ItemContent = ({item}) => {
 
                 <div className='flex md:flex-row flex-col lg:gap-4 sm:gap-3 gap-0 items-start'>
                     <h3 className='lg:text-lg text-sm font-semibold text-slate-600'>
-                        {item.name}
+                        {truncateText(item.name)}
                     </h3>
                 </div>
 
                 <div>
-                    <img 
-                    src={item.image} 
-                    alt={item.name} 
-                    className='md:h-36 sm:h-24 h-12 w-full object-cover rounded-md'/>
+                    <img
+                        src={item.image}
+                        alt={item.name}
+                        className='md:h-36 sm:h-24 h-12 w-full object-cover rounded-md' />
                 </div>
 
                 <div>
                     <button
-                    onClick={() => removeItemFromCart(item)}
-                    className='flex items-center font-semibold space-x-2 px-3 py-1 text-xs border border-rose-600 text-rose-600 rounded-md hover:bg-red-100 transition-colors duration-200 cursor-pointer'
+                        onClick={() => removeItemFromCart(item)}
+                        className='flex items-center font-semibold space-x-2 px-3 py-1 text-xs border border-rose-600 text-rose-600 rounded-md hover:bg-red-100 transition-colors duration-200 cursor-pointer'
                     >
-                        <HiOutlineTrash size={16} className='text-rose-600'/>
+                        <HiOutlineTrash size={16} className='text-rose-600' />
                         Remove Item
                     </button>
                 </div>
@@ -60,21 +62,21 @@ const ItemContent = ({item}) => {
             </div>
 
             <div className='justify-self-center lg:text-lg text-sm text-slate-600 font-semibold'>
-                {`$${Number(item.specialPrice).toFixed(2)}`}
+                {currencyFormatter(item.specialPrice)}
             </div>
 
             <div className='justify-self-center'>
-                <SetQuantity 
-                quantity={item.quantity}
-                cartQuantity={currentQuantity}
-                cardCounter={true}
-                handleQtyIncrease={() => handleQtyIncrease(item)}
-                handleQtyDecrease={() => handleQtyDecrease(item)}
+                <SetQuantity
+                    quantity={item.quantity}
+                    cartQuantity={currentQuantity}
+                    cardCounter={true}
+                    handleQtyIncrease={() => handleQtyIncrease(item)}
+                    handleQtyDecrease={() => handleQtyDecrease(item)}
                 />
             </div>
 
             <div className='justify-self-center lg:text-lg text-sm text-slate-600 font-semibold'>
-                {`$${(Number(item.specialPrice) * Number(item.cartQuantity)).toFixed(2)}`}
+                {currencyFormatter(item.specialPrice * item.cartQuantity)}
             </div>
         </div>
     )
