@@ -4,9 +4,11 @@ import { FaShoppingCart, FaSignInAlt } from 'react-icons/fa';
 import { RxCross2 } from "react-icons/rx";
 import { IoIosMenu } from "react-icons/io";
 import { GiShop } from "react-icons/gi"; import { Link, useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const [navOpen, setNavOpen] = useState(false);
+  const { cart } = useSelector(state => state.carts);
 
   const path = useLocation().pathname;
   return (
@@ -56,8 +58,8 @@ const Navbar = () => {
             <Link className={`${path === '/cart' ? 'text-white font-semibold' : 'text-gray-400'}`}
               to='/cart'>
               <Badge
-                showZero
-                badgeContent={0}
+                showZero={false}
+                badgeContent={cart.length || 0}
                 color='primary'
                 overlap='circular'
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
@@ -77,10 +79,10 @@ const Navbar = () => {
         </ul>
 
         <button
-        onClick={() => setNavOpen(!navOpen)}
-        className='sm:hidden flex items-center sm:mt-0 mt-2 cursor-pointer'>
+          onClick={() => setNavOpen(!navOpen)}
+          className='sm:hidden flex items-center sm:mt-0 mt-2 cursor-pointer'>
           {navOpen ? (
-            <RxCross2 className='text-white text-3xl'/>
+            <RxCross2 className='text-white text-3xl' />
           ) : (
             <IoIosMenu className='text-white text-3xl' />
           )}
