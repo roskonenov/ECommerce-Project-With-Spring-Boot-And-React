@@ -3,7 +3,7 @@ import SetQuantity from './SetQuantity';
 import { HiOutlineTrash } from "react-icons/hi";
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
-import { decreaseCartItemQuantity, increaseCartItemQuantity } from '../../store/actions';
+import { decreaseCartItemQuantity, increaseCartItemQuantity, removeFromCart } from '../../store/actions';
 
 
 const ItemContent = ({item}) => {
@@ -19,6 +19,10 @@ const ItemContent = ({item}) => {
         if (newQuantity <= 0) return;
         setCurrentQuantity(newQuantity);
         dispatch(decreaseCartItemQuantity(cartItem, newQuantity))
+    }
+
+    const removeItemFromCart = (item) => {
+        dispatch(removeFromCart(item, toast));
     }
 
     return (
@@ -40,7 +44,7 @@ const ItemContent = ({item}) => {
 
                 <div>
                     <button
-                    onClick={() => {}}
+                    onClick={() => removeItemFromCart(item)}
                     className='flex items-center font-semibold space-x-2 px-3 py-1 text-xs border border-rose-600 text-rose-600 rounded-md hover:bg-red-100 transition-colors duration-200 cursor-pointer'
                     >
                         <HiOutlineTrash size={16} className='text-rose-600'/>

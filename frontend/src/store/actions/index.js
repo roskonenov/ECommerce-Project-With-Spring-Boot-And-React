@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import api from "../../api/api";
 
 const CACHE_TTL = 60 * 10000 // 10 minutes
@@ -130,3 +131,13 @@ export const decreaseCartItemQuantity = (data, newQuantity) =>
         });
         localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
     }
+
+export const removeFromCart = (data, toast) => (dispatch, getState) => {
+    dispatch({
+        type: 'REMOVE_CART',
+        payload: data
+    });
+
+    toast.success(`${data.name} removed from cart!`)
+    localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
+};
