@@ -3,14 +3,17 @@ import { MdArrowBack, MdShoppingCart, MdShoppingCartCheckout } from 'react-icons
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ItemContent from './ItemContent'
+import EmptyCart from './EmptyCart'
 
 const Cart = () => {
-    const {cart} = useSelector(state => state.carts);
-    const cartCopy = {...cart};
+    const { cart } = useSelector(state => state.carts);
+    const cartCopy = { ...cart };
 
     cartCopy.totalPrice = cart.reduce((acc, current) => {
         return acc + Number(current?.specialPrice) * Number(current?.quantity);
     }, 0);
+
+    if (!cart || cart.length < 1) return <EmptyCart />;
 
     return (
         <div className='px-4 sm:px-8 lg:px-16 py-10'>
@@ -41,11 +44,11 @@ const Cart = () => {
                 <div className='justify-self-center text-lg text-slate-800'>
                     Total
                 </div>
-                
+
             </div>
 
             <div>
-                {cart?.length > 0 && cart.map((product, i) => <ItemContent key={i} item={product}/>)}
+                {cart?.length > 0 && cart.map((product, i) => <ItemContent key={i} item={product} />)}
             </div>
 
             <div className='border-t-2 border-slate-300 py-4 flex sm:flex-row flex-col sm:px-0 px-2 sm:justify-between gap-4'>
