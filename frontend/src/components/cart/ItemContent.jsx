@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import SetQuantity from './SetQuantity';
 import { HiOutlineTrash } from "react-icons/hi";
 import { useDispatch } from 'react-redux';
@@ -9,6 +9,11 @@ import { decreaseCartItemQuantity, increaseCartItemQuantity, removeFromCart } fr
 const ItemContent = ({item}) => {
     const [currentQuantity, setCurrentQuantity] = useState(item.cartQuantity);
     const dispatch = useDispatch();
+
+    // sync currentQuantity when item prop changes (e.g., after remove/update from another component)
+    useEffect(() => {
+        setCurrentQuantity(item.cartQuantity);
+    }, [item.cartQuantity, item.id]);
 
     const handleQtyIncrease = (cartItem) => {
         dispatch(increaseCartItemQuantity(cartItem, toast, currentQuantity, setCurrentQuantity));

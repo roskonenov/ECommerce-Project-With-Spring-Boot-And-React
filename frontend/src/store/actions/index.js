@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import api from "../../api/api";
 
 const CACHE_TTL = 60 * 10000 // 10 minutes
