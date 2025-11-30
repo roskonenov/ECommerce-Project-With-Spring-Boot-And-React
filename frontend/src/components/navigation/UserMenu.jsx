@@ -5,6 +5,7 @@ import { BiUser } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { IoIosExit } from 'react-icons/io';
+import Backdrop from './Backdrop';
 
 
 const UserMenu = () => {
@@ -22,6 +23,9 @@ const UserMenu = () => {
 
     return (
         <div className='relative z-30'>
+
+            {open && <Backdrop />}
+
             <div
                 className='cursor-pointer rounded-full hover:shadow-md transition'
                 onClick={handleClick}
@@ -37,7 +41,7 @@ const UserMenu = () => {
                 slotProps={{
                     list: {
                         'aria-labelledby': 'basic-button',
-                        sx: { width: 160, background: '#dbdfe6ff'}
+                        sx: { width: 160, background: '#c9ced6ff'}
                     },
                 }}
             >

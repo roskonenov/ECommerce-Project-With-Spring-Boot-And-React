@@ -42,7 +42,7 @@
   }
   70% {
     opacity: 0.9;
-    transform: translateX(-0.3rem);
+    transform: translateX(-1rem);
   }
   100% {
     opacity: 1;
