@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import api from "../../api/api";
 
 const CACHE_TTL = 60 * 10000 // 10 minutes
@@ -139,4 +140,22 @@ export const removeFromCart = (data, toast) => (dispatch, getState) => {
 
     toast.success(`${data.name} removed from cart!`)
     localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
+};
+
+export const authenticateUserLogin = (loginData, toast, reset, navigate, setLoader) => async (dispatch) => {
+    try {
+        setLoader(true);
+        const { data } = await api.post('/auth/signin', loginData);
+        dispatch({ type: 'LOGIN_USER', payload: data });
+        reset();
+        localStorage.setItem('auth', JSON.stringify(data));
+        navigate('/')
+        toast.success('Login Successful!')
+    } catch (error) {
+        toast.error(error?.response?.data?.message || 'Something went wrong! Try again later :(')
+
+    } finally {
+        setLoader(false);
+    }
+
 };
