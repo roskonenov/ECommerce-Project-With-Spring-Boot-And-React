@@ -16,7 +16,7 @@ const InputField = ({
     return (
         <div className='flex flex-col gap-1 w-full'>
 
-            <label htmlFor='id'
+            <label htmlFor={id}
                 className={`${className ? className : ''} 
             font-semibold text-sm text-slate-800`}
             >
@@ -59,4 +59,4 @@ const InputField = ({
     )
 }
 
-export default InputField
+export default InputField;

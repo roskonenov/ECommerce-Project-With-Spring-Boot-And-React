@@ -8,13 +8,14 @@ import React from 'react';
 import Cart from './components/cart/Cart.jsx';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import LogIn from './components/auth/LogIn.jsx';
 
 
 function App() {
 
   return (
     <React.Fragment>
-      <Toaster position='top-right'/>
+      <Toaster position='top-center'/>
       <Router>
         <Navbar />
         <Routes>
@@ -23,6 +24,7 @@ function App() {
           <Route path='/about' element={<About />} />
           <Route path='/contacts' element={<Contacts />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/login' element={<LogIn />} />
         </Routes>
       </Router>
     </React.Fragment>
