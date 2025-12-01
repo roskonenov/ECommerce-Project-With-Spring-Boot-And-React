@@ -169,16 +169,28 @@ export const registerUser = (loginData, toast, reset, navigate, setLoader) => as
         dispatch(authenticateUserLogin(loginData, toast, reset, navigate, setLoader));
 
     } catch (error) {
-        toast.error(error?.response?.data?.message || 'Something went wrong! Try again later :(')
+        toast.error(error?.response?.data?.message || 'Something went wrong! Try again later :(');
 
     } finally {
         setLoader(false);
     }
 };
 
-export const logOut = (navigate, toast) => (dispatch) => {
-    dispatch({type: 'LOG_OUT'});
-    localStorage.removeItem('auth');
-    navigate('/');
-    toast.success('Logged out Seccessfully!')
+export const logOut = (navigate, toast, setLoader) => async (dispatch) => {
+    try {
+        setLoader(true);
+        const { data } = await api.post('/auth/signout');
+        dispatch({ type: 'LOG_OUT' });
+        localStorage.removeItem('auth');
+        navigate('/');
+        toast.success(data?.message || 'Logged out Seccessfully!');
+
+    } catch (error) {
+        console.log(error);
+        toast.error('Something went wrong! Try again later :(');
+
+    } finally {
+        setLoader(false);
+    }
+
 };

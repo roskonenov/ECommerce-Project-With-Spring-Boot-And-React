@@ -8,9 +8,11 @@ import { IoIosExit } from 'react-icons/io';
 import Backdrop from './Backdrop';
 import { logOut } from '../../store/actions';
 import toast from 'react-hot-toast';
+import Spinner from '../shared/Spinner';
 
 
 const UserMenu = () => {
+    const [loader, setLoader] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const { user } = useSelector(state => state.auth);
@@ -26,7 +28,7 @@ const UserMenu = () => {
     };
 
     const handleLogOut = () => {
-        dispatch(logOut(navigate, toast));
+        dispatch(logOut(navigate, toast, setLoader));
     };
 
     return (
@@ -49,7 +51,7 @@ const UserMenu = () => {
                 slotProps={{
                     list: {
                         'aria-labelledby': 'basic-button',
-                        sx: { width: 160, background: '#c9ced6ff'}
+                        sx: { width: 160, background: '#c9ced6ff' }
                     },
                 }}
             >
@@ -75,8 +77,16 @@ const UserMenu = () => {
                     className='flex gap-2'
                     onClick={handleLogOut}>
                     <div className='bg-button-gradient w-full rounded-sm text-white flex gap-2 justify-center items-center py-1 px-4 font-semibold'>
-                        <IoIosExit className='text-xl' />
-                        <span className='text-[16px] font-semibold'>Logout</span>
+                        {loader ?
+                            <>
+                                <Spinner classProps={'w-6'} />
+                                <span className='text-[16px] font-semibold'>Logging out</span>
+                            </>
+                            :
+                            <>
+                                <IoIosExit className='text-xl' />
+                                <span className='text-[16px] font-semibold'>Logout</span>
+                            </>}
                     </div>
                 </MenuItem>
             </Menu>
