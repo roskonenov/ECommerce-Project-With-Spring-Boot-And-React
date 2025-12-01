@@ -31,7 +31,7 @@ const About = () => {
                     Welcome to our online store! We believe shopping should be simple, enjoyable, and accessible to everyone. That's why we offer a carefully curated selection of products that combine quality, style, and practicality.
                     Our mission is to provide fast service, secure shopping, and a personalized experience every time. Thank you for choosing us — your trust is our greatest motivation.
                 </p>
-                <div className="w-full min-h-110 max-w-[45%] md:w-1/2 rounded-md flex items-center justify-center">
+                <div className="w-full min-h-110 md:max-w-[45%] md:w-1/2 rounded-md flex items-center justify-center">
                     <img
                         key={currentIndex}
                         src={aboutImages[currentIndex]}

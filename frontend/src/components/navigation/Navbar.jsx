@@ -24,7 +24,7 @@ const Navbar = () => {
           <span className='text-pink-400 ml-1 first-letter:text-green-300 uppercase'>- Shop</span>
         </Link>
 
-        <ul className={`flex sm:gap-10 gap-4 sm:items-center sm:static absolute left-1/2 top-16 sm:shadow-none shadow-md
+        <ul className={`flex sm:gap-6 md:gap-8 lg:gap-10 gap-4 sm:items-center sm:static absolute left-1/2 top-16 sm:shadow-none shadow-md
         ${navOpen ? 'h-fit sm:pb-0 pb-5' : 'h-0 overflow-hidden'} transition-all duration-100 sm:h-fit sm:bg-none bg-custom-gradient text-white sm:w-fit w-1/2 sm:flex-row flex-col px-4 sm:px-0`}>
 
 
