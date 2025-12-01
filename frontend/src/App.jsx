@@ -10,6 +10,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import LogIn from './components/auth/LogIn.jsx';
 import PrivateRoute from './components/guards/PrivateRoute.jsx';
+import Register from './components/auth/Register.jsx';
 
 
 function App() {
@@ -28,8 +29,9 @@ function App() {
 
           <Route element={<PrivateRoute publicPage />} >
             <Route path='/login' element={<LogIn />} />
+            <Route path='/register' element={<Register />} />
           </Route>
-          
+
         </Routes>
       </Router>
     </React.Fragment>

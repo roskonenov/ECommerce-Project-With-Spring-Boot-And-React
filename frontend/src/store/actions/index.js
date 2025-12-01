@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import api from "../../api/api";
 
 const CACHE_TTL = 60 * 10000 // 10 minutes
@@ -150,12 +149,29 @@ export const authenticateUserLogin = (loginData, toast, reset, navigate, setLoad
         reset();
         localStorage.setItem('auth', JSON.stringify(data));
         navigate('/')
-        toast.success('Login Successful!')
+        toast.success('Login Successful!');
+
+    } catch (error) {
+
+        toast.error(error?.response?.data?.message || 'Something went wrong! Try again later :(')
+
+    } finally {
+        setLoader(false);
+    }
+};
+
+export const registerUser = (loginData, toast, reset, navigate, setLoader) => async (dispatch) => {
+    try {
+        setLoader(true);
+        const { data } = await api.post('/auth/signup', loginData);
+        reset();
+        toast.success(data?.message || 'User Registered Successfully!')
+        dispatch(authenticateUserLogin(loginData, toast, reset, navigate, setLoader));
+
     } catch (error) {
         toast.error(error?.response?.data?.message || 'Something went wrong! Try again later :(')
 
     } finally {
         setLoader(false);
     }
-
 };
