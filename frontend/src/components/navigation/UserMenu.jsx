@@ -1,17 +1,21 @@
 import { Avatar, Button, Menu, MenuItem } from '@mui/material';
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BiUser } from "react-icons/bi";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { IoIosExit } from 'react-icons/io';
 import Backdrop from './Backdrop';
+import { logOut } from '../../store/actions';
+import toast from 'react-hot-toast';
 
 
 const UserMenu = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const { user } = useSelector(state => state.auth)
+    const { user } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -19,6 +23,10 @@ const UserMenu = () => {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleLogOut = () => {
+        dispatch(logOut(navigate, toast));
     };
 
     return (
@@ -65,7 +73,7 @@ const UserMenu = () => {
 
                 <MenuItem
                     className='flex gap-2'
-                    onClick={handleClose}>
+                    onClick={handleLogOut}>
                     <div className='bg-button-gradient w-full rounded-sm text-white flex gap-2 justify-center items-center py-1 px-4 font-semibold'>
                         <IoIosExit className='text-xl' />
                         <span className='text-[16px] font-semibold'>Logout</span>
