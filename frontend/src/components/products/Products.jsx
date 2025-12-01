@@ -25,7 +25,7 @@ const Products = () => {
             {categories &&
                 <Filter categories={categories} />}
             {isLoading ? (
-                <Spinner />
+                <Spinner classProps={'mx-auto my-50 w-15'}/>
             ) : errorMessage ? (
                 <div className='flex justify-center items-center h-[200px]'>
                     <FaExclamationTriangle className='text-slate-800 text-3xl mr-2' />

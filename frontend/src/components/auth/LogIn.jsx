@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authenticateUserLogin } from '../../store/actions';
 import toast from 'react-hot-toast';
+import Spinner from '../shared/Spinner';
 
 
 const LogIn = () => {
@@ -56,9 +57,15 @@ const LogIn = () => {
 
                 </div>
 
-                <button className={`bg-button-gradient flex gap-2 items-center justify-center rounded-md text-white font-semibold w-full my-4 hover:text-slate-400 transition-colors duration-100 py-2 ${loader ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                <button className={`bg-button-gradient flex gap-3 items-center justify-center rounded-md text-white font-semibold w-full my-4 hover:text-slate-400 transition-colors duration-100 py-2 ${loader ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     disabled={loader}>
-                    {loader ? <>Loading...</> : <>Login</>}
+                    {loader ?
+                        <>
+                            <Spinner classProps={'w-6'}/>
+                            Loading...
+                        </>
+                        :
+                        <>Login</>}
                 </button>
 
                 <p className='text-slate-600 text-sm flex gap-2 justify-center items-center mt-5'>

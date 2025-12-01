@@ -28,7 +28,7 @@ const Home = () => {
       </div>
       {isLoading ? (
         <div className='min-h-[700px]'>
-          <Spinner />
+          <Spinner classProps={'mx-auto my-50 w-15'}/>
         </div>
       ) : errorMessage ? (
         <div className='flex justify-center items-center h-[200px]'>

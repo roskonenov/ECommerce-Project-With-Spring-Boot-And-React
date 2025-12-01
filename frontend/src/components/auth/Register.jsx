@@ -6,6 +6,7 @@ import { FaUserPlus } from "react-icons/fa";
 import InputField from '../shared/InputField';
 import toast from 'react-hot-toast';
 import { registerUser } from '../../store/actions';
+import Spinner from '../shared/Spinner';
 
 
 const Register = () => {
@@ -68,9 +69,15 @@ const Register = () => {
 
                 </div>
 
-                <button className={`bg-button-gradient flex gap-2 items-center justify-center rounded-md text-white font-semibold w-full my-4 hover:text-slate-400 transition-colors duration-100 py-2 ${loader ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                <button className={`bg-button-gradient flex gap-4 items-center justify-center rounded-md text-white font-semibold w-full my-4 hover:text-slate-400 transition-colors duration-100 py-2 ${loader ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     disabled={loader}>
-                    {loader ? <>Loading...</> : <>Register</>}
+                    {loader ?
+                        <>
+                            <Spinner classProps={'w-6'} />
+                            Loading...
+                        </>
+                        :
+                        <>Register</>}
                 </button>
 
                 <p className='text-slate-600 text-sm flex gap-2 justify-center items-center mt-5'>
