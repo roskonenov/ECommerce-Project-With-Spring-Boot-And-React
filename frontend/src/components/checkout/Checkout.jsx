@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Step, StepLabel, Stepper } from '@mui/material';
+import AddressInfo from './AddressInfo';
 
 const Checkout = () => {
     const [activeStep, setActiveStep] = useState(0);
@@ -11,10 +12,13 @@ const Checkout = () => {
         <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map((label, index) => (
                 <Step key={index}>
-                    <StepLabel sx={{color: 'blue', fontWeight: 'bold'}}>{label}</StepLabel>
+                    <StepLabel>{label}</StepLabel>
                 </Step>
             ))}
         </Stepper>
+        <div className='mt-16'>
+            {activeStep === 0 && <AddressInfo />}
+        </div>
     </div>
   )
 }
