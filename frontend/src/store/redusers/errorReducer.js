@@ -1,6 +1,7 @@
 const initialState = {
     isLoading: false,
-    errorMessage: null
+    errorMessage: null,
+    btnLoader: false
 };
 
 export const errorReducer = (state = initialState, action) => {

@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import AddressSceleton from './AddressSceleton';
 import { FaRegAddressBook } from 'react-icons/fa';
+import AddAddressModal from './AddAddressModal';
+import AddAddressForm from './AddAddressForm';
 
 const AddressInfo = () => {
     const [openAddAddressModal, setOpenAddAddressModal] = useState(false);
@@ -46,6 +48,12 @@ const AddressInfo = () => {
                 className='bg-blue-500 py-3 px-6 rounded text-white font-semibold mx-auto block mt-4 cursor-pointer hover:bg-custom-blue transition-colors'>
                 Add Address
             </button>
+
+            <AddAddressModal
+                open={openAddAddressModal}
+                setOpen={setOpenAddAddressModal}>
+                <AddAddressForm />
+            </AddAddressModal>
         </div>
     )
 }

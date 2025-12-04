@@ -83,7 +83,7 @@ const Register = () => {
                 <p className='text-slate-600 text-sm flex gap-2 justify-center items-center mt-5'>
                     Already have an account?
                     <Link className='font-semibold underline hover:text-slate-900 transition'
-                        to='/register'>
+                        to='/login'>
                         <span>
                             Login Here
                         </span>
