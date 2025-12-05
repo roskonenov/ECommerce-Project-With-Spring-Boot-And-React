@@ -9,7 +9,7 @@ const Spinner = ({classProps}) => {
         before:mix-blend-darken before:animate-[spin_2s_infinite_linear]
         after:content-[''] after:col-start-1 after:row-start-1 after:border-8 
         after:rounded-full after:border-t-transparent after:border-l-transparent 
-        after:border-b-blue-600 after:border-r-blue-600 after:mix-blend-darken 
+        after:border-b-blue-800 after:border-r-blue-800 after:mix-blend-darken 
         after:animate-[spin_1s_infinite_linear_reverse]`}></div>)
 }
 

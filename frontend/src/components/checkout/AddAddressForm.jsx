@@ -2,14 +2,20 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import InputField from '../shared/InputField';
 import { FaRegAddressCard } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../shared/Spinner';
+import toast from 'react-hot-toast';
+import { addUpdateUserAddress } from '../../store/actions';
 
-const AddAddressForm = () => {
+const AddAddressForm = ({ address, setOpenModal }) => {
+    const dispatch = useDispatch();
     const { btnLoader } = useSelector(state => state.errors);
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onTouched' });
+    const { register, handleSubmit, formState: { errors } } = useForm({ mode: 'onTouched' });
 
     const onAddressSaveHandler = (data) => {
+        console.log(data, address, setOpenModal);
+        
+        dispatch(addUpdateUserAddress(data, toast, address?.id, setOpenModal));
     };
 
     return (
@@ -95,7 +101,9 @@ const AddAddressForm = () => {
 
                 </div>
 
-                <button className={`text-white bg-custom-blue rounded-md px-4 py-2 mt-4 ${btnLoader ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                <button
+                    type='submit'
+                    className={`flex gap-2 text-white bg-custom-blue rounded-md px-4 py-2 mt-4 ${btnLoader ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     disabled={btnLoader}>
                     {btnLoader ?
                         <>

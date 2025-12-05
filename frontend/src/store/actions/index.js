@@ -187,10 +187,29 @@ export const logOut = (navigate, toast, setLoader) => async (dispatch) => {
 
     } catch (error) {
         console.log(error);
-        toast.error('Something went wrong! Try again later :(');
+        toast.error(error?.response?.data?.message || 'Something went wrong! Try again later :(');
 
     } finally {
         setLoader(false);
     }
+};
 
+export const addUpdateUserAddress = (sendData, toast, addressId, setOpenModal) => async (dispatch) => {
+    dispatch({type: 'BUTTON_LOADER'});
+    
+    try {
+        const { data } = await api.post('/addresses', sendData);
+        toast.success('Address Saved Successfilly!');
+
+    } catch (error) {
+        console.log(error);
+        toast.error(error?.response?.data?.message || 'Something went wrong! Try again later :(');
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message
+        });
+
+    } finally {
+        setOpenModal(false);
+    }
 };
