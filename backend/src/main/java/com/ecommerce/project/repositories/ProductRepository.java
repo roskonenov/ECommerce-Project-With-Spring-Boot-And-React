@@ -18,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
         return product;
     }
 
-    Page<Product> findByCategoryOrderByPriceAsc(Category category, Pageable pageable);
+    Page<Product> findByCategory(Category category, Pageable pageable);
 
     Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 

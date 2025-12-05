@@ -50,7 +50,7 @@ public class AuthController {
         } catch (AuthenticationException e) {
             return new ResponseEntity<>(
                     Map.of(
-                            "message", "Bad credentials",
+                            "message", "Username or password incorrect!",
                             "status", false
                     ),
                     HttpStatus.NOT_FOUND
@@ -79,13 +79,13 @@ public class AuthController {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Username already exists"));
+                    .body(new MessageResponse("Username already exists!"));
         }
 
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("This Email is already used"));
+                    .body(new MessageResponse("This Email is already registered!"));
         }
 
         Set<Role> roles = signupRequest.getRoles() == null
@@ -111,7 +111,7 @@ public class AuthController {
                         .setEmail(signupRequest.getEmail())
                         .setRoles(roles)
         );
-        return ResponseEntity.ok(new MessageResponse("User registered successfully"));
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
     @GetMapping("username")
@@ -125,7 +125,7 @@ public class AuthController {
         return userDetails == null
                 ?
                 ResponseEntity.badRequest()
-                        .body(new MessageResponse("User not found"))
+                        .body(new MessageResponse("User not found!"))
                 :
                 ResponseEntity.ok(new UserInfoResponse(
                         userDetails.getId(),

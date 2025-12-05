@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderItem> orderItems = createOrderItems(cart, savedOrder);
 
-        updateProductSock(cart);
+        updateProductStock(cart);
         cart.getCartItems().clear();
         cartRepository.save(cart);
 
@@ -111,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cart", "email", authUtil.loggedInUserEmail()));
     }
 
-    private void updateProductSock(Cart cart) {
+    private void updateProductStock(Cart cart) {
         cart.getCartItems()
                 .forEach(item -> {
                     productRepository.save(item.getProduct()

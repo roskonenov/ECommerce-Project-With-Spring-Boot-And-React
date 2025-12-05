@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId));
 
         Page<Product> productPage = Optional.of(
-                        productRepository.findByCategoryOrderByPriceAsc(
+                        productRepository.findByCategory(
                                 category,
                                 PageRequest.of(pageNumber, pageSize, sorting)
                         ))
