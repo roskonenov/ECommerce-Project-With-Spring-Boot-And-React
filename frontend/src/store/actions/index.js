@@ -50,7 +50,7 @@ export const fetchProducts = (params) => async (dispatch, getState) => {
         console.log(error);
         dispatch({
             type: 'IS_ERROR',
-            payload: error?.response?.data?.message
+            payload: error?.response?.data?.message || 'Failed to fetch Products!'
         });
     }
 };
@@ -75,7 +75,7 @@ export const fetchCategories = () => async (dispatch) => {
         console.log(error);
         dispatch({
             type: 'IS_ERROR',
-            payload: error?.response?.data?.message
+            payload: error?.response?.data?.message || 'Failed to fetch Categories!'
         });
     }
 };
@@ -211,5 +211,22 @@ export const addUpdateUserAddress = (sendData, toast, addressId, setOpenModal) =
 
     } finally {
         setOpenModal(false);
+    }
+};
+
+export const fetchUserAddresses = () => async (dispatch, getState) => {
+    try {
+        dispatch({ type: 'IS_FETCHING' });
+
+        const { data } = await api.get(`/users/addresses`);
+        dispatch({type: 'FETCH_USER_ADDRESSES', payload: data});
+
+        dispatch({ type: 'IS_SUCCESS' });
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message || 'Failed to fetch user Addresses'
+        });
     }
 };

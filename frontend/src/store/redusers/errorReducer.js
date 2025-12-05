@@ -9,17 +9,20 @@ export const errorReducer = (state = initialState, action) => {
         case 'IS_FETCHING':
             return {
                 isLoading: true,
-                errorMessage: null
+                errorMessage: null,
+                btnLoader: true
             };
         case 'IS_SUCCESS':
             return {
                 isLoading: false,
-                errorMessage: null
+                errorMessage: null,
+                btnLoader: false
             };
         case 'IS_ERROR':
             return {
                 isLoading: false,
-                errorMessage: action.payload
+                errorMessage: action.payload,
+                btnLoader: false
             };
         default:
             return state;
