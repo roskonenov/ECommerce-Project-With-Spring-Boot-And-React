@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import InputField from '../shared/InputField';
 import { FaRegAddressCard } from 'react-icons/fa';
@@ -10,13 +10,22 @@ import { addUpdateUserAddress } from '../../store/actions';
 const AddAddressForm = ({ address, setOpenModal }) => {
     const dispatch = useDispatch();
     const { btnLoader } = useSelector(state => state.errors);
-    const { register, handleSubmit, formState: { errors } } = useForm({ mode: 'onTouched' });
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({ mode: 'onTouched' });
 
     const onAddressSaveHandler = (data) => {
-        console.log(data, address, setOpenModal);
-        
         dispatch(addUpdateUserAddress(data, toast, address?.id, setOpenModal));
     };
+
+    useEffect(() => {
+        if (!address.id) return;
+        setValue('country', address.country);
+        setValue('city', address.city);
+        setValue('state', address.state);
+        setValue('street', address.street);
+        setValue('building', address.building);
+        setValue('apartment', address.apartment);
+        setValue('postalCode', address.postalCode);
+    }, [address, setValue]);
 
     return (
         <div className=''>
@@ -25,7 +34,7 @@ const AddAddressForm = ({ address, setOpenModal }) => {
 
                 <div className='flex justify-center items-center gap-3 space-y-4 text-slate-800 font-semibold text-2xl px-2 py-4 mb-3'>
                     <FaRegAddressCard className='text-5xl text-slate-800' />
-                    Add Address
+                    {address?.id ? 'Edit Address' : 'Add Address'}
                 </div>
 
                 <div className='flex flex-col space-y-4'>

@@ -20,7 +20,8 @@ const AddressList = ({ addresses, selectedAddress, setSelectedAddress, setOpenAd
 
     return (
         <div className='space-y-4'>
-            {addresses.map(address => (
+            {addresses
+            .map(address => (
                 <div
                     key={address.id}
                     onClick={() => addressSelectionHandler(address)}

@@ -195,11 +195,20 @@ export const logOut = (navigate, toast, setLoader) => async (dispatch) => {
 };
 
 export const addUpdateUserAddress = (sendData, toast, addressId, setOpenModal) => async (dispatch) => {
-    dispatch({type: 'BUTTON_LOADER'});
+    dispatch({ type: 'IS_FETCHING' });
+    console.log(sendData);
     
     try {
-        const { data } = await api.post('/addresses', sendData);
+        if (addressId) {
+            await api.put(`/addresses/${addressId}`, {...sendData, id: addressId});
+
+        } else {
+            await api.post('/addresses', sendData);
+        }
+
+        dispatch(fetchUserAddresses());
         toast.success('Address Saved Successfilly!');
+        dispatch({ type: 'IS_SUCCESS' });
 
     } catch (error) {
         console.log(error);
@@ -214,12 +223,12 @@ export const addUpdateUserAddress = (sendData, toast, addressId, setOpenModal) =
     }
 };
 
-export const fetchUserAddresses = () => async (dispatch, getState) => {
+export const fetchUserAddresses = () => async (dispatch) => {
     try {
         dispatch({ type: 'IS_FETCHING' });
 
         const { data } = await api.get(`/users/addresses`);
-        dispatch({type: 'FETCH_USER_ADDRESSES', payload: data});
+        dispatch({ type: 'FETCH_USER_ADDRESSES', payload: data });
 
         dispatch({ type: 'IS_SUCCESS' });
     } catch (error) {
