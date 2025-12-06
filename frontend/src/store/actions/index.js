@@ -230,3 +230,10 @@ export const fetchUserAddresses = () => async (dispatch, getState) => {
         });
     }
 };
+
+export const setCheckoutAddress = (address) => {
+    return {
+        type: 'SELECT_CHECKOUT_ADDRESS',
+        payload: address
+    };
+};

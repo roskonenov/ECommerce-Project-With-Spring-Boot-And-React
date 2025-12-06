@@ -1,6 +1,7 @@
 const initialState = {
     user: null,
     address: [],
+    selectedCheckoutAddress: null
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -20,6 +21,12 @@ export const authReducer = (state = initialState, action) => {
         case 'LOG_OUT':
             return initialState;
 
+        case 'SELECT_CHECKOUT_ADDRESS':
+            return {
+                ...state,
+                selectedCheckoutAddress: action.payload
+            };
+            
         default:
             return state;
     }

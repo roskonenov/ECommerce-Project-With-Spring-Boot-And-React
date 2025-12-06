@@ -1,22 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AddressSceleton from './AddressSceleton';
 import { FaRegAddressBook } from 'react-icons/fa';
 import AddAddressModal from './AddAddressModal';
 import AddAddressForm from './AddAddressForm';
 import AddressList from './AddressList';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCheckoutAddress } from '../../store/actions';
 
 const AddressInfo = () => {
     const [openAddAddressModal, setOpenAddAddressModal] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState('');
     const { isLoading, btnLoader } = useSelector(state => state.errors);
     const { address } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
     const noAddressExist = !address || address.length === 0 || address?.success === false;
 
     const addNewAddressHandler = () => {
         setSelectedAddress('');
         setOpenAddAddressModal(true);
     };
+
+    useEffect(() => {
+        dispatch(setCheckoutAddress(selectedAddress));
+    }, [dispatch, selectedAddress]);
 
     return (
         <div className='pt-4'>
