@@ -3,17 +3,21 @@ import AddressSceleton from './AddressSceleton';
 import { FaRegAddressBook } from 'react-icons/fa';
 import AddAddressModal from './AddAddressModal';
 import AddAddressForm from './AddAddressForm';
+import AddressList from './AddressList';
+import { useSelector } from 'react-redux';
 
 const AddressInfo = () => {
     const [openAddAddressModal, setOpenAddAddressModal] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState('');
-    const noAddressExist = true;
-    const isLoading = true;
+    const { isLoading, btnLoader } = useSelector(state => state.errors);
+    const { address } = useSelector(state => state.auth);
+    const noAddressExist = !address || address.length === 0 || address?.success === false;
 
     const addNewAddressHandler = () => {
         setSelectedAddress('');
         setOpenAddAddressModal(true);
     };
+
     return (
         <div className='pt-4'>
             {noAddressExist ? (
@@ -28,18 +32,20 @@ const AddressInfo = () => {
                 </div>
             ) : (
                 <div className='rounded-lg max-w-md p-6 mx-auto'>
-                    <h1 className=' text-slate-800 text-center text-3xl font-bold'>
+                    <h1 className=' text-slate-800 text-center text-3xl font-bold mb-3'>
                         Select Address
                     </h1>
                     {isLoading ? (
                         <div className='py-6 px-8 mt-6'>
                             <AddressSceleton />
                         </div>
-
                     ) : (
-                        <div>
-                            <p>addresses here...</p>
-                        </div>
+                        <AddressList
+                            addresses={address}
+                            selectedAddress={selectedAddress}
+                            setSelectedAddress={setSelectedAddress}
+                            setOpenAddAddressModal={setOpenAddAddressModal}
+                        />
                     )}
                 </div>
             )}
@@ -52,9 +58,9 @@ const AddressInfo = () => {
             <AddAddressModal
                 open={openAddAddressModal}
                 setOpen={setOpenAddAddressModal}>
-                <AddAddressForm 
-                address={selectedAddress}
-                setOpenModal={setOpenAddAddressModal}/>
+                <AddAddressForm
+                    address={selectedAddress}
+                    setOpenModal={setOpenAddAddressModal} />
             </AddAddressModal>
         </div>
     )
