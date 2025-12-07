@@ -5,10 +5,13 @@ import AddAddressModal from './AddAddressModal';
 import AddAddressForm from './AddAddressForm';
 import AddressList from './AddressList';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCheckoutAddress } from '../../store/actions';
+import { deleteUserAddress, setCheckoutAddress } from '../../store/actions';
+import DeleteAddressModal from './DeleteAddressModal';
+import toast from 'react-hot-toast';
 
 const AddressInfo = () => {
     const [openAddAddressModal, setOpenAddAddressModal] = useState(false);
+    const [openDeleteAddressModal, setOpenDeleteAddressModal] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState('');
     const { isLoading, btnLoader } = useSelector(state => state.errors);
     const { address } = useSelector(state => state.auth);
@@ -18,6 +21,10 @@ const AddressInfo = () => {
     const addNewAddressHandler = () => {
         setSelectedAddress('');
         setOpenAddAddressModal(true);
+    };
+
+    const deleteAddressHandler = () => {
+        dispatch(deleteUserAddress(selectedAddress?.id, toast, setOpenDeleteAddressModal));
     };
 
     useEffect(() => {
@@ -51,6 +58,7 @@ const AddressInfo = () => {
                             selectedAddress={selectedAddress}
                             setSelectedAddress={setSelectedAddress}
                             setOpenAddAddressModal={setOpenAddAddressModal}
+                            setOpenDeleteAddressModal={setOpenDeleteAddressModal}
                         />
                     )}
                 </div>
@@ -68,8 +76,16 @@ const AddressInfo = () => {
                     address={selectedAddress}
                     setOpenModal={setOpenAddAddressModal} />
             </AddAddressModal>
+
+            <DeleteAddressModal
+                open={openDeleteAddressModal}
+                setOpen={setOpenDeleteAddressModal}
+                title='Delete Address'
+                deleteAddressHandler={deleteAddressHandler}
+                loader={btnLoader}
+            />
         </div>
     )
 }
 
-export default AddressInfo
+export default AddressInfo;

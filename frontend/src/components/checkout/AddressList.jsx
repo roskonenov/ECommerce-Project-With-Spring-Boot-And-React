@@ -4,18 +4,18 @@ import { MdPinDrop, MdPublic } from "react-icons/md";
 
 
 
-const AddressList = ({ addresses, selectedAddress, setSelectedAddress, setOpenAddAddressModal }) => {
+const AddressList = ({ addresses, selectedAddress, setSelectedAddress, setOpenAddAddressModal, setOpenDeleteAddressModal }) => {
 
     const addressSelectionHandler = (address) => {
         setSelectedAddress(address);
     };
 
-    const editAddressHandler = (address) => {
+    const editAddressHandler = () => {
         setOpenAddAddressModal(true);
     };
 
-    const deleteAddressHandler = (address) => {
-        
+    const deleteAddressHandler = () => {
+        setOpenDeleteAddressModal(true);
     };
 
     return (
@@ -66,12 +66,12 @@ const AddressList = ({ addresses, selectedAddress, setSelectedAddress, setOpenAd
                     <div className='flex gap-3 absolute top-3 right-3'>
                         <button
                             className='cursor-pointer hover:scale-115 transition'
-                            onClick={() => editAddressHandler(address)}>
+                            onClick={editAddressHandler}>
                             <FaEdit size={18} className='text-teal-700' />
                         </button>
                         <button
                             className='cursor-pointer hover:scale-115 transition'
-                            onClick={() => deleteAddressHandler(address)}>
+                            onClick={deleteAddressHandler}>
                             <FaTrash size={16} className='text-rose-600' />
                         </button>
                     </div>

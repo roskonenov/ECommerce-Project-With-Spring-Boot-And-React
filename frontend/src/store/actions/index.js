@@ -196,12 +196,10 @@ export const logOut = (navigate, toast, setLoader) => async (dispatch) => {
 
 export const addUpdateUserAddress = (sendData, toast, addressId, setOpenModal) => async (dispatch) => {
     dispatch({ type: 'IS_FETCHING' });
-    console.log(sendData);
-    
+
     try {
         if (addressId) {
-            await api.put(`/addresses/${addressId}`, {...sendData, id: addressId});
-
+            await api.put(`/addresses/${addressId}`, { ...sendData, id: addressId });
         } else {
             await api.post('/addresses', sendData);
         }
@@ -224,12 +222,12 @@ export const addUpdateUserAddress = (sendData, toast, addressId, setOpenModal) =
 };
 
 export const fetchUserAddresses = () => async (dispatch) => {
+    dispatch({ type: 'IS_FETCHING' });
+
     try {
-        dispatch({ type: 'IS_FETCHING' });
 
         const { data } = await api.get(`/users/addresses`);
         dispatch({ type: 'FETCH_USER_ADDRESSES', payload: data });
-
         dispatch({ type: 'IS_SUCCESS' });
     } catch (error) {
         console.log(error);
@@ -244,5 +242,24 @@ export const setCheckoutAddress = (address) => {
     return {
         type: 'SELECT_CHECKOUT_ADDRESS',
         payload: address
+    };
+};
+
+export const deleteUserAddress = (addresId, toast, setOpenDeleteAddressModal) => async (dispatch) => {
+    dispatch({ type: 'IS_FETCHING' });
+    try {
+        await api.delete(`/addresses/${addresId}`);
+        dispatch(fetchUserAddresses());
+        dispatch({ type: 'REMOVE_CHECKOUT_ADDRESS' })
+        dispatch({ type: 'IS_SUCCESS' });
+        toast.success('The Address was deleted successfully!')
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message || 'Internal Error occurred'
+        });
+    } finally {
+        setOpenDeleteAddressModal(false);
     };
 };
