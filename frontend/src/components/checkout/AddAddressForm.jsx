@@ -7,13 +7,13 @@ import Spinner from '../shared/Spinner';
 import toast from 'react-hot-toast';
 import { addUpdateUserAddress } from '../../store/actions';
 
-const AddAddressForm = ({ address, setOpenModal }) => {
+const AddAddressForm = ({ address, setSelectedAddress,  setOpenModal }) => {
     const dispatch = useDispatch();
     const { btnLoader } = useSelector(state => state.errors);
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({ mode: 'onTouched' });
 
     const onAddressSaveHandler = (data) => {
-        dispatch(addUpdateUserAddress(data, toast, address?.id, setOpenModal));
+        dispatch(addUpdateUserAddress(data, toast, address?.id, setOpenModal, setSelectedAddress));
     };
 
     useEffect(() => {

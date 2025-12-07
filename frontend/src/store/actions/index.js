@@ -194,14 +194,17 @@ export const logOut = (navigate, toast, setLoader) => async (dispatch) => {
     }
 };
 
-export const addUpdateUserAddress = (sendData, toast, addressId, setOpenModal) => async (dispatch) => {
+export const addUpdateUserAddress = (sendData, toast, addressId, setOpenModal, setSelectedAddress) => async (dispatch) => {
     dispatch({ type: 'IS_FETCHING' });
 
     try {
         if (addressId) {
-            await api.put(`/addresses/${addressId}`, { ...sendData, id: addressId });
+            const { data } = await api.put(`/addresses/${addressId}`, { ...sendData, id: addressId });
+            setSelectedAddress(data);
         } else {
-            await api.post('/addresses', sendData);
+            const { data } = await api.post('/addresses', sendData);
+            setSelectedAddress(data);
+
         }
 
         dispatch(fetchUserAddresses());
