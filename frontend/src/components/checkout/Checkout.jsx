@@ -4,6 +4,7 @@ import AddressInfo from './AddressInfo';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserAddresses } from '../../store/actions';
 import toast from 'react-hot-toast';
+import Spinner from '../shared/Spinner';
 
 const Checkout = () => {
     const [activeStep, setActiveStep] = useState(0);
@@ -47,9 +48,17 @@ const Checkout = () => {
                     </Step>
                 ))}
             </Stepper>
-            <div className='mt-10 mb-20'>
-                {activeStep === 0 && <AddressInfo />}
-            </div>
+
+            {isLoading ? (
+                <div className='w-full flex justify-center mt-30'>
+                    <Spinner classProps={'w-20'}/>
+                </div>
+            ) : (
+                <div className='mt-10 mb-20'>
+                    {activeStep === 0 && <AddressInfo />}
+                </div>
+            )}
+
 
             <div className='fixed bottom-0 left-0 w-full z-50 h-20 shadow-md flex justify-between items-center bg-white border-gray-400'
                 style={{ boxShadow: '0 -2px 4px rgba(100, 100, 100, 0.15)' }}>
