@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserAddresses } from '../../store/actions';
 import toast from 'react-hot-toast';
 import Spinner from '../shared/Spinner';
+import ErrorPage from '../shared/ErrorPage';
 
 const Checkout = () => {
     const [activeStep, setActiveStep] = useState(0);
@@ -86,6 +87,7 @@ const Checkout = () => {
                     </button>}
 
             </div>
+            {errorMessage && <ErrorPage message={errorMessage}/>}
         </div>
     )
 }
