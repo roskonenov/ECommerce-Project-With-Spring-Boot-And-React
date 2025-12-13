@@ -49,7 +49,7 @@ public class AddressServiceImpl implements AddressService {
                                 .findAll(PageRequest.of(pageNumber, pageSize, sorting))
                 )
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
+                .orElseThrow(() -> new APIException("No addresses found!", HttpStatus.OK));
 
         return new AddressResponse()
                 .setContent(addressPage
