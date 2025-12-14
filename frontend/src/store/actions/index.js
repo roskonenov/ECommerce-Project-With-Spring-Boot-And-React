@@ -228,10 +228,10 @@ export const fetchUserAddresses = () => async (dispatch) => {
     dispatch({ type: 'IS_FETCHING' });
 
     try {
-
         const { data } = await api.get(`/users/addresses`);
         dispatch({ type: 'FETCH_USER_ADDRESSES', payload: data });
         dispatch({ type: 'IS_SUCCESS' });
+
     } catch (error) {
         console.log(error);
         dispatch({
@@ -255,7 +255,8 @@ export const deleteUserAddress = (addresId, toast, setOpenDeleteAddressModal) =>
         dispatch(fetchUserAddresses());
         dispatch({ type: 'REMOVE_CHECKOUT_ADDRESS' })
         dispatch({ type: 'IS_SUCCESS' });
-        toast.success('The Address was deleted successfully!')
+        toast.success('The Address was deleted successfully!');
+
     } catch (error) {
         console.log(error);
         dispatch({
@@ -268,5 +269,49 @@ export const deleteUserAddress = (addresId, toast, setOpenDeleteAddressModal) =>
 };
 
 export const setPaymentMethod = (method) => {
-    return {type: 'SET_PAYMENT_METHOD', payload: method}
+    return { type: 'SET_PAYMENT_METHOD', payload: method }
+};
+
+export const createUsersCart = (cartItemsData) => async (dispatch, getState) => {
+    dispatch({ type: 'IS_FETCHING' });
+    try {
+        const { data } = await api.post('/carts/create', cartItemsData);
+        dispatch({
+            type: 'SET_USER_CART_PRODUCTS',
+            payload: data.products,
+            totalPrice: data.totalPrice,
+            cartId: data.id,
+        });
+        dispatch({ type: 'IS_SUCCESS' });
+        localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
+
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message || 'Failed to create Users cart!'
+        });
+    }
+};
+
+export const getUsersCart = () => async (dispatch, getState) => {
+    dispatch({ type: 'IS_FETCHING' });
+    try {
+        const { data } = await api.post('/carts/users/cart');
+        dispatch({
+            type: 'SET_USER_CART_PRODUCTS',
+            payload: data.products,
+            totalPrice: data.totalPrice,
+            cartId: data.id,
+        });
+        dispatch({ type: 'IS_SUCCESS' });
+        localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
+
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message || 'Failed to get Users cart!'
+        });
+    }
 };
