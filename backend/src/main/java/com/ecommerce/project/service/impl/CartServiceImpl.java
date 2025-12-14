@@ -6,6 +6,7 @@ import com.ecommerce.project.model.Cart;
 import com.ecommerce.project.model.CartItem;
 import com.ecommerce.project.model.Product;
 import com.ecommerce.project.payload.dto.CartDTO;
+import com.ecommerce.project.payload.dto.CartItemDTO;
 import com.ecommerce.project.payload.dto.ProductDTO;
 import com.ecommerce.project.repositories.CartItemRepository;
 import com.ecommerce.project.repositories.CartRepository;
@@ -37,34 +38,48 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartDTO addProductToCart(Long productId, Integer quantity) {
-        Cart cart = cartRepository
-                .findByUserEmail(authUtil.loggedInUserEmail())
-                .orElseGet(() -> cartRepository
-                        .save(new Cart()
-                                .setUser(authUtil.loggedInUser())));
+        Cart cart = getLoggedUsersCart();
 
         Product product = getValidProduct(productId, quantity);
 
-        cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
-                .ifPresent(item -> {
-                    throw new APIException("Product " + item.getProduct().getName() + " already exists in cart!");
-                });
+        validateCartItem(productId, cart);
 
-        CartItem cartItem = cartItemRepository
-                .save(new CartItem()
-                        .setCart(cart)
-                        .setProduct(product)
-                        .setQuantity(quantity)
-                        .setDiscount(product.getDiscount())
-                        .setProductPrice(product.getSpecialPrice()));
+        CartItem cartItem = saveNewCartItem(quantity, cart, product);
 
 //        Optional reducing to product quantity, depends on application logic!!!
 //        product.setQuantity(product.getQuantity() - quantity);
         cart.getCartItems().add(cartItem);
         cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProductPrice() * quantity));
-        cartRepository.save(cart);
 
-        return mapCartToDTO(cart);
+        return mapCartToDTO(cartRepository.save(cart));
+    }
+
+    private Cart getLoggedUsersCart() {
+        return cartRepository
+                .findByUserEmail(authUtil.loggedInUserEmail())
+                .orElseGet(() -> cartRepository
+                        .save(new Cart()
+                                .setUser(authUtil.loggedInUser())));
+    }
+
+
+    @Override
+    @Transactional
+    public CartDTO addAllProductsToCart(List<CartItemDTO> cartItems) {
+        Cart cart = getLoggedUsersCart();
+        cartItems
+                .forEach(item -> {
+                    Product product = getValidProduct(item.getProductId(), item.getQuantity());
+                    validateCartItem(product.getId(), cart);
+                    CartItem cartItem = saveNewCartItem(item.getQuantity(), cart, product);
+
+//                  Optional reducing to product quantity, depends on application logic!!!
+//                    product.setQuantity(product.getQuantity() - item.getQuantity());
+
+                    cart.getCartItems().add(cartItem);
+                    cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProductPrice() * item.getQuantity()));
+                });
+        return mapCartToDTO(cartRepository.save(cart));
     }
 
     @Override
@@ -107,7 +122,7 @@ public class CartServiceImpl implements CartService {
         }
 
         return mapCartToDTO(
-                cartRepository.save(cart
+        cartRepository.save(cart
                         .setTotalPrice(cart.getTotalPrice() + savedCartItem.getProductPrice() * quantity))
         );
     }
@@ -136,8 +151,8 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new APIException("Product " + product.getName() + " does not exist in cart!"));
 
         cartRepository.save(cart.setTotalPrice(
-                cart.getTotalPrice() - (cartItem.getProductPrice() * cartItem.getQuantity())
-                + (product.getSpecialPrice() * cartItem.getQuantity())
+        cart.getTotalPrice() - (cartItem.getProductPrice() * cartItem.getQuantity())
+        + (product.getSpecialPrice() * cartItem.getQuantity())
         ));
 
         cartItemRepository.save(cartItem
@@ -154,9 +169,27 @@ public class CartServiceImpl implements CartService {
         }
         if (product.getQuantity() < quantity) {
             throw new APIException("Please make an order of the " + product.getName()
-                    + " quantity less than or equal to " + product.getQuantity() + ".");
+            + " quantity less than or equal to " + product.getQuantity() + ".");
         }
         return product;
+    }
+
+    private CartItem saveNewCartItem(Integer quantity, Cart cart, Product product) {
+        CartItem cartItem = cartItemRepository
+                .save(new CartItem()
+                        .setCart(cart)
+                        .setProduct(product)
+                        .setQuantity(quantity)
+                        .setDiscount(product.getDiscount())
+                        .setProductPrice(product.getSpecialPrice()));
+        return cartItem;
+    }
+
+    private void validateCartItem(Long productId, Cart cart) {
+        cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
+                .ifPresent(item -> {
+                    throw new APIException("Product " + item.getProduct().getName() + " already exists in cart!");
+                });
     }
 
     private CartDTO mapCartToDTO(Cart cart) {

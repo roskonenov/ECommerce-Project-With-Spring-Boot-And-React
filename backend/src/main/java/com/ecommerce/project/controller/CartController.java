@@ -1,6 +1,7 @@
 package com.ecommerce.project.controller;
 
 import com.ecommerce.project.payload.dto.CartDTO;
+import com.ecommerce.project.payload.dto.CartItemDTO;
 import com.ecommerce.project.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,14 @@ public class CartController {
                                                     @PathVariable Integer quantity) {
         return new ResponseEntity<>(
                 cartService.addProductToCart(productId, quantity),
+                HttpStatus.CREATED
+        );
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<CartDTO> addAllProductsToCart(@RequestBody List<CartItemDTO> cartItems) {
+        return new ResponseEntity<>(
+                cartService.addAllProductsToCart(cartItems),
                 HttpStatus.CREATED
         );
     }
