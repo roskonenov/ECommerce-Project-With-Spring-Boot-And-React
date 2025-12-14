@@ -6,6 +6,7 @@ import { fetchUserAddresses } from '../../store/actions';
 import toast from 'react-hot-toast';
 import Spinner from '../shared/Spinner';
 import ErrorPage from '../shared/ErrorPage';
+import PaymentMethod from './PaymentMethod';
 
 const Checkout = () => {
     const [activeStep, setActiveStep] = useState(0);
@@ -57,6 +58,7 @@ const Checkout = () => {
             ) : (
                 <div className='mt-10 mb-20'>
                     {activeStep === 0 && <AddressInfo />}
+                    {activeStep === 1 && <PaymentMethod />}
                 </div>
             )}
 

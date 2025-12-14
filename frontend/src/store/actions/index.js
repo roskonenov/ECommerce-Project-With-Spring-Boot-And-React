@@ -266,3 +266,7 @@ export const deleteUserAddress = (addresId, toast, setOpenDeleteAddressModal) =>
         setOpenDeleteAddressModal(false);
     };
 };
+
+export const setPaymentMethod = (method) => {
+    return {type: 'SET_PAYMENT_METHOD', payload: method}
+};
