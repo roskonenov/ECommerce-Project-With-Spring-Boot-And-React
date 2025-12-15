@@ -7,12 +7,14 @@ import toast from 'react-hot-toast';
 import Spinner from '../shared/Spinner';
 import ErrorPage from '../shared/ErrorPage';
 import PaymentMethod from './PaymentMethod';
+import OrderSummary from './OrderSummary';
 
 const Checkout = () => {
     const [activeStep, setActiveStep] = useState(0);
     const dispatch = useDispatch();
     const { selectedCheckoutAddress } = useSelector(state => state.auth);
     const { isLoading, errorMessage } = useSelector(state => state.errors);
+    const { paymentMethod } = useSelector(state => state.payment);
 
     const steps = ['Address', 'Payment Method', 'OrderSummary', 'Payment'];
 
@@ -39,8 +41,6 @@ const Checkout = () => {
         setActiveStep(prev => prev + 1);
     };
 
-    const paymentMethod = false;
-
     return (
         <div className='w-[80%] mx-auto py-14 min-h-[calc(100vh-100px)]'>
             <Stepper activeStep={activeStep} alternativeLabel>
@@ -59,6 +59,7 @@ const Checkout = () => {
                 <div className='mt-10 mb-20'>
                     {activeStep === 0 && <AddressInfo />}
                     {activeStep === 1 && <PaymentMethod />}
+                    {activeStep === 2 && <OrderSummary />}
                 </div>
             )}
 
