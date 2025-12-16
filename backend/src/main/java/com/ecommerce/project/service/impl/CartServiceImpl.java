@@ -40,8 +40,6 @@ public class CartServiceImpl implements CartService {
     public CartDTO addProductToCart(Long productId, Integer quantity) {
         Cart cart = getLoggedUsersCart();
 
-        cartItemRepository.deleteCartItemByProductIdAndCartId(productId, cart.getId());
-
         Product product = getValidProduct(productId, quantity);
 
         validateCartItem(productId, cart);
@@ -56,19 +54,12 @@ public class CartServiceImpl implements CartService {
         return mapCartToDTO(cartRepository.save(cart));
     }
 
-    private Cart getLoggedUsersCart() {
-        return cartRepository
-                .findByUserEmail(authUtil.loggedInUserEmail())
-                .orElseGet(() -> cartRepository
-                        .save(new Cart()
-                                .setUser(authUtil.loggedInUser())));
-    }
-
-
     @Override
     @Transactional
     public CartDTO addAllProductsToCart(List<CartItemDTO> cartItems) {
         Cart cart = getLoggedUsersCart();
+
+        cartItemRepository.deleteCartItemByCartId(cart.getId());
         cartItems
                 .forEach(item -> {
                     Product product = getValidProduct(item.getProductId(), item.getQuantity());
@@ -160,6 +151,14 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.save(cartItem
                 .setProductPrice(product.getSpecialPrice())
                 .setDiscount(product.getDiscount()));
+    }
+
+    private Cart getLoggedUsersCart() {
+        return cartRepository
+                .findByUserEmail(authUtil.loggedInUserEmail())
+                .orElseGet(() -> cartRepository
+                        .save(new Cart()
+                                .setUser(authUtil.loggedInUser())));
     }
 
     private Product getValidProduct(Long productId, Integer quantity) {
