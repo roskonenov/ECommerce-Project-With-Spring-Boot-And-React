@@ -40,6 +40,8 @@ public class CartServiceImpl implements CartService {
     public CartDTO addProductToCart(Long productId, Integer quantity) {
         Cart cart = getLoggedUsersCart();
 
+        cartItemRepository.deleteCartItemByProductIdAndCartId(productId, cart.getId());
+
         Product product = getValidProduct(productId, quantity);
 
         validateCartItem(productId, cart);
@@ -175,14 +177,13 @@ public class CartServiceImpl implements CartService {
     }
 
     private CartItem saveNewCartItem(Integer quantity, Cart cart, Product product) {
-        CartItem cartItem = cartItemRepository
+        return cartItemRepository
                 .save(new CartItem()
                         .setCart(cart)
                         .setProduct(product)
                         .setQuantity(quantity)
                         .setDiscount(product.getDiscount())
                         .setProductPrice(product.getSpecialPrice()));
-        return cartItem;
     }
 
     private void validateCartItem(Long productId, Cart cart) {
