@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { amountFormatter } from '../../utils/currencyFormatter';
 
 const OrderSummary = () => {
     const { selectedCheckoutAddress: address } = useSelector(state => state.auth);
@@ -55,13 +56,13 @@ const OrderSummary = () => {
                             <h2 className='text-2xl font-semibold mb-2'>Order Items</h2>
                             <div className='space-y-2'>
                                 {cart?.map(item => (
-                                    <div key={item?.id} className='flex items-center gap-2'>
+                                    <div key={item?.id} className='flex items-center gap-2 p-2 bg-gray-100 rounded-lg'>
                                         <img src={item?.image} alt={item?.name}
                                             className='w-12 h-12 rounded' />
                                         <div className='text-gray-700'>
                                             <p>{item.name}</p>
                                             <p>
-                                                {item?.quantity} x ${item?.specialPrice} = ${item.quantity * item.specialPrice}
+                                                {item?.quantity} x ${amountFormatter(1, item?.specialPrice)} = ${amountFormatter(item?.quantity, item?.specialPrice)}
                                             </p>
                                         </div>
                                     </div>
@@ -76,7 +77,7 @@ const OrderSummary = () => {
                         <div className='space-y-2'>
                             <div className='flex justify-between'>
                                 <span>Products</span>
-                                <span>${totalPrice}</span>
+                                <span>${amountFormatter(1, totalPrice)}</span>
                             </div>
                             <div className='flex justify-between'>
                                 <span>Tax (0%)</span>
@@ -84,7 +85,7 @@ const OrderSummary = () => {
                             </div>
                             <div className='flex justify-between font-semibold'>
                                 <span>SubTotal</span>
-                                <span>${totalPrice}</span>
+                                <span>${amountFormatter(1, totalPrice)}</span>
                             </div>
                         </div>
                     </div>

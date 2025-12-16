@@ -8,6 +8,8 @@ import Spinner from '../shared/Spinner';
 import ErrorPage from '../shared/ErrorPage';
 import PaymentMethod from './PaymentMethod';
 import OrderSummary from './OrderSummary';
+import StripePayment from './StripePayment';
+import PayPalPayment from './PayPalPayment';
 
 const Checkout = () => {
     const [activeStep, setActiveStep] = useState(0);
@@ -53,13 +55,20 @@ const Checkout = () => {
 
             {isLoading ? (
                 <div className='w-full flex justify-center mt-30'>
-                    <Spinner classProps={'w-20'}/>
+                    <Spinner classProps={'w-20'} />
                 </div>
             ) : (
                 <div className='mt-10 mb-20'>
                     {activeStep === 0 && <AddressInfo />}
                     {activeStep === 1 && <PaymentMethod />}
                     {activeStep === 2 && <OrderSummary />}
+                    {activeStep === 3 &&
+                        <>{paymentMethod === 'Stripe' ? (
+                            <StripePayment />
+                        ) : (
+                            <PayPalPayment />
+                        )}</>
+                    }
                 </div>
             )}
 
@@ -90,7 +99,7 @@ const Checkout = () => {
                     </button>}
 
             </div>
-            {errorMessage && <ErrorPage message={errorMessage}/>}
+            {errorMessage && <ErrorPage message={errorMessage} />}
         </div>
     )
 }
