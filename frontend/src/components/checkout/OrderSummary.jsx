@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux'
 const OrderSummary = () => {
     const { selectedCheckoutAddress: address } = useSelector(state => state.auth);
     const { paymentMethod } = useSelector(state => state.payment);
-    const { cart } = useSelector(state => state.carts);
+    const { cart, totalPrice } = useSelector(state => state.carts);
     return (
         <div className='container mx-auto px-4'>
             <div className='flex flex-wrap'>
-                <div className='w-full lg:w-8/12 pr-4'>
+                <div className='w-full lg:w-8/12 lg:pr-4'>
                     <div className='space-y-4'>
                         <div className='p-4 border rounded-lg shadow-sm'>
                             <h2 className='text-2xl font-semibold mb-2'>Billing Address</h2>
@@ -55,10 +55,10 @@ const OrderSummary = () => {
                             <h2 className='text-2xl font-semibold mb-2'>Order Items</h2>
                             <div className='space-y-2'>
                                 {cart?.map(item => (
-                                    <div key={item?.id} className='flex items-center'>
+                                    <div key={item?.id} className='flex items-center gap-2'>
                                         <img src={item?.image} alt={item?.name}
                                             className='w-12 h-12 rounded' />
-                                        <div className='text-gray-500'>
+                                        <div className='text-gray-700'>
                                             <p>{item.name}</p>
                                             <p>
                                                 {item?.quantity} x ${item?.specialPrice} = ${item.quantity * item.specialPrice}
@@ -66,6 +66,25 @@ const OrderSummary = () => {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className='w-full lg:w-4/12 mt-4 lg:mt-0'>
+                    <div className='border rounded-lg shadow-sm p-4 space-y-4'>
+                        <h2 className='text-2xl font-semibold mb-2'>Order Summary</h2>
+                        <div className='space-y-2'>
+                            <div className='flex justify-between'>
+                                <span>Products</span>
+                                <span>${totalPrice}</span>
+                            </div>
+                            <div className='flex justify-between'>
+                                <span>Tax (0%)</span>
+                                <span>$0.00</span>
+                            </div>
+                            <div className='flex justify-between font-semibold'>
+                                <span>SubTotal</span>
+                                <span>${totalPrice}</span>
                             </div>
                         </div>
                     </div>
