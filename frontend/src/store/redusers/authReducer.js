@@ -1,6 +1,7 @@
 const initialState = {
     user: null,
     address: [],
+    clientSecret: null,
     selectedCheckoutAddress: null
 };
 
@@ -16,7 +17,7 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 address: action.payload
-            }
+            };
 
         case 'LOG_OUT':
             return initialState;
@@ -26,12 +27,19 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 selectedCheckoutAddress: action.payload
             };
+
         case 'REMOVE_CHECKOUT_ADDRESS':
             return {
                 ...state,
                 selectedCheckoutAddress: null
-            };    
-            
+            };
+
+        case 'SET_CLIENT_SECRET':
+            return {
+                ...state,
+                clientSecret: action.payload
+            };
+
         default:
             return state;
     }

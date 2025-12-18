@@ -7,7 +7,7 @@ const PaymentMethod = () => {
     const dispatch = useDispatch();
     const { paymentMethod } = useSelector(state => state.payment);
     const { cart, cartId } = useSelector(state => state.carts);
-    const { isLoading, errorMessage } = useSelector(state => state.errors);
+    const { errorMessage } = useSelector(state => state.errors);
     
     useEffect(() => {
         if (cart.length > 0 && !cartId && !errorMessage) {

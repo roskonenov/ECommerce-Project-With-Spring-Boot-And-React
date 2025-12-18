@@ -315,3 +315,20 @@ export const getUsersCart = () => async (dispatch, getState) => {
         });
     }
 };
+
+export const createStripeClientSecret = (sendData) => async (dispatch, getState) => {
+    dispatch({ type: 'IS_FETCHING' });
+    try {
+        const { data } = await api.post('/orders/users/stripe-client-secret', sendData);
+        dispatch({ type: 'SET_CLIENT_SECRET', payload: data });
+        dispatch({ type: 'IS_SUCCESS' });
+        localStorage.setItem('clientSecret', JSON.stringify(getState().auth.clientSecret));
+
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message || 'Failed to create client secret!'
+        });
+    }
+};
