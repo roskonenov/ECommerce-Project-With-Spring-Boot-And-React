@@ -242,6 +242,7 @@ export const fetchUserAddresses = () => async (dispatch) => {
 };
 
 export const setCheckoutAddress = (address) => {
+    localStorage.setItem('checkoutAddress', JSON.stringify(address));
     return {
         type: 'SELECT_CHECKOUT_ADDRESS',
         payload: address
@@ -329,6 +330,31 @@ export const createStripeClientSecret = (sendData) => async (dispatch, getState)
         dispatch({
             type: 'IS_ERROR',
             payload: error?.response?.data?.message || 'Failed to create client secret!'
+        });
+    }
+};
+
+export const stripePaymentConfirmation = (toast, sendData) => async (dispatch, getState) => {
+    dispatch({ type: 'IS_FETCHING' });
+    try {
+        const response = await api.post('/order/users/payments/online', sendData);
+
+        if (response.data) {
+            localStorage.removeItem('cartItems');
+            localStorage.removeItem('clientSecret');
+            dispatch({ type: 'REMOVE_CLIENT_SECRET_AND_ADDRESS' });
+            dispatch({ type: 'CLEAR_CART' });
+            dispatch({ type: 'IS_SUCCESS' });
+            toast.success('Order Accepted!')
+        } else {
+            toast.error('Payment was unsuccessful! Please try again later.');
+        }
+
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message || 'Payment was unsuccessful! Please try again later.'
         });
     }
 };

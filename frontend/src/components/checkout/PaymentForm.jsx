@@ -1,6 +1,6 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import React, { useState } from 'react'
-import Skeleton from '../shared/Sceleton';
+import Skeleton from '../shared/Skeleton';
 
 const PaymentForm = ({totalPrice, clientSecret}) => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -8,8 +8,22 @@ const PaymentForm = ({totalPrice, clientSecret}) => {
     const elements = useElements();
     const isLoading = !clientSecret || !stripe || !elements;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!stripe || !elements) return;
 
+        const {error: submitError} = await elements.submit();
+        const {error} = await stripe.confirmPayment({
+            elements,
+            clientSecret,
+            confirmParams: {
+                return_url: `${import.meta.env.VITE_FRONTEND_URL}/order-confirm`,
+            },
+        });
+        if (error) {
+            setErrorMessage(error.message);
+            return false;
+        }
     };
 
     return (

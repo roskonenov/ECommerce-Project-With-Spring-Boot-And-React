@@ -6,7 +6,6 @@ export const currencyFormatter = (amount) => {
 };
 
 export const amountFormatter = (quantity, amount) => {
-    console.log(quantity, amount);
-    
+
     return (Number(quantity) * Number(amount)).toFixed(2);
 };

@@ -1,7 +1,7 @@
 import { Alert } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Skeleton from '../shared/Sceleton';
+import Skeleton from '../shared/Skeleton';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from './PaymentForm';

@@ -13,6 +13,10 @@ const cartItems = localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))
     : [];
 
+const checkoutAddress = localStorage.getItem('checkoutAddress')
+    ? JSON.parse(localStorage.getItem('checkoutAddress'))
+    : [];
+
 export const store = configureStore({
     reducer: {
         products: productReducer,
@@ -22,8 +26,8 @@ export const store = configureStore({
         payment: paymentMethodReducer,
     },
     preloadedState: {
-        carts: {cart: cartItems},
-        auth: {user: user},
+        carts: { cart: cartItems },
+        auth: { user: user, selectedCheckoutAddress: checkoutAddress},
     },
 });
 
