@@ -47,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
 
         updateProductStock(cart);
         cart.getCartItems().clear();
+        cart.setTotalPrice(0.0);
         cartRepository.save(cart);
 
         return mapOrderToDTO(orderRequestDTO.getAddressId(), savedOrder, orderItems);

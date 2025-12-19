@@ -65,6 +65,7 @@ public class AuthController {
                         new UserInfoResponse(
                                 userDetails.getId(),
                                 userDetails.getUsername(),
+                                userDetails.getEmail(),
                                 authentication
                                         .getAuthorities()
                                         .stream()
@@ -130,6 +131,7 @@ public class AuthController {
                 ResponseEntity.ok(new UserInfoResponse(
                         userDetails.getId(),
                         userDetails.getUsername(),
+                        userDetails.getEmail(),
                         authentication
                                 .getAuthorities()
                                 .stream()
