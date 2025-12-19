@@ -11,8 +11,8 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const StripePayment = () => {
     const dispatch = useDispatch();
-    const { isLoading, errorMessage } = useSelector(state => state.errors);
-    const { clientSecret } = useSelector(state => state.auth);
+    const { isLoading } = useSelector(state => state.errors);
+    const { user, clientSecret, selectedCheckoutAddress } = useSelector(state => state.auth);
     const { totalPrice } = useSelector(state => state.carts);
 
     useEffect(() => {
@@ -20,10 +20,15 @@ const StripePayment = () => {
 
         const sendData = {
             amount: Number(totalPrice) * 100,
-            currency: 'bgn'
+            currency: 'bgn',
+            email: user.email,
+            name: user.username,
+            address: selectedCheckoutAddress,
+            description: `Order for ${user.email}`,
         };
         dispatch(createStripeClientSecret(sendData));
-    }, [clientSecret, dispatch, totalPrice]);
+        
+    }, [clientSecret, dispatch, totalPrice, user, selectedCheckoutAddress]);
 
     if (isLoading) {
         return (
@@ -36,8 +41,8 @@ const StripePayment = () => {
     return (
         <>
             {clientSecret &&
-                <Elements stripe={stripePromise} options={{clientSecret}}>
-                    <PaymentForm totalPrice={totalPrice} clientSecret={clientSecret}/>
+                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                    <PaymentForm totalPrice={totalPrice} clientSecret={clientSecret} />
                 </Elements>
             }
         </>

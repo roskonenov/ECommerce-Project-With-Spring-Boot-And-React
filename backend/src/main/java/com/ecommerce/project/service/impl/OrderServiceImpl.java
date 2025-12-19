@@ -22,7 +22,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private final CartService cartService;
     private final CartRepository cartRepository;
     private final AddressRepository addressRepository;
     private final PaymentRepository paymentRepository;
