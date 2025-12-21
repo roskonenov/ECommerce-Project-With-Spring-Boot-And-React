@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 import { Link } from 'react-router-dom';
-import { slidesData } from '../../utils/slidesData';
+import { slidesData } from '../../utils/data';
 
 // Import Swiper styles
 import 'swiper/css';

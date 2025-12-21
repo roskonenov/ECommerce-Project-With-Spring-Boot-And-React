@@ -1,3 +1,5 @@
+import { FaBoxOpen, FaHome, FaStore, FaThList } from "react-icons/fa";
+
 export const slidesData =
     [
         {
@@ -57,4 +59,28 @@ export const aboutImages = [
     'https://i.ibb.co/MDT1jjXY/360-F-348054737-Tv5fl9-LQn-Znz-DUwsk-KVKd5-Mzj4-Sj-GFxa.jpg',
     'https://i.ibb.co/HfhqRC6b/cover-ecommerce1-optimized.webp',
     'https://i.ibb.co/N6xB30xf/Perfect-Ecommerce-Sales-Banner.jpg'
+];
+
+export const adminNavigation = [
+    {
+        name: 'Dashboard',
+        href: '/admin',
+        icon: FaHome,
+        current: true,
+    },
+    {
+        name: 'Products',
+        href: '/admin/products',
+        icon: FaBoxOpen,
+    },
+    {
+        name: 'Categories',
+        href: '/admin/categories',
+        icon: FaThList,
+    },
+    {
+        name: 'Sellers',
+        href: '/admin/seller',
+        icon: FaStore,
+    },
 ];

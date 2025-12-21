@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { aboutImages } from "../../utils/slidesData";
+import { aboutImages } from "../../utils/data";
 
 const About = () => {
     const [currentIndex, setCurrentIndex] = useState(0);

@@ -13,6 +13,7 @@ import PrivateRoute from './components/guards/PrivateRoute.jsx';
 import Register from './components/auth/Register.jsx';
 import Checkout from './components/checkout/Checkout.jsx';
 import ConfirmPayment from './components/checkout/ConfirmPayment.jsx';
+import AdminLayout from './components/admin/AdminLayout.jsx';
 
 
 function App() {
@@ -38,6 +39,10 @@ function App() {
           <Route element={<PrivateRoute publicPage />} >
             <Route path='/login' element={<LogIn />} />
             <Route path='/register' element={<Register />} />
+          </Route>
+
+          <Route element={<PrivateRoute />} >
+            <Route path='/admin' element={<AdminLayout />} />
           </Route>
 
         </Routes>
