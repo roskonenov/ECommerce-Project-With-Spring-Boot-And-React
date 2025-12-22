@@ -38,7 +38,7 @@ const PaymentForm = ({totalPrice, clientSecret}) => {
                     <button
                         disabled={isLoading}
                         className='w-full text-white bg-black rounded-md mt-3 px-2 py-3 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:animate-pulse'>
-                        {`Pay $${totalPrice}`}
+                        {`Pay €${totalPrice.toFixed(2)}`}
                     </button>
                 </>
             )}

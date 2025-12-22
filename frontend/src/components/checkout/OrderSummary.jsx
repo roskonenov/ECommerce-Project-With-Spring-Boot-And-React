@@ -62,7 +62,7 @@ const OrderSummary = () => {
                                         <div className='text-gray-700'>
                                             <p>{item.name}</p>
                                             <p>
-                                                {item?.quantity} x ${amountFormatter(1, item?.specialPrice)} = ${amountFormatter(item?.quantity, item?.specialPrice)}
+                                                {item?.quantity} x €{amountFormatter(1, item?.specialPrice)} = €{amountFormatter(item?.quantity, item?.specialPrice)}
                                             </p>
                                         </div>
                                     </div>
@@ -77,15 +77,15 @@ const OrderSummary = () => {
                         <div className='space-y-2'>
                             <div className='flex justify-between'>
                                 <span>Products</span>
-                                <span>${amountFormatter(1, totalPrice)}</span>
+                                <span>€{amountFormatter(1, totalPrice)}</span>
                             </div>
                             <div className='flex justify-between'>
                                 <span>Tax (0%)</span>
-                                <span>$0.00</span>
+                                <span>€0.00</span>
                             </div>
                             <div className='flex justify-between font-semibold'>
                                 <span>SubTotal</span>
-                                <span>${amountFormatter(1, totalPrice)}</span>
+                                <span>€{amountFormatter(1, totalPrice)}</span>
                             </div>
                         </div>
                     </div>

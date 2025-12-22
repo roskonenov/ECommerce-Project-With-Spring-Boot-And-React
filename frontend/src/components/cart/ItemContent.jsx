@@ -12,7 +12,6 @@ const ItemContent = ({ item }) => {
     const [currentQuantity, setCurrentQuantity] = useState(item.cartQuantity);
     const dispatch = useDispatch();
 
-    // sync currentQuantity when item prop changes (e.g., after remove/update from another component)
     useEffect(() => {
         setCurrentQuantity(item.cartQuantity);
     }, [item.cartQuantity, item.id]);
