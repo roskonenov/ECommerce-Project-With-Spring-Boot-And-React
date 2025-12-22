@@ -74,6 +74,7 @@ const UserMenu = () => {
                 </Link>
 
                 <MenuItem
+                    disabled={loader}
                     className='flex gap-2'
                     onClick={handleLogOut}>
                     <div className='bg-button-gradient w-full rounded-sm text-white flex gap-2 justify-center items-center py-1 px-4 font-semibold'>
