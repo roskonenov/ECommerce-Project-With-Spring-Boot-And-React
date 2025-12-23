@@ -12,6 +12,7 @@ import com.ecommerce.project.repositories.ProductRepository;
 import com.ecommerce.project.service.CartService;
 import com.ecommerce.project.service.ImageService;
 import com.ecommerce.project.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import static com.ecommerce.project.util.AppUtil.getSorting;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ModelMapper modelMapper;
@@ -35,15 +37,6 @@ public class ProductServiceImpl implements ProductService {
     private final ImageService imageService;
     private final CartService cartService;
     private final CartRepository cartRepository;
-
-    public ProductServiceImpl(ModelMapper modelMapper, ProductRepository productRepository, CategoryRepository categoryRepository, ImageService imageService, CartService cartService, CartRepository cartRepository) {
-        this.modelMapper = modelMapper;
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-        this.imageService = imageService;
-        this.cartService = cartService;
-        this.cartRepository = cartRepository;
-    }
 
     @Override
     public ProductDTO createProduct(Long categoryId, ProductDTO productDTO) {

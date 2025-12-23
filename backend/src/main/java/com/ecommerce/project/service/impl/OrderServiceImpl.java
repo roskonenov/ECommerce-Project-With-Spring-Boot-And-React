@@ -6,18 +6,24 @@ import com.ecommerce.project.model.*;
 import com.ecommerce.project.payload.dto.OrderDTO;
 import com.ecommerce.project.payload.dto.OrderItemDTO;
 import com.ecommerce.project.payload.dto.OrderRequestDTO;
+import com.ecommerce.project.payload.response.OrderResponse;
 import com.ecommerce.project.repositories.*;
-import com.ecommerce.project.service.CartService;
 import com.ecommerce.project.service.OrderService;
 import com.ecommerce.project.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import static com.ecommerce.project.util.AppUtil.getSorting;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +56,27 @@ public class OrderServiceImpl implements OrderService {
         cartRepository.save(cart);
 
         return mapOrderToDTO(orderRequestDTO.getAddressId(), savedOrder, orderItems);
+    }
+
+    @Override
+    public OrderResponse getAllOrders(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sorting = getSorting(sortBy, sortOrder);
+
+        Page<Order> orderPage = Optional.of(
+                        orderRepository.findAll(PageRequest.of(pageNumber, pageSize, sorting)))
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new APIException("No orders found!", HttpStatus.OK));
+
+        return new OrderResponse()
+                .setContent(orderPage.getContent()
+                        .stream()
+                        .map(order -> modelMapper.map(order, OrderDTO.class))
+                        .toList())
+                .setTotalPages(orderPage.getTotalPages())
+                .setTotalElements(orderPage.getTotalElements())
+                .setPageNumber(orderPage.getNumber())
+                .setPageSize(orderPage.getSize())
+                .setLastPage(orderPage.isLast());
     }
 
     private List<OrderItem> createOrderItems(Cart cart, Order savedOrder) {

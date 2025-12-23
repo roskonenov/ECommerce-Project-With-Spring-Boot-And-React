@@ -1,8 +1,10 @@
 package com.ecommerce.project.controller;
 
+import com.ecommerce.project.config.AppConstants;
 import com.ecommerce.project.payload.dto.OrderDTO;
 import com.ecommerce.project.payload.dto.OrderRequestDTO;
 import com.ecommerce.project.payload.dto.StripePaymentDTO;
+import com.ecommerce.project.payload.response.OrderResponse;
 import com.ecommerce.project.service.OrderService;
 import com.ecommerce.project.service.StripeService;
 import com.stripe.exception.StripeException;
@@ -32,10 +34,22 @@ public class OrderController {
 
     @PostMapping("/orders/users/stripe-client-secret")
     public ResponseEntity<String> getClientSecret(@RequestBody StripePaymentDTO stripePaymentDTO) throws StripeException {
-        System.out.println("StripePaymentDTO received " + stripePaymentDTO);
         return new ResponseEntity<>(
                 stripeService.paymentIntent(stripePaymentDTO),
                 HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping("/admi/orders")
+    public ResponseEntity<OrderResponse> getAllOrders(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder
+    ) {
+        return new ResponseEntity<>(
+                orderService.getAllOrders(pageNumber, pageSize, sortBy, sortOrder),
+                HttpStatus.OK
         );
     }
 }
