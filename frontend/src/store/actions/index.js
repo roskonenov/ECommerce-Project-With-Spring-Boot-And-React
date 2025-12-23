@@ -359,3 +359,23 @@ export const stripePaymentConfirmation = (toast, sendData) => async (dispatch) =
         });
     }
 };
+
+export const getAdminAnalytics = () => async (dispatch) => {
+    try {
+        dispatch({ type: 'IS_FETCHING' });
+        const { data } = await api.get('/admin/app/analytics');
+
+        dispatch({
+            type: 'ADMIN_ANALYTICS',
+            payload: data
+        });
+        dispatch({ type: 'IS_SUCCESS' });
+
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message || 'Failed to load Admin Analytics!'
+        });
+    };
+};

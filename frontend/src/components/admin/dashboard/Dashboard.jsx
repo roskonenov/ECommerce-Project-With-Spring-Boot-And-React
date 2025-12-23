@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import DashboardOverview from './DashboardOverview';
 import { FaBoxOpen, FaShoppingCart, FaEuroSign } from "react-icons/fa";
+import { useDispatch, useSelector } from 'react-redux';
+import { getAdminAnalytics } from '../../../store/actions';
 
 
 const Dashboard = () => {
-    const {productCount, totalRevenue, totalOrders} = {
-    productCount: "34",
-    totalOrders: "10",
-    totalRevenue: "18241.62"
-}
+    const dispatch = useDispatch();
+    const {analytics: {productCount, totalRevenue, totalOrders}} = useSelector(state => state.admin);
+
+    useEffect(() => {
+        dispatch(getAdminAnalytics());
+    }, [dispatch]);
+    
     return (
         <div>
             <div className='flex md:flex-row flex-col mt-8 lg:justify-between border border-slate-400 rounded-lg bg-linear-to-r from-blue-50 to-blue-100 shadow-lg'>
