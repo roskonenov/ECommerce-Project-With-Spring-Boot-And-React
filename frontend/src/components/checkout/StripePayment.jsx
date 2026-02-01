@@ -20,7 +20,7 @@ const StripePayment = () => {
 
         const sendData = {
             amount: Number(totalPrice) * 100,
-            currency: 'bgn',
+            currency: 'eur',
             email: user.email,
             name: user.username,
             address: selectedCheckoutAddress,
