@@ -1,6 +1,6 @@
 import { FaEdit } from "react-icons/fa";
 
-export const adminOrdersTableColumns = [
+export const adminOrdersTableColumns = (handleEdit) => [
     {
         sortable: false,
         disableColumnMenu: true,
@@ -81,7 +81,9 @@ export const adminOrdersTableColumns = [
         renderCell: (params) => {
             return (
                 <div className='flex justify-center items-center space-x-4 h-full '>
-                    <button className='flex justify-center items-center bg-blue-400 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'>
+                    <button 
+                    className='flex justify-center items-center bg-blue-400 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'
+                    onClick={() => handleEdit(params.row)}>
                         <FaEdit className='mr-2' />
                         Edit
                     </button>

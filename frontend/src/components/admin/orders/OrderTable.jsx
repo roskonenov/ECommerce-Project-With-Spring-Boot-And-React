@@ -2,8 +2,11 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useState } from 'react'
 import { adminOrdersTableColumns } from '../../helper/TableColumns';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import Modal from '../../shared/Modal';
 
 const OrderTable = ({ adminOrders, pagination }) => {
+  const [selectedOrder, setSelectedOrder] = useState('');
+  const [openUpdateModal, setOpenUpdateModeal] = useState(false);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(
     pagination?.pageNumber + 1 || 1
@@ -25,40 +28,50 @@ const OrderTable = ({ adminOrders, pagination }) => {
 
   const handlePaginationChange = (paginationModel) => {
     const page = paginationModel.page + 1;
-    console.log(page);
-    
     setCurrentPage(page);
     params.set('page', page.toString());
     navigate(`${pathname}?${params}`);
   };
 
+  const handleEdit = (order) => {
+    setSelectedOrder(order);
+    setOpenUpdateModeal(true)
+  };
+
   return (
     <div>
-      <DataGrid
-      className='w-full'
-        rows={rows}
-        columns={adminOrdersTableColumns}
-        paginationMode='server'
-        rowCount={pagination?.totalElements || 0}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: pagination?.pageSize || 20,
-              page: currentPage - 1
+      <div>
+        <DataGrid
+          className='w-full'
+          rows={rows}
+          columns={adminOrdersTableColumns(handleEdit)}
+          paginationMode='server'
+          rowCount={pagination?.totalElements || 0}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: pagination?.pageSize || 20,
+                page: currentPage - 1
+              },
             },
-          },
-        }}
-        onPaginationModelChange={handlePaginationChange}
-        disableColumnResize
-        pageSizeOptions={[pagination?.pageSize || 20]}
-        disableRowSelectionOnClick
-        pagination
-        paginationOptions={{
-          showFirstButton: true,
-          showLastButton: true,
-          hideNextButton: pagination?.lastPage
-        }}
-      />
+          }}
+          onPaginationModelChange={handlePaginationChange}
+          disableColumnResize
+          pageSizeOptions={[pagination?.pageSize || 20]}
+          disableRowSelectionOnClick
+          pagination
+          paginationOptions={{
+            showFirstButton: true,
+            showLastButton: true,
+            hideNextButton: pagination?.lastPage
+          }}
+        />
+      </div>
+      <Modal
+        open={openUpdateModal}
+        setOpen={setOpenUpdateModeal}
+        title='Update Order Status'>
+      </Modal>
     </div>
   )
 }
