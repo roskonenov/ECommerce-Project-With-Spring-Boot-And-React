@@ -3,6 +3,7 @@ package com.ecommerce.project.controller;
 import com.ecommerce.project.config.AppConstants;
 import com.ecommerce.project.payload.dto.OrderDTO;
 import com.ecommerce.project.payload.dto.OrderRequestDTO;
+import com.ecommerce.project.payload.dto.OrderStatusUpdateDTO;
 import com.ecommerce.project.payload.dto.StripePaymentDTO;
 import com.ecommerce.project.payload.response.OrderResponse;
 import com.ecommerce.project.service.OrderService;
@@ -40,7 +41,7 @@ public class OrderController {
         );
     }
 
-    @GetMapping("/admi/orders")
+    @GetMapping("/admin/orders")
     public ResponseEntity<OrderResponse> getAllOrders(
             @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
@@ -49,6 +50,17 @@ public class OrderController {
     ) {
         return new ResponseEntity<>(
                 orderService.getAllOrders(pageNumber, pageSize, sortBy, sortOrder),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("admin/orders/{orderId}/status")
+    public ResponseEntity<OrderDTO> updateOrderStatus(
+            @PathVariable Long orderId,
+            @RequestBody OrderStatusUpdateDTO orderStatusUpdateDTO
+    ) {
+        return new ResponseEntity<>(
+                orderService.updateOrder(orderId, orderStatusUpdateDTO),
                 HttpStatus.OK
         );
     }
