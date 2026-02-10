@@ -18,6 +18,15 @@ export const orderReducer = (state = initialState, action) => {
                     lastPage: action.lastPage,
                 }
             }
+        case 'UPDATE_ORDER_STATUS':
+            return {
+                ...state,
+                adminOrders: state.adminOrders.map(order => (
+                    order.id === action.payload.id
+                    ? action.payload
+                    : order
+                ))
+            }    
         default:
             return state;
     };

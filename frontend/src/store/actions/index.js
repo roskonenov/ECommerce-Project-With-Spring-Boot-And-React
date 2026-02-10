@@ -346,7 +346,7 @@ export const stripePaymentConfirmation = (toast, sendData) => async (dispatch) =
             dispatch({ type: 'REMOVE_CLIENT_SECRET_AND_ADDRESS' });
             dispatch({ type: 'CLEAR_CART' });
             dispatch({ type: 'IS_SUCCESS' });
-            toast.success('Order Accepted!')
+            toast.success('Order Accepted!');
         } else {
             toast.error('Payment was unsuccessful! Please try again later.');
         }
@@ -404,3 +404,23 @@ export const getDashboardOrders = (params) => async (dispatch) => {
         });
     }
 };
+
+export const updateOrderStatusFromAdminDashboard = (orderId, orderStatus, toast, setOpen) => async (dispatch) => {
+    try {
+        dispatch({ type: 'IS_FETCHING' });
+
+        const { data } = await api.put(`/admin/orders/${orderId}/status`, {status: orderStatus});
+        toast.success('Order Status Changed!');
+
+        dispatch({type: 'UPDATE_ORDER_STATUS', payload: data});
+        dispatch({ type: 'IS_SUCCESS' });
+        setOpen(false);
+
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message || 'Failed to Update Order Status!'
+        });
+    }
+}
