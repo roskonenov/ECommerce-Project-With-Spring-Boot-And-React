@@ -39,7 +39,7 @@ const Register = () => {
                         label='Username'
                         id='username'
                         required
-                        min={3}
+                        minLength={3}
                         message='* Username is required'
                         type='text'
                         placeholder='Enter your username'
@@ -59,7 +59,7 @@ const Register = () => {
                     <InputField
                         label='Password'
                         id='password'
-                        min={6}
+                        minLength={6}
                         required
                         message='* Password is required'
                         type='password'

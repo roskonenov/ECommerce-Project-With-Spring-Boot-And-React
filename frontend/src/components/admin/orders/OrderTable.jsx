@@ -7,8 +7,7 @@ import UpdateOrderForm from './UpdateOrderForm';
 
 const OrderTable = ({ adminOrders, pagination }) => {
   const [selectedOrder, setSelectedOrder] = useState('');
-  const [openUpdateModal, setOpenUpdateModeal] = useState(false);
-  const [loader, setLoader] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(
     pagination?.pageNumber + 1 || 1
@@ -37,7 +36,7 @@ const OrderTable = ({ adminOrders, pagination }) => {
 
   const handleEdit = (order) => {
     setSelectedOrder(order);
-    setOpenUpdateModeal(true)
+    setOpenUpdateModal(true)
   };
 
   return (
@@ -71,13 +70,11 @@ const OrderTable = ({ adminOrders, pagination }) => {
       </div>
       <Modal
         open={openUpdateModal}
-        setOpen={setOpenUpdateModeal}
+        setOpen={setOpenUpdateModal}
         title='Update Order Status'>
         <UpdateOrderForm
-          setOpen={setOpenUpdateModeal}
-          selectedItem={selectedOrder}
-          loader={loader}
-          setLoader={setLoader} />
+          setOpen={setOpenUpdateModal}
+          selectedItem={selectedOrder}/>
       </Modal>
     </div>
   )
