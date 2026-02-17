@@ -49,6 +49,7 @@ const OrderTable = ({ adminOrders, pagination }) => {
           columns={adminOrdersTableColumns(handleEdit)}
           paginationMode='server'
           rowCount={pagination?.totalElements || 0}
+          autosizeOptions={{ columns: ['action'], expand: true }}
           initialState={{
             pagination: {
               paginationModel: {
@@ -58,7 +59,6 @@ const OrderTable = ({ adminOrders, pagination }) => {
             },
           }}
           onPaginationModelChange={handlePaginationChange}
-          disableColumnResize
           pageSizeOptions={[pagination?.pageSize || 20]}
           disableRowSelectionOnClick
           pagination

@@ -33,7 +33,7 @@ const AdminLayout = () => {
                                     onClick={() => setSidebarOpen(false)}
                                     className='-m-2.5 p-2.5'>
                                     <span className='sr-only'>Close Sidebar</span>
-                                    <RxCross1 className='text-white text-2xl' />
+                                    <RxCross1 className='text-white text-2xl cursor-pointer' />
                                 </button>
                             </div>
                         </TransitionChild>
@@ -52,7 +52,7 @@ const AdminLayout = () => {
                     onClick={() => setSidebarOpen(true)}
                     className='-m-2.5 text-gray-700 xl:hidden p-4'>
                     <span className='sr-only'>Open Sidebar</span>
-                    <FaBars className='text-slate-800 text-2xl' />
+                    <FaBars className='text-slate-800 text-2xl cursor-pointer' />
                 </button>
                 <main>
                     <div className='p-4 sm:p-6 xl:p-8'>
