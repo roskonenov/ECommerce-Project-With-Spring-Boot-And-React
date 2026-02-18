@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import api from "../../api/api";
 
 const CACHE_TTL = 60 * 10000 // 10 minutes
@@ -418,9 +419,11 @@ export const updateOrderStatusFromAdminDashboard = (orderId, orderStatus, toast,
 
     } catch (error) {
         console.log(error);
+        const message = error?.response?.data?.message || 'Failed to Update Order Status!';
+        toast.error(message);
         dispatch({
             type: 'IS_ERROR',
-            payload: error?.response?.data?.message || 'Failed to Update Order Status!'
+            payload: message
         });
     }
 }
@@ -445,9 +448,33 @@ export const fetchAdminDasboardProducts = (params) => async (dispatch) => {
 
     } catch (error) {
         console.log(error);
+        const message = error?.response?.data?.message || 'Failed to Fetch Products for Admin Dashboard!';
+        toast.error(message);
         dispatch({
             type: 'IS_ERROR',
-            payload: error?.response?.data?.message || 'Failed to fetch Products for Admin Dashboard!'
+            payload: message
+        });
+    }
+};
+
+export const updateProductFromAdminDashboard = (sendData, toast, reset, setOpen) => async (dispatch) => {
+    try {
+        dispatch({type: 'IS_FETCHING'});
+
+        const {data} = await api.put(`/admin/products/${sendData.id}`, sendData);
+        toast.success('Product Update Successful!');
+
+        dispatch({type: 'UPDATE_PRODUCT', payload: data});
+        dispatch({ type: 'IS_SUCCESS' });
+        reset();
+        setOpen(false);
+    } catch (error) {
+        console.log(error);
+        const message = error?.response?.data?.message || 'Failed to Update Product!';
+        toast.error(message);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: message
         });
     }
 };

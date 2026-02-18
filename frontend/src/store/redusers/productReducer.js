@@ -37,6 +37,15 @@ export const productReducer = (state = initialState, action) => {
                     }
                 })
             };
+        case 'UPDATE_PRODUCT':
+            return {
+                ...state,
+                products: state.products.map(product => (
+                    product.id === action.payload.id
+                    ? action.payload
+                    : product
+                ))
+            }
             
         case 'FETCH_CATEGORIES':
             return {

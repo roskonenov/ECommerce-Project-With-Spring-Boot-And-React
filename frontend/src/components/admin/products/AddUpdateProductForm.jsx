@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import InputField from '../../shared/InputField';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { amountFormatter } from '../../../utils/currencyFormatter';
+import toast from 'react-hot-toast';
+import { updateProductFromAdminDashboard } from '../../../store/actions';
 
 const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
-    const { errorMessage, btnLoader } = useSelector(state => state.errors);
+    const { btnLoader } = useSelector(state => state.errors);
+    const dispatch = useDispatch();
 
     const { register, handleSubmit, reset, setValue, formState: { errors }, control } = useForm({ mode: 'onTouched' });
 
@@ -34,9 +37,24 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
         }
     }, [price, discount, setValue]);
 
+    const saveProductFromAdminDashboard = (submitData) => {
+        if (update) {
+            const sendData = {
+                ...submitData,
+                id: product.id
+            };
+
+            dispatch(updateProductFromAdminDashboard(sendData, toast, reset, setOpen ));
+        } else {
+            // TODO create product logic
+        }
+    }
+
     return (
         <div className='py-5 relative h-full'>
-            <form className='space-y-4'>
+            <form 
+            onSubmit={handleSubmit(saveProductFromAdminDashboard)}
+            className='space-y-4'>
                 <div className='flex md:flex-row flex-col gap-4 w-full'>
                     <InputField
                         label='Name'

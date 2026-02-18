@@ -15,7 +15,7 @@ const UpdateOrderForm = ({ setOpen, selectedItem }) => {
     const [orderStatus, setOrderStatus] = useState(selectedItem?.status || 'Acceped');
     const [error, setError] = useState('');
     const dispatch = useDispatch();
-    const { errorMessage, btnLoader } = useSelector(state => state.errors);
+    const { btnLoader } = useSelector(state => state.errors);
 
     const updateOrderStatus = (e) => {
         e.preventDefault();
@@ -26,12 +26,6 @@ const UpdateOrderForm = ({ setOpen, selectedItem }) => {
 
         dispatch(updateOrderStatusFromAdminDashboard(selectedItem.id, orderStatus, toast, setOpen));
     }
-
-    useEffect(() => {
-        if (errorMessage) {
-            toast.error(errorMessage);
-        }
-    }, [errorMessage]);
 
     return (
         <div className='py-5 relative h-full'>
