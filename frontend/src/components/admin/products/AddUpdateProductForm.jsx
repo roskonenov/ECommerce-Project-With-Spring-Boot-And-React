@@ -1,26 +1,39 @@
 import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import InputField from '../../shared/InputField';
 import { useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
+import { amountFormatter } from '../../../utils/currencyFormatter';
 
 const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
     const { errorMessage, btnLoader } = useSelector(state => state.errors);
 
-    const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({ mode: 'onTouched' });
+    const { register, handleSubmit, reset, setValue, formState: { errors }, control } = useForm({ mode: 'onTouched' });
+
+    const price = useWatch({ control, name: 'price' });
+    const discount = useWatch({ control, name: 'discount' });
 
     useEffect(() => {
         if (!product || !update) return;
-console.log(product, update);
 
         setValue('name', product?.name);
         setValue('description', product?.description);
         setValue('quantity', product?.quantity);
-        setValue('price', product?.price);
+        setValue('price', amountFormatter(1, product?.price));
         setValue('discount', product?.discount);
-        setValue('specialPrice', product?.specialPrice);
+        setValue('specialPrice', amountFormatter(1, product?.specialPrice));
 
     }, [update, product, setValue]);
+
+    useEffect(() => {
+        if (price && discount) {
+            const specialPrice = price - (discount * 0.01) * price;
+            setValue('specialPrice', amountFormatter(1, specialPrice));
+        } else if (price && !discount) {
+            setValue('specialPrice', amountFormatter(1, price));
+        }
+    }, [price, discount, setValue]);
+
     return (
         <div className='py-5 relative h-full'>
             <form className='space-y-4'>
@@ -83,6 +96,8 @@ console.log(product, update);
                         placeholder='Add product special price'
                         min='0'
                         step='0.01'
+                        disabled
+                        className={'cursor-not-allowed'}
                     />
                 </div>
                 <div className='flex flex-col gap-4 w-full'>
