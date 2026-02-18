@@ -99,4 +99,17 @@ public class ProductController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/admin/products")
+    public ResponseEntity<ProductResponse> getProductsForAdminDashboard(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder
+    ) {
+        return new ResponseEntity<>(
+                productService.getAllProductsForAdminDashboard(pageNumber, pageSize, sortBy, sortOrder),
+                HttpStatus.OK
+        );
+    }
 }

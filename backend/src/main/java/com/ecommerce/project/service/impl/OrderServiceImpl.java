@@ -82,7 +82,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO updateOrder(Long orderId, OrderStatusUpdateDTO orderStatusUpdateDTO) {
-
         return modelMapper.map(
                 orderRepository.save(
                         orderRepository.findById(orderId)
@@ -136,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
                 .setOrderDate(LocalDate.now())
                 .setEmail(authUtil.loggedInUserEmail())
                 .setAddress(address)
-                .setStatus("Order accepted!")
+                .setStatus("Accepted")
                 .setTotalAmount(cart.getTotalPrice());
     }
 

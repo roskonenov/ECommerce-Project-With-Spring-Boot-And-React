@@ -188,6 +188,28 @@ public class ProductServiceImpl implements ProductService {
                 ProductDTO.class);
     }
 
+    @Override
+    public ProductResponse getAllProductsForAdminDashboard(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sorting = getSorting(sortBy, sortOrder);
+        Page<Product> productPage = Optional.of(
+                        productRepository
+                                .findAll(PageRequest.of(pageNumber, pageSize, sorting))
+                )
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
+
+        return new ProductResponse()
+                .setContent(productPage
+                        .stream()
+                        .map(product -> modelMapper.map(product, ProductDTO.class))
+                        .toList()
+                ).setPageNumber(productPage.getNumber())
+                .setPageSize(productPage.getSize())
+                .setTotalElements(productPage.getTotalElements())
+                .setTotalPages(productPage.getTotalPages())
+                .setLastPage(productPage.isLast());
+    }
+
     private double calculateSpecialPrice(double price, double discount) {
         return price - (discount * 0.01) * price;
     }
