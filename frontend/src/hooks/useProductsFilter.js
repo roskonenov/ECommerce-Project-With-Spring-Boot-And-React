@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { fetchProducts } from "../store/actions";
+import { fetchAdminDasboardProducts, fetchProducts } from "../store/actions";
 
 const useProductFilter = () => {
     const dispatch = useDispatch();
@@ -23,6 +23,22 @@ const useProductFilter = () => {
         if (keyword) params.set('keyword', keyword);
         
         dispatch(fetchProducts(params.toString()));
+
+    }, [searchParams, dispatch]);
+};
+
+export const useAdminDashboardProductFilter = () => {
+    const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        const params = new URLSearchParams();
+
+        const currentPage = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
+
+        params.set('pageNumber', currentPage - 1);
+        
+        dispatch(fetchAdminDasboardProducts(params.toString()));
 
     }, [searchParams, dispatch]);
 };
