@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import Spinner from '../../shared/Spinner';
 import { FaBoxOpen } from 'react-icons/fa';
@@ -9,6 +9,7 @@ import { useAdminDashboardProductFilter } from '../../../hooks/useProductsFilter
 const AdminProducts = () => {
   const { isLoading } = useSelector(state => state.errors);
   const { products, pagination } = useSelector(state => state.products);
+  const [openAddModal, setOpenAddModal] = useState(false);
 
   useAdminDashboardProductFilter();
 
@@ -18,6 +19,7 @@ const AdminProducts = () => {
     <div>
       <div className='py-8 flex justify-end'>
         <button
+          onClick={() => setOpenAddModal(true)}
           className='bg-custom-blue text-white font-semibold py-2 px-6 rounded-md shadow-md hover:bg-blue-800 hover:text-slate-400 transition-colors duration-300 cursor-pointer flex items-center gap-2'>
           <MdAddShoppingCart className='text-xl' />
           Add Product
@@ -42,7 +44,7 @@ const AdminProducts = () => {
                 All Products
               </h1>
               <div>
-                <ProductsTable products={products} pagination={pagination} />
+                <ProductsTable products={products} pagination={pagination} openAddModal={openAddModal} setOpenAddModal={setOpenAddModal} />
               </div>
             </div>
           ))}

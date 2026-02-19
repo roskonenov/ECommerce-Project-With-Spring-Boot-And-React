@@ -1,7 +1,9 @@
 const initialState = {
     isLoading: false,
     errorMessage: null,
-    btnLoader: false
+    btnLoader: false,
+    categoryLoader: false,
+    categoryError: false,
 };
 
 export const errorReducer = (state = initialState, action) => {
@@ -16,7 +18,9 @@ export const errorReducer = (state = initialState, action) => {
             return {
                 isLoading: false,
                 errorMessage: null,
-                btnLoader: false
+                btnLoader: false,
+                categoryLoader: false,
+                categoryError: false
             };
         case 'IS_ERROR':
             return {
@@ -24,6 +28,20 @@ export const errorReducer = (state = initialState, action) => {
                 errorMessage: action.payload,
                 btnLoader: false
             };
+        case 'CATEGORY_LOADER':
+            return {
+                ...state,
+                categoryLoader: true,
+                categoryError: null,
+                errorMessage: null
+            };
+        case 'CATEGORY_ERROR':
+            return {
+                ...state,
+                categoryError: true,
+                categoryLoader: false,
+                errorMessage: action.payload
+            }
         default:
             return state;
     }

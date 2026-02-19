@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import InputField from '../../shared/InputField';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { amountFormatter } from '../../../utils/currencyFormatter';
 import toast from 'react-hot-toast';
-import { updateProductFromAdminDashboard } from '../../../store/actions';
+import { fetchCategories, updateProductFromAdminDashboard } from '../../../store/actions';
+import SelectField from '../../shared/SelectField';
+import Skeleton from '../../shared/Skeleton';
+import ErrorPage from '../../shared/ErrorPage';
 
 const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
-    const { btnLoader } = useSelector(state => state.errors);
+    const { btnLoader, categoryLoader, categoryError, errorMessage } = useSelector(state => state.errors);
+    const { categories } = useSelector(state => state.products);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const dispatch = useDispatch();
 
     const { register, handleSubmit, reset, setValue, formState: { errors }, control } = useForm({ mode: 'onTouched' });
@@ -50,6 +55,15 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
         }
     }
 
+    useEffect(() => {
+        if (!update && categories?.length === 0) {
+         dispatch(fetchCategories());   
+        }
+    }, [dispatch, update, categories?.length]);
+
+    if(categoryLoader) return <Skeleton />;
+    if(categoryError) return <ErrorPage  message={errorMessage}/>
+
     return (
         <div className='py-5 relative h-full'>
             <form 
@@ -68,6 +82,20 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
                         minLength='3'
                         maxLength='255'
                     />
+                    {!update && (
+                        <SelectField
+                        id='category'
+                        label='Category'
+                        register={register}
+                        errors={errors}
+                        required
+                        message={'* Select Product Category!'}
+                        list={categories}
+                        select={selectedCategory}
+                        setSelect={setSelectedCategory}
+                        placeholder='-- Select Category --'
+                        />
+                    )}
                 </div>
                 <div className='flex md:flex-row flex-col gap-4 w-full'>
                     <InputField
@@ -162,7 +190,7 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
                         color='primary'
                         className='bg-custom-blue text-white py-2.5 px-4 font-medium'
                     >
-                        Update
+                        {update ? 'Update' : 'Add'}
                     </Button>
                 </div>
             </form>

@@ -5,9 +5,10 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Modal from '../../shared/Modal';
 import AddUpdateProductForm from './AddUpdateProductForm';
 
-const ProductsTable = ({ products, pagination }) => {
+const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) => {
   const [selectedProduct, setSelectedProduct] = useState('');
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(
     pagination?.pageNumber + 1 || 1
@@ -85,11 +86,11 @@ const ProductsTable = ({ products, pagination }) => {
         />
       </div>
       <Modal
-        open={openUpdateModal}
-        setOpen={setOpenUpdateModal}
-        title='Update Product'>
+        open={openUpdateModal || openAddModal}
+        setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
+        title={openUpdateModal ? 'Update Product' : 'Add Product'}>
         <AddUpdateProductForm
-          setOpen={setOpenUpdateModal}
+          setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
           product={selectedProduct}
           update={openUpdateModal}/>
       </Modal>

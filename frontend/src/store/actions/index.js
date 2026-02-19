@@ -58,7 +58,7 @@ export const fetchProducts = (params) => async (dispatch, getState) => {
 
 export const fetchCategories = () => async (dispatch) => {
     try {
-        dispatch({ type: 'IS_FETCHING' });
+        dispatch({ type: 'CATEGORY_LOADER' });
 
         const { data } = await api.get(`/public/categories`);
         dispatch({
@@ -75,7 +75,7 @@ export const fetchCategories = () => async (dispatch) => {
     } catch (error) {
         console.log(error);
         dispatch({
-            type: 'IS_ERROR',
+            type: 'CATEGORY_ERROR',
             payload: error?.response?.data?.message || 'Failed to fetch Categories!'
         });
     }
