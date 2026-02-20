@@ -8,13 +8,15 @@ import DeleteModal from '../../shared/DeleteModal';
 import { useDispatch } from 'react-redux';
 import { deleteProduct } from '../../../store/actions';
 import toast from 'react-hot-toast';
+import ImageUploadForm from './ImageUploadForm';
 
 const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) => {
   const [selectedProduct, setSelectedProduct] = useState('');
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
   const [loader, setLoader] = useState(false);
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(
@@ -49,7 +51,8 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
   }
 
   const handleImageUpload = (product) => {
-
+    setSelectedProduct(product);
+    setOpenImageUploadModal(true);
   }
 
   const handleProductView = (product) => {
@@ -105,16 +108,26 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
         <AddUpdateProductForm
           setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
           product={selectedProduct}
-          update={openUpdateModal}/>
+          update={openUpdateModal} />
+      </Modal>
+
+      <Modal
+        open={openImageUploadModal}
+        setOpen={setOpenImageUploadModal}
+        title={'Upload Product Image'}>
+        <ImageUploadForm
+          setOpen={setOpenImageUploadModal}
+          product={selectedProduct}
+        />
       </Modal>
 
       <DeleteModal
-                open={openDeleteModal}
-                setOpen={setOpenDeleteModal}
-                title='Delete Product'
-                deleteHandler={handleProductDelete}
-                loader={loader}
-            />
+        open={openDeleteModal}
+        setOpen={setOpenDeleteModal}
+        title='Delete Product'
+        deleteHandler={handleProductDelete}
+        loader={loader}
+      />
 
     </div>
   )
