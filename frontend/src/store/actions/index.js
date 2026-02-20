@@ -490,9 +490,28 @@ export const deleteProduct = (productId, toast, setLoader, setOpenDeleteModal) =
         console.log(error);
         const message = error?.response?.data?.message || 'Internal Error occurred';
         toast.error(message);
-        
+
     } finally {
         setOpenDeleteModal(false);
         setLoader(false);
     };
+};
+
+export const updateProductPicture = (formData, productId, setLoader, setOpen) => async (dispatch) => {
+    try {
+        setLoader(true);
+        const { data } = await api.put(`/admin/products/${productId}/image`, formData);
+        toast.success('Product Image Updated Successfully!');
+
+        dispatch({ type: 'UPDATE_PRODUCT', payload: data });
+
+    } catch (error) {
+        console.log(error);
+        const message = error?.response?.data?.message || 'Failed to Upload Product Image!';
+        toast.error(message);
+
+    } finally {
+        setLoader(false);
+        setOpen(false)
+    }
 };

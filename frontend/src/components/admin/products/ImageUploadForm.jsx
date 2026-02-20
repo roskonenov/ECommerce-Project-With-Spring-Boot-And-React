@@ -2,6 +2,8 @@ import Button from '@mui/material/Button';
 import React, { useRef, useState } from 'react'
 import toast from 'react-hot-toast';
 import { FaCloudUploadAlt } from 'react-icons/fa'
+import { useDispatch } from 'react-redux';
+import { updateProductPicture } from '../../../store/actions';
 
 const ImageUploadForm = ({ setOpen, product }) => {
     const MAX_FILE_SIZE = 32 * 1024 * 1024 // 32 MB
@@ -9,6 +11,7 @@ const ImageUploadForm = ({ setOpen, product }) => {
     const [imagePreview, setImagePreview] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [loader, setLoader] = useState(false);
+    const dispatch = useDispatch();
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -39,9 +42,17 @@ const ImageUploadForm = ({ setOpen, product }) => {
         setSelectedFile(null);
     }
 
-    const handleImageUpload = (e) => {
+    const handleImageUpload = async (e) => {
         e.preventDefault();
-        
+        if(!selectedFile) {
+            toast.error('Please select image file before uploading!');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+
+        dispatch(updateProductPicture(formData, product.id, setLoader, setOpen));
     }
 
     return (
