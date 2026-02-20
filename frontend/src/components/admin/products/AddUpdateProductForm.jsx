@@ -105,7 +105,7 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
                         register={register}
                         errors={errors}
                         required
-                        message='* Quantity is required'
+                        message='* Quantity is required!'
                         placeholder='Add quantity in stock'
                         min='0'
                     />
@@ -116,7 +116,7 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
                         register={register}
                         errors={errors}
                         required
-                        message='* Price is require'
+                        message='* Price is required!'
                         placeholder='Add product price'
                         min='0'
                         step='0.01'

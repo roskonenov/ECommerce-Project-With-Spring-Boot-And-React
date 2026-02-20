@@ -4,7 +4,7 @@ import { MdPinDrop, MdPublic } from "react-icons/md";
 
 
 
-const AddressList = ({ addresses, selectedAddress, setSelectedAddress, setOpenAddAddressModal, setOpenDeleteAddressModal }) => {
+const AddressList = ({ addresses, selectedAddress, setSelectedAddress, setOpenAddAddressModal, setOpenDeleteModal }) => {
 
     const addressSelectionHandler = (address) => {
         setSelectedAddress(address);
@@ -15,7 +15,7 @@ const AddressList = ({ addresses, selectedAddress, setSelectedAddress, setOpenAd
     };
 
     const deleteAddressHandler = () => {
-        setOpenDeleteAddressModal(true);
+        setOpenDeleteModal(true);
     };
 
     return (

@@ -4,11 +4,18 @@ import { adminProductsTableColumns } from '../../helper/TableColumns';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Modal from '../../shared/Modal';
 import AddUpdateProductForm from './AddUpdateProductForm';
+import DeleteModal from '../../shared/DeleteModal';
+import { useDispatch } from 'react-redux';
+import { deleteProduct } from '../../../store/actions';
+import toast from 'react-hot-toast';
 
 const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) => {
   const [selectedProduct, setSelectedProduct] = useState('');
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [loader, setLoader] = useState(false);
   
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(
     pagination?.pageNumber + 1 || 1
@@ -37,7 +44,8 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
   }
 
   const handleDelete = (product) => {
-
+    setSelectedProduct(product);
+    setOpenDeleteModal(true);
   }
 
   const handleImageUpload = (product) => {
@@ -53,6 +61,10 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
     setCurrentPage(page);
     params.set('page', page.toString());
     navigate(`${pathname}?${params}`);
+  }
+
+  const handleProductDelete = () => {
+    dispatch(deleteProduct(selectedProduct.id, toast, setLoader, setOpenDeleteModal));
   }
 
   return (
@@ -85,6 +97,7 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
           }}
         />
       </div>
+
       <Modal
         open={openUpdateModal || openAddModal}
         setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
@@ -94,6 +107,15 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
           product={selectedProduct}
           update={openUpdateModal}/>
       </Modal>
+
+      <DeleteModal
+                open={openDeleteModal}
+                setOpen={setOpenDeleteModal}
+                title='Delete Product'
+                deleteHandler={handleProductDelete}
+                loader={loader}
+            />
+
     </div>
   )
 }

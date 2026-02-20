@@ -6,12 +6,12 @@ import AddAddressForm from './AddAddressForm';
 import AddressList from './AddressList';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUserAddress, setCheckoutAddress } from '../../store/actions';
-import DeleteAddressModal from './DeleteAddressModal';
 import toast from 'react-hot-toast';
+import DeleteModal from '../shared/DeleteModal';
 
 const AddressInfo = () => {
     const [openAddAddressModal, setOpenAddAddressModal] = useState(false);
-    const [openDeleteAddressModal, setOpenDeleteAddressModal] = useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState('');
     const { isLoading, btnLoader } = useSelector(state => state.errors);
     const { address } = useSelector(state => state.auth);
@@ -24,7 +24,7 @@ const AddressInfo = () => {
     };
 
     const deleteAddressHandler = () => {
-        dispatch(deleteUserAddress(selectedAddress?.id, toast, setOpenDeleteAddressModal));
+        dispatch(deleteUserAddress(selectedAddress?.id, toast, setOpenDeleteModal));
     };
 
     useEffect(() => {
@@ -58,7 +58,7 @@ const AddressInfo = () => {
                             selectedAddress={selectedAddress}
                             setSelectedAddress={setSelectedAddress}
                             setOpenAddAddressModal={setOpenAddAddressModal}
-                            setOpenDeleteAddressModal={setOpenDeleteAddressModal}
+                            setOpenDeleteModal={setOpenDeleteModal}
                         />
                     )}
                 </div>
@@ -78,11 +78,11 @@ const AddressInfo = () => {
                     setOpenModal={setOpenAddAddressModal} />
             </AddAddressModal>
 
-            <DeleteAddressModal
-                open={openDeleteAddressModal}
-                setOpen={setOpenDeleteAddressModal}
+            <DeleteModal
+                open={openDeleteModal}
+                setOpen={setOpenDeleteModal}
                 title='Delete Address'
-                deleteAddressHandler={deleteAddressHandler}
+                deleteHandler={deleteAddressHandler}
                 loader={btnLoader}
             />
         </div>

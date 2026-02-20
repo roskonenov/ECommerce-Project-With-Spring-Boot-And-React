@@ -250,7 +250,7 @@ export const setCheckoutAddress = (address) => {
     };
 };
 
-export const deleteUserAddress = (addresId, toast, setOpenDeleteAddressModal) => async (dispatch) => {
+export const deleteUserAddress = (addresId, toast, setOpenDeleteModal) => async (dispatch) => {
     dispatch({ type: 'IS_FETCHING' });
     try {
         await api.delete(`/addresses/${addresId}`);
@@ -266,7 +266,7 @@ export const deleteUserAddress = (addresId, toast, setOpenDeleteAddressModal) =>
             payload: error?.response?.data?.message || 'Internal Error occurred'
         });
     } finally {
-        setOpenDeleteAddressModal(false);
+        setOpenDeleteModal(false);
     };
 };
 
@@ -410,10 +410,10 @@ export const updateOrderStatusFromAdminDashboard = (orderId, orderStatus, toast,
     try {
         dispatch({ type: 'IS_FETCHING' });
 
-        const { data } = await api.put(`/admin/orders/${orderId}/status`, {status: orderStatus});
+        const { data } = await api.put(`/admin/orders/${orderId}/status`, { status: orderStatus });
         toast.success('Order Status Changed!');
 
-        dispatch({type: 'UPDATE_ORDER_STATUS', payload: data});
+        dispatch({ type: 'UPDATE_ORDER_STATUS', payload: data });
         dispatch({ type: 'IS_SUCCESS' });
         setOpen(false);
 
@@ -459,12 +459,12 @@ export const fetchAdminDasboardProducts = (params) => async (dispatch) => {
 
 export const updateProductFromAdminDashboard = (sendData, toast, reset, setOpen) => async (dispatch) => {
     try {
-        dispatch({type: 'IS_FETCHING'});
+        dispatch({ type: 'IS_FETCHING' });
 
-        const {data} = await api.put(`/admin/products/${sendData.id}`, sendData);
+        const { data } = await api.put(`/admin/products/${sendData.id}`, sendData);
         toast.success('Product Update Successful!');
 
-        dispatch({type: 'UPDATE_PRODUCT', payload: data});
+        dispatch({ type: 'UPDATE_PRODUCT', payload: data });
         dispatch({ type: 'IS_SUCCESS' });
         reset();
         setOpen(false);
@@ -477,4 +477,22 @@ export const updateProductFromAdminDashboard = (sendData, toast, reset, setOpen)
             payload: message
         });
     }
+};
+
+export const deleteProduct = (productId, toast, setLoader, setOpenDeleteModal) => async (dispatch) => {
+    try {
+        setLoader(true);
+        const { data } = await api.delete(`/admin/products/${productId}`);
+        dispatch({ type: 'REMOVE_PRODUCT', payload: data });
+        toast.success('The PRODUCT was deleted successfully!');
+
+    } catch (error) {
+        console.log(error);
+        const message = error?.response?.data?.message || 'Internal Error occurred';
+        toast.error(message);
+        
+    } finally {
+        setOpenDeleteModal(false);
+        setLoader(false);
+    };
 };

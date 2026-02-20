@@ -2,7 +2,7 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/re
 import React from 'react'
 import { FaExclamationTriangle, FaTimes } from 'react-icons/fa';
 
-const DeleteAddressModal = ({ open, setOpen, title, deleteAddressHandler, loader }) => {
+const DeleteModal = ({ open, setOpen, title, deleteHandler, loader }) => {
 
     return (
         <Dialog open={open} onClose={() => setOpen(false)} className='relative z-50'>
@@ -50,7 +50,7 @@ const DeleteAddressModal = ({ open, setOpen, title, deleteAddressHandler, loader
                             <button
                             disabled={loader}
                             type='button'
-                            onClick={deleteAddressHandler}
+                            onClick={deleteHandler}
                             className='inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto cursor-pointer'
                             >
                                 {loader ? 'Loading...' : 'Delete'}
@@ -71,4 +71,4 @@ const DeleteAddressModal = ({ open, setOpen, title, deleteAddressHandler, loader
     );
 };
 
-export default DeleteAddressModal;
+export default DeleteModal;
