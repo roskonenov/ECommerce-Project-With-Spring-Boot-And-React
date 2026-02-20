@@ -2,6 +2,7 @@ package com.ecommerce.project.service.impl;
 
 import com.ecommerce.project.config.ImgbbConfig;
 import com.ecommerce.project.service.ImageService;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
@@ -49,9 +50,18 @@ public class ImageServiceImpl implements ImageService {
                 .retrieve()
                 .body(String.class);
 
-        return objectMapper.readTree(response)
-                .path("data")
-                .path("display_url")
-                .asText();
+        JsonNode root = objectMapper.readTree(response);
+
+        String mediumUrl = root.at("/data/medium/url").asText();
+        if (mediumUrl != null && !mediumUrl.isBlank()) {
+            return mediumUrl;
+        }
+
+        String originalUrl = root.at("/data/display_url").asText();
+        if (originalUrl != null && !originalUrl.isBlank()) {
+            return originalUrl;
+        }
+
+        throw new IllegalStateException("No image URL found in response: " + response);
     }
 }

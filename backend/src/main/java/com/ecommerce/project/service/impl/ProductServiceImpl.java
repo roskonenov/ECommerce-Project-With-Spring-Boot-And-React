@@ -46,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
         return modelMapper.map(
                 productRepository.save(
                         modelMapper.map(productDTO, Product.class)
-                                .setImage("defaultImage")
+                                .setImage("https://i.ibb.co/hF7WDtp1/default-product.png")
                                 .setSpecialPrice(calculateSpecialPrice(productDTO.getPrice(), productDTO.getDiscount()))
                                 .setCategory(categoryRepository.findById(categoryId)
                                         .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId)))
