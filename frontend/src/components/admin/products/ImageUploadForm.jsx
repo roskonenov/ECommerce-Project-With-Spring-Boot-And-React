@@ -15,12 +15,14 @@ const ImageUploadForm = ({ setOpen, product }) => {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
+        console.log(file.type);
+
 
         if (!file) {
             return;
 
-        } else if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
-            toast.error('Please select a valid image file (.jpeg, .jpg, .png)');
+        } else if (!['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'].includes(file.type)) {
+            toast.error('Please select a valid image file (.jpeg, .jpg, .png, .webp, .avif)');
             return;
 
         } else if (file.size > MAX_FILE_SIZE) {
@@ -44,7 +46,7 @@ const ImageUploadForm = ({ setOpen, product }) => {
 
     const handleImageUpload = async (e) => {
         e.preventDefault();
-        if(!selectedFile) {
+        if (!selectedFile) {
             toast.error('Please select image file before uploading!');
             return;
         }
@@ -60,6 +62,8 @@ const ImageUploadForm = ({ setOpen, product }) => {
             <form onSubmit={handleImageUpload}>
                 <div className='flex flex-col gap-4 w-full'>
 
+
+
                     <label
                         className='mx-auto my-4 w-4/5 flex flex-wrap justify-center items-center gap-2 font-semibold text-gray-600 border-2 border-dashed border-custom-blue p-2 rounded-md cursor-pointer'
                     >
@@ -70,18 +74,29 @@ const ImageUploadForm = ({ setOpen, product }) => {
                             ref={fileInputRef}
                             onChange={handleImageChange}
                             className='hidden'
-                            accept='image/jpeg, image/jpg, image/png'
+                            accept='image/jpeg, image/jpg, image/png, image/webp, image/avif'
                         />
                         <span
                             className='w-full text-center text-xs'
                         >Up to 32 MB</span>
                     </label>
 
+                    {!imagePreview && (
+                        <div className='text-center'>
+                            <img src={product.image}
+                                alt="Current Image"
+                                className='h-80 rounded-md mx-auto my-4 object-scale-down' />
+                            <span
+                                className='w-full text-center text-xl text-gray-700 font-semibold'
+                            >Current Image</span>
+                        </div>
+                    )}
+
                     {imagePreview && (
                         <div className='text-center'>
                             <img src={imagePreview}
                                 alt="Preview of the Image to Upload"
-                                className='h-80 rounded-md mx-auto my-4' />
+                                className='h-80 rounded-md mx-auto my-4 object-scale-down' />
                             <button
                                 type='button'
                                 className='bg-rose-600 text-white font-semibold rounded-md px-4 py-2 mt-4 hover:bg-rose-700 hover:text-gray-300 transition-colors duration-200 cursor-pointer'
