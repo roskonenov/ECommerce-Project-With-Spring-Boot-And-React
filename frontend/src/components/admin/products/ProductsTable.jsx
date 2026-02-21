@@ -9,13 +9,16 @@ import { useDispatch } from 'react-redux';
 import { deleteProduct } from '../../../store/actions';
 import toast from 'react-hot-toast';
 import ImageUploadForm from './ImageUploadForm';
+import ProductViewModal from '../../shared/ProductViewModal';
 
 const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) => {
   const [selectedProduct, setSelectedProduct] = useState('');
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
+  const [openProductViewModal, setOpenProductViewModal] = useState(false);
   const [loader, setLoader] = useState(false);
+  const isAvailable = selectedProduct.quantity && Number(selectedProduct.quantity) > 0;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,7 +59,8 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
   }
 
   const handleProductView = (product) => {
-
+    setSelectedProduct(product);
+    setOpenProductViewModal(true);
   }
 
   const handlePaginationChange = (paginationModel) => {
@@ -128,6 +132,12 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
         deleteHandler={handleProductDelete}
         loader={loader}
       />
+
+      <ProductViewModal
+        open={openProductViewModal}
+        setOpen={setOpenProductViewModal}
+        product={selectedProduct}
+        isAvailable={isAvailable} />
 
     </div>
   )
