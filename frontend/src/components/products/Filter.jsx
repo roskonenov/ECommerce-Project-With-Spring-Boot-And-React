@@ -20,9 +20,15 @@ const Filter = ({categories}) => {
         const handler = setTimeout(() => {
             setSearchParams(s => {
                 const params = new URLSearchParams(s);
-                searchTerm.trim()
-                    ? params.set('keyword', searchTerm.trim())
-                    : params.delete('keyword');
+                if (searchTerm.trim()) {
+                    
+                    if (s.get('keyword') !== searchTerm.trim()) {
+                        params.set('page', '1');
+                    }
+                    params.set('keyword', searchTerm.trim());
+                } else {
+                    params.delete('keyword');
+                }
                 return params;
             });
         }, 700);

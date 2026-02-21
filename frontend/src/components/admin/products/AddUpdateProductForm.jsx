@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import { amountFormatter } from '../../../utils/currencyFormatter';
 import toast from 'react-hot-toast';
-import { fetchCategories, updateProductFromAdminDashboard } from '../../../store/actions';
+import { createProductFromAdminDashboard, fetchCategories, updateProductFromAdminDashboard } from '../../../store/actions';
 import SelectField from '../../shared/SelectField';
 import Skeleton from '../../shared/Skeleton';
 import ErrorPage from '../../shared/ErrorPage';
@@ -43,6 +43,10 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
     }, [price, discount, setValue]);
 
     const saveProductFromAdminDashboard = (submitData) => {
+        if (!submitData.discount) {
+            submitData.discount = 0;
+        }
+        
         if (update) {
             const sendData = {
                 ...submitData,
@@ -50,8 +54,11 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
             };
 
             dispatch(updateProductFromAdminDashboard(sendData, toast, reset, setOpen ));
+
         } else {
-            // TODO create product logic
+
+            const categoryId = categories.find(cat => cat.name === selectedCategory)?.id;
+            dispatch(createProductFromAdminDashboard(submitData, categoryId, reset, setOpen));
         }
     }
 

@@ -26,12 +26,13 @@ const SelectField = ({
 
             <select
                 id={id}
-                onChange={setSelect}
                 disabled={disabled}
                 className={`${className ? className : ''} p-2 border outline-none bg-transparent text-slate-800 rounded-md
                 ${errors[id]?.message ? 'border-red-500' : 'border-slate-700'}`}
-                {...register(id, {required: { value: required, message }})}
-                defaultValue={select || ''}
+                {...register(id, {
+                    required: { value: required, message },
+                    onChange: (e) => setSelect(e.target.value)
+                })}
             >
                 <option value={''}>{placeholder}</option>
                 {list?.map(item => <option key={item.id} value={item.name}>{item.name}</option>)}

@@ -10,23 +10,34 @@ export const errorReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'IS_FETCHING':
             return {
+                ...state,
                 isLoading: true,
                 errorMessage: null,
-                btnLoader: true
+                categoryError: false
             };
         case 'IS_SUCCESS':
             return {
+                ...state,
                 isLoading: false,
                 errorMessage: null,
                 btnLoader: false,
                 categoryLoader: false,
                 categoryError: false
             };
+        case 'BTN_LOADER':
+            return {
+                ...state,
+                btnLoader: true,
+                errorMessage: null,
+                categoryError: false
+            }
         case 'IS_ERROR':
             return {
+                ...state,
                 isLoading: false,
                 errorMessage: action.payload,
-                btnLoader: false
+                btnLoader: false,
+                categoryLoader: false
             };
         case 'CATEGORY_LOADER':
             return {

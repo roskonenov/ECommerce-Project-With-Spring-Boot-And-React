@@ -515,3 +515,25 @@ export const updateProductPicture = (formData, productId, setLoader, setOpen) =>
         setOpen(false)
     }
 };
+
+export const createProductFromAdminDashboard = (submitData, categoryId, reset, setOpen) => async (dispatch) => {
+    try {
+        dispatch({ type: 'BTN_LOADER' });
+
+        const { data } = await api.post(`/admin/categories/${categoryId}/product`, submitData);
+        toast.success('Product Created Successfully!');
+
+        dispatch({ type: 'ADD_PRODUCT', payload: data });
+        dispatch({ type: 'IS_SUCCESS' });
+        reset();
+        setOpen(false);
+    } catch (error) {
+        console.log(error);
+        const message = error?.response?.data?.message || 'Failed to Create Product!';
+        toast.error(message);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: message
+        });
+    }
+};
