@@ -6,6 +6,7 @@ import DeleteModal from '../../shared/DeleteModal';
 import { useDispatch } from 'react-redux';
 import {adminCategoryTableColumns} from '../../helper/TableColumns'
 import AddUpdateCategoryForm from './AddUpdateCategoryForm';
+import { deleteCategory } from '../../../store/actions';
 
 const CategoryTable = ({ categories, pagination, openAddModal, setOpenAddModal, modalMode, setModalMode }) => {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -50,7 +51,7 @@ const CategoryTable = ({ categories, pagination, openAddModal, setOpenAddModal, 
   }
 
   const handleCategoryDelete = () => {
-    dispatch();
+    dispatch(deleteCategory(selectedCategory.id, setLoader, setOpenDeleteModal));
   }
 
   return (

@@ -56,7 +56,9 @@ export const productReducer = (state = initialState, action) => {
         case 'REMOVE_PRODUCT':
             return {
                 ...state,
-                products: state.products.filter(product => product.id !== action.payload.id)
+                products: state.products.filter(product => (
+                    product.id !== action.payload.id
+                ))
             }
 
         case 'FETCH_CATEGORIES':
@@ -87,6 +89,14 @@ export const productReducer = (state = initialState, action) => {
                         ? action.payload
                         : cat
                 )
+            }
+
+        case 'REMOVE_CATEGORY':
+            return {
+                ...state,
+                categories: state.categories.filter(cat => (
+                    cat.id !== action.payload.id
+                ))
             }
         default:
             return state;

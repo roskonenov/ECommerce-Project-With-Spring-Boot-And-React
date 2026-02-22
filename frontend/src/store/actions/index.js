@@ -582,3 +582,24 @@ export const createCategory = (sendData, reset, setOpen) => async (dispatch) => 
         });
     }
 };
+
+export const deleteCategory = (categoryId, setLoader, setOpen) => async (dispatch) => {
+    try {
+        setLoader(true);
+        const { data } = await api.delete(`/admin/categories/${categoryId}`);
+        toast.success('Category Deleted!');
+
+        dispatch({ type: 'REMOVE_CATEGORY', payload: data });
+        setOpen(false);
+    } catch (error) {
+        console.log(error);
+        const message = error?.response?.data?.message || 'Failed to Create Category!';
+        toast.error(message);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: message
+        });
+    } finally {
+        setLoader(false);
+    }
+};
