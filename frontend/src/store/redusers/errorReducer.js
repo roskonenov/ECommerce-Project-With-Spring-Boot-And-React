@@ -43,7 +43,7 @@ export const errorReducer = (state = initialState, action) => {
             return {
                 ...state,
                 categoryLoader: true,
-                categoryError: null,
+                categoryError: false,
                 errorMessage: null
             };
         case 'CATEGORY_ERROR':

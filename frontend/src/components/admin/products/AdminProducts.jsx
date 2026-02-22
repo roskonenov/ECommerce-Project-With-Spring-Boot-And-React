@@ -10,16 +10,23 @@ const AdminProducts = () => {
   const { isLoading } = useSelector(state => state.errors);
   const { products, pagination } = useSelector(state => state.products);
   const [openAddModal, setOpenAddModal] = useState(false);
+    const [modalMode, setModalMode] = useState('');
 
   useAdminDashboardProductFilter();
 
   const noProducts = !products || products.length === 0;
+  const handleOpenAddModal = () => {
+    setOpenAddModal(true);
+    setModalMode('add');
+    console.log('Modal mode changed to add');
+    
+  }
 
   return (
     <div>
       <div className='py-8 flex justify-end'>
         <button
-          onClick={() => setOpenAddModal(true)}
+          onClick={handleOpenAddModal}
           className='bg-custom-blue text-white font-semibold py-2 px-6 rounded-md shadow-md hover:bg-blue-800 hover:text-slate-400 transition-colors duration-300 cursor-pointer flex items-center gap-2'>
           <MdAddShoppingCart className='text-xl' />
           Add Product
@@ -44,7 +51,13 @@ const AdminProducts = () => {
                 All Products
               </h1>
               <div>
-                <ProductsTable products={products} pagination={pagination} openAddModal={openAddModal} setOpenAddModal={setOpenAddModal} />
+                <ProductsTable 
+                products={products} 
+                pagination={pagination} 
+                openAddModal={openAddModal} 
+                setOpenAddModal={setOpenAddModal}
+                modalMode={modalMode}
+                setModalMode={setModalMode} />
               </div>
             </div>
           ))}

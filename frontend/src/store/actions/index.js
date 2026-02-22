@@ -56,11 +56,12 @@ export const fetchProducts = (params) => async (dispatch, getState) => {
     }
 };
 
-export const fetchCategories = () => async (dispatch) => {
+export const fetchCategories = (queryString) => async (dispatch) => {
+    queryString = queryString ? `?${queryString}` : '';
     try {
         dispatch({ type: 'CATEGORY_LOADER' });
 
-        const { data } = await api.get(`/public/categories`);
+        const { data } = await api.get(`/public/categories${queryString}`);
         dispatch({
             type: 'FETCH_CATEGORIES',
             payload: data.content,

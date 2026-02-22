@@ -261,3 +261,68 @@ export const adminOrdersTableColumns = (handleEdit) => [
         }
     },
 ];
+
+export const adminCategoryTableColumns = (
+    handleEdit,
+    handleDelete
+) => [
+    {
+        sortable: false,
+        disableColumnMenu: true,
+        field: 'id',
+        headerName: 'Id',
+        minWidth: 100,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false,
+        headerClassName: 'text-black font-semibold border',
+        cellClassName: 'text-slate-700 font-normal border',
+        renderHeader: (params) => <span>Category ID</span>
+    },
+    {
+        sortable: false,
+        disableColumnMenu: true,
+        field: 'name',
+        headerName: 'Name',
+        minWidth: 300,
+        flex: 0,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false,
+        headerClassName: 'text-black font-semibold border',
+        cellClassName: 'text-slate-700 font-normal border',
+        renderHeader: (params) => <span>Name</span>
+    },
+    {
+        sortable: false,
+        disableColumnMenu: true,
+        field: 'action',
+        headerName: 'action',
+        minWidth: 400,
+        flex: 0,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false,
+        headerClassName: 'text-black font-semibold text-center',
+        cellClassName: 'text-slate-700 font-normal',
+        renderHeader: (params) => <span>Action</span>,
+        renderCell: (params) => {
+            return (
+                <div className='flex justify-around items-center space-x-4 h-full ml-3'>
+                    <button 
+                    className='flex justify-center items-center bg-blue-500 hover:bg-blue-700 transition-colors duration-200 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'
+                    onClick={() => handleEdit(params.row)}>
+                        <FaEdit className='mr-2' />
+                        Edit
+                    </button>
+                    <button 
+                    className='flex justify-center items-center bg-red-500 hover:bg-red-700 transition-colors duration-200 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'
+                    onClick={() => handleDelete(params.row)}>
+                        <FaTrashAlt className='mr-2' />
+                        Delete
+                    </button>
+                </div>
+            );
+        }
+    },
+];

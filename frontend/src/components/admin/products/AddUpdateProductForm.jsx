@@ -10,7 +10,7 @@ import SelectField from '../../shared/SelectField';
 import Skeleton from '../../shared/Skeleton';
 import ErrorPage from '../../shared/ErrorPage';
 
-const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
+const AddUpdateProductForm = ({ setOpen, product, update = false, modalMode }) => {
     const { btnLoader, categoryLoader, categoryError, errorMessage } = useSelector(state => state.errors);
     const { categories } = useSelector(state => state.products);
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -89,7 +89,7 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
                         minLength='3'
                         maxLength='255'
                     />
-                    {!update && (
+                    {modalMode === 'add' && (
                         <SelectField
                         id='category'
                         label='Category'
@@ -197,7 +197,7 @@ const AddUpdateProductForm = ({ setOpen, product, update = false }) => {
                         color='primary'
                         className='bg-custom-blue text-white py-2.5 px-4 font-medium'
                     >
-                        {update ? 'Update' : 'Add'}
+                        {modalMode === 'edit' ? 'Update' : 'Add'}
                     </Button>
                 </div>
             </form>

@@ -11,13 +11,14 @@ import toast from 'react-hot-toast';
 import ImageUploadForm from './ImageUploadForm';
 import ProductViewModal from '../../shared/ProductViewModal';
 
-const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) => {
+const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal, modalMode, setModalMode }) => {
   const [selectedProduct, setSelectedProduct] = useState('');
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
   const [openProductViewModal, setOpenProductViewModal] = useState(false);
   const [loader, setLoader] = useState(false);
+
   const isAvailable = selectedProduct.quantity && Number(selectedProduct.quantity) > 0;
 
   const dispatch = useDispatch();
@@ -46,6 +47,9 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
   const handleEdit = (product) => {
     setSelectedProduct(product);
     setOpenUpdateModal(true);
+    setModalMode('edit');
+    console.log('Modal mode set to edit');
+    
   }
 
   const handleDelete = (product) => {
@@ -108,11 +112,12 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal }) 
       <Modal
         open={openUpdateModal || openAddModal}
         setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
-        title={openUpdateModal ? 'Update Product' : 'Add Product'}>
+        title={modalMode === 'edit' ? 'Update Product' : 'Add Product'}>
         <AddUpdateProductForm
           setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
           product={selectedProduct}
-          update={openUpdateModal} />
+          update={openUpdateModal}
+          modalMode={modalMode} />
       </Modal>
 
       <Modal
