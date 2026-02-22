@@ -9,8 +9,14 @@ const Categories = () => {
   const { categoryLoader } = useSelector(state => state.errors);
   const { categories, categoryPagination } = useSelector(state => state.products);
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [modalMode, setModalMode] = useState('');
 
   useCategoryFilter();
+
+  const handleOpenAddModal = () => {
+    setOpenAddModal(true);
+    setModalMode('add');
+  }
 
   const noCategories = !categories || categories.length === 0;
 
@@ -18,7 +24,7 @@ const Categories = () => {
     <div>
       <div className='py-8 flex justify-end'>
         <button
-          onClick={() => setOpenAddModal(true)}
+          onClick={handleOpenAddModal}
           className='bg-custom-blue text-white font-semibold py-2 px-6 rounded-md shadow-md hover:bg-blue-800 hover:text-slate-400 transition-colors duration-300 cursor-pointer flex items-center gap-2'>
           <FaThList className='text-xl' />
           Add Category
@@ -43,7 +49,14 @@ const Categories = () => {
                 All Categories
               </h1>
               <div>
-                <CategoryTable categories={categories} pagination={categoryPagination} openAddModal={openAddModal} setOpenAddModal={setOpenAddModal} />
+                <CategoryTable
+                  categories={categories}
+                  pagination={categoryPagination}
+                  openAddModal={openAddModal}
+                  setOpenAddModal={setOpenAddModal}
+                  modalMode={modalMode}
+                  setModalMode={setModalMode}
+                />
               </div>
             </div>
           ))}

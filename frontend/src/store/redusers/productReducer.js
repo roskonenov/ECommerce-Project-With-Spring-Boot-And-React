@@ -43,12 +43,12 @@ export const productReducer = (state = initialState, action) => {
                 ...state,
                 products: state.products.map(product => (
                     product.id === action.payload.id
-                    ? action.payload
-                    : product
+                        ? action.payload
+                        : product
                 ))
             }
         case 'ADD_PRODUCT':
-            return{
+            return {
                 ...state,
                 products: [...state.products, action.payload]
             }
@@ -57,8 +57,8 @@ export const productReducer = (state = initialState, action) => {
             return {
                 ...state,
                 products: state.products.filter(product => product.id !== action.payload.id)
-            }    
-            
+            }
+
         case 'FETCH_CATEGORIES':
             return {
                 ...state,
@@ -71,6 +71,15 @@ export const productReducer = (state = initialState, action) => {
                     totalPages: action.totalPages,
                     lastPage: action.lastPage,
                 },
+            }
+        case 'UPDATE_CATEGORY':
+            return {
+                ...state,
+                categories: state.categories.map(cat =>
+                    cat.id === action.payload.id
+                        ? action.payload
+                        : cat
+                )
             }
         default:
             return state;

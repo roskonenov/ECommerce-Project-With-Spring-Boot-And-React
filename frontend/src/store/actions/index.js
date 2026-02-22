@@ -538,3 +538,25 @@ export const createProductFromAdminDashboard = (submitData, categoryId, reset, s
         });
     }
 };
+
+export const updateCategory = (sendData, reset, setOpen) => async (dispatch) => {
+    try {
+        dispatch({ type: 'BTN_LOADER' });
+
+        const { data } = await api.put(`/admin/categories/${sendData.id}`, sendData);
+        toast.success('Category Update Successful!');
+
+        dispatch({ type: 'UPDATE_CATEGORY', payload: data });
+        dispatch({ type: 'IS_SUCCESS' });
+        reset();
+        setOpen(false);
+    } catch (error) {
+        console.log(error);
+        const message = error?.response?.data?.message || 'Failed to Update Category!';
+        toast.error(message);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: message
+        });
+    }
+};

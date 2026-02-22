@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import {adminCategoryTableColumns} from '../../helper/TableColumns'
 import AddUpdateCategoryForm from './AddUpdateCategoryForm';
 
-const CategoryTable = ({ categories, pagination, openAddModal, setOpenAddModal }) => {
+const CategoryTable = ({ categories, pagination, openAddModal, setOpenAddModal, modalMode, setModalMode }) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -34,6 +34,7 @@ const CategoryTable = ({ categories, pagination, openAddModal, setOpenAddModal }
   const handleEdit = (category) => {
     setSelectedCategory(category);
     setOpenUpdateModal(true);
+    setModalMode('edit');
   }
 
   const handleDelete = (category) => {
@@ -56,7 +57,7 @@ const CategoryTable = ({ categories, pagination, openAddModal, setOpenAddModal }
     <div>
       <div>
         <DataGrid
-          className='w-200 mx-auto'
+          className='w-210 mx-auto'
           rows={rows}
           columns={adminCategoryTableColumns(handleEdit, handleDelete)}
           paginationMode='server'
@@ -85,11 +86,13 @@ const CategoryTable = ({ categories, pagination, openAddModal, setOpenAddModal }
       <Modal
         open={openUpdateModal || openAddModal}
         setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
-        title={openUpdateModal ? 'Update Category' : 'Add Category'}>
+        title={modalMode === 'edit' ? 'Update Category' : 'Add Category'}>
         <AddUpdateCategoryForm
           setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
           category={selectedCategory}
-          update={openUpdateModal} />
+          update={openUpdateModal} 
+          modalMode={modalMode}
+          />
       </Modal>
 
       <DeleteModal

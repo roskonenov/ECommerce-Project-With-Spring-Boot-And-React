@@ -299,7 +299,7 @@ export const adminCategoryTableColumns = (
         field: 'action',
         headerName: 'action',
         minWidth: 400,
-        flex: 0,
+        flex: 1,
         headerAlign: 'center',
         align: 'center',
         editable: false,

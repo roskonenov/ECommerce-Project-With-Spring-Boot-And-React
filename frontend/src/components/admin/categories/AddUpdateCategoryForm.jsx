@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import Skeleton from '../../shared/Skeleton';
 import ErrorPage from '../../shared/ErrorPage';
+import { updateCategory } from '../../../store/actions';
 
-const AddUpdateCategoryForm = ({ setOpen, category, update = false }) => {
+const AddUpdateCategoryForm = ({ setOpen, category, update = false, modalMode }) => {
     const { btnLoader, categoryLoader, categoryError, errorMessage } = useSelector(state => state.errors);
     const dispatch = useDispatch();
 
@@ -27,7 +28,7 @@ const AddUpdateCategoryForm = ({ setOpen, category, update = false }) => {
                 id: category.id
             };
 
-            dispatch();
+            dispatch(updateCategory(sendData, reset, setOpen));
 
         } else {
             dispatch();
@@ -74,7 +75,7 @@ const AddUpdateCategoryForm = ({ setOpen, category, update = false }) => {
                         color='primary'
                         className='bg-custom-blue text-white py-2.5 px-4 font-medium'
                     >
-                        {update ? 'Update' : 'Add'}
+                        {modalMode === 'edit' ? 'Update' : 'Add'}
                     </Button>
                 </div>
 
