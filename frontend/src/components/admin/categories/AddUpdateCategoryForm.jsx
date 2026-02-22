@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import Skeleton from '../../shared/Skeleton';
 import ErrorPage from '../../shared/ErrorPage';
-import { updateCategory } from '../../../store/actions';
+import { createCategory, updateCategory } from '../../../store/actions';
 
 const AddUpdateCategoryForm = ({ setOpen, category, update = false, modalMode }) => {
     const { btnLoader, categoryLoader, categoryError, errorMessage } = useSelector(state => state.errors);
@@ -27,22 +27,22 @@ const AddUpdateCategoryForm = ({ setOpen, category, update = false, modalMode })
                 ...submitData,
                 id: category.id
             };
-
             dispatch(updateCategory(sendData, reset, setOpen));
 
         } else {
-            dispatch();
+
+            dispatch(createCategory(submitData, reset, setOpen));
         }
     }
 
-    if(categoryLoader) return <Skeleton />;
-    if(categoryError) return <ErrorPage  message={errorMessage}/>
+    if (categoryLoader) return <Skeleton />;
+    if (categoryError) return <ErrorPage message={errorMessage} />
 
     return (
         <div className='py-5 relative h-full'>
-            <form 
-            onSubmit={handleSubmit(saveCategory)}
-            className='space-y-4'>
+            <form
+                onSubmit={handleSubmit(saveCategory)}
+                className='space-y-4'>
                 <div className='flex md:flex-row flex-col gap-4 w-full'>
                     <InputField
                         label='Name'
@@ -56,9 +56,9 @@ const AddUpdateCategoryForm = ({ setOpen, category, update = false, modalMode })
                         minLength='3'
                         maxLength='255'
                     />
-                    
+
                 </div>
-                
+
                 <div className='flex w-full justify-between items-center absolute bottom-20'>
                     <Button
                         disabled={btnLoader}

@@ -560,3 +560,25 @@ export const updateCategory = (sendData, reset, setOpen) => async (dispatch) => 
         });
     }
 };
+
+export const createCategory = (sendData, reset, setOpen) => async (dispatch) => {
+    try {
+        dispatch({ type: 'BTN_LOADER' });
+
+        const { data } = await api.post('/admin/categories', sendData);
+        toast.success('Category Created!');
+
+        dispatch({ type: 'CREATE_CATEGORY', payload: data });
+        dispatch({ type: 'IS_SUCCESS' });
+        reset();
+        setOpen(false);
+    } catch (error) {
+        console.log(error);
+        const message = error?.response?.data?.message || 'Failed to Create Category!';
+        toast.error(message);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: message
+        });
+    }
+};

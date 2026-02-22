@@ -72,6 +72,13 @@ export const productReducer = (state = initialState, action) => {
                     lastPage: action.lastPage,
                 },
             }
+
+        case 'CREATE_CATEGORY':
+            return {
+                ...state,
+                categories: [...state.categories, action.payload]
+            }
+
         case 'UPDATE_CATEGORY':
             return {
                 ...state,
