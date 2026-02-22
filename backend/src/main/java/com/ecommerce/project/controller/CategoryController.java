@@ -51,8 +51,7 @@ public class CategoryController {
         );
     }
 
-    @DeleteMapping("/admin/categories/{categoryI" +
-            "d}")
+    @DeleteMapping("/admin/categories/{categoryId}")
     public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoryId) {
 
         return new ResponseEntity<>(
