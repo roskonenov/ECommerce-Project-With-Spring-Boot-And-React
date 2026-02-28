@@ -1,9 +1,16 @@
 package com.ecommerce.project.service.impl;
 
+import com.ecommerce.project.config.AppConstants;
+import com.ecommerce.project.exceptions.APIException;
+import com.ecommerce.project.model.Product;
 import com.ecommerce.project.model.Role;
 import com.ecommerce.project.model.RoleName;
 import com.ecommerce.project.model.User;
+import com.ecommerce.project.payload.dto.ProductDTO;
+import com.ecommerce.project.payload.dto.UserDTO;
 import com.ecommerce.project.payload.response.AuthenticationResult;
+import com.ecommerce.project.payload.response.ProductResponse;
+import com.ecommerce.project.payload.response.UserResponse;
 import com.ecommerce.project.repositories.RoleRepository;
 import com.ecommerce.project.repositories.UserRepository;
 import com.ecommerce.project.security.jwt.JwtUtils;
@@ -14,7 +21,13 @@ import com.ecommerce.project.security.response.UserInfoResponse;
 import com.ecommerce.project.security.service.UserDetailsImpl;
 import com.ecommerce.project.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,8 +37,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.ecommerce.project.util.AppUtil.getSorting;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +56,8 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final ModelMapper modelMapper;
 
     @Override
     public AuthenticationResult login(LoginRequest loginRequest) {
@@ -134,5 +152,28 @@ public class AuthServiceImpl implements AuthService {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtUtils.getCleanJwtCookie().toString())
                 .body(new MessageResponse("You've been signed out!"));
+    }
+
+    @Override
+    public UserResponse getAllSellers(Integer pageNumber) {
+        Sort sorting = getSorting(AppConstants.SORT_USERS_BY, "asc");
+
+        Page<User> userPage = userRepository
+                                .findAllByRoleName(RoleName.ROLE_SELLER, PageRequest.of(
+                                        pageNumber,
+                                        Integer.parseInt(AppConstants.PAGE_SIZE),
+                                        sorting));
+
+        return new UserResponse()
+                .setContent(userPage
+                        .getContent()
+                        .stream()
+                        .map(user -> modelMapper.map(user, UserDTO.class))
+                        .toList()
+                ).setPageNumber(userPage.getNumber())
+                .setPageSize(userPage.getSize())
+                .setTotalElements(userPage.getTotalElements())
+                .setTotalPages(userPage.getTotalPages())
+                .setLastPage(userPage.isLast());
     }
 }

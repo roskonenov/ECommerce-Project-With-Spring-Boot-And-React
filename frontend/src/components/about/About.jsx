@@ -16,7 +16,7 @@ const About = () => {
 
     useEffect(() => {
         const nextImage = new window.Image();
-        nextImage.src = aboutImages[currentIndex + 1 % aboutImages.length];
+        nextImage.src = aboutImages[(currentIndex + 1) % aboutImages.length];
     }, [currentIndex]);
 
     return (
@@ -27,11 +27,11 @@ const About = () => {
                 </h1>
             </div>
             <section className="w-[85%] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-                <p className="flex-100 md:flex-50 text-slate-700 font-bold mx-10 text-center">
+                <p className="flex-1 md:w-1/2 text-slate-700 font-bold mx-10 text-center">
                     Welcome to our online store! We believe shopping should be simple, enjoyable, and accessible to everyone. That's why we offer a carefully curated selection of products that combine quality, style, and practicality.
                     Our mission is to provide fast service, secure shopping, and a personalized experience every time. Thank you for choosing us — your trust is our greatest motivation.
                 </p>
-                <div className="w-full min-h-110 md:max-w-[45%] md:w-1/2 rounded-md flex items-center justify-center">
+                <div className="w-full md:w-1/2 h-96 rounded-md flex items-center justify-center">
                     <img
                         key={currentIndex}
                         src={aboutImages[currentIndex]}

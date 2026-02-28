@@ -8,4 +8,5 @@ public class AppConstants {
     public static final String PAGE_SIZE = "12";
     public static final String SORT_BY = "id";
     public static final String SORT_DIR = "asc";
+    public static final String SORT_USERS_BY = "id";
 }

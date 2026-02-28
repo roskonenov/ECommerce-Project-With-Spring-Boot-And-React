@@ -1,12 +1,15 @@
 package com.ecommerce.project.controller;
 
+import com.ecommerce.project.config.AppConstants;
 import com.ecommerce.project.payload.response.AuthenticationResult;
+import com.ecommerce.project.payload.response.UserResponse;
 import com.ecommerce.project.security.request.LoginRequest;
 import com.ecommerce.project.security.request.SignupRequest;
 import com.ecommerce.project.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +49,15 @@ public class AuthController {
     @PostMapping("/signout")
     public ResponseEntity<?> signOutUser() {
         return authService.logOut();
+    }
+
+    @GetMapping("/sellers")
+    public ResponseEntity<UserResponse> getAllSellers(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber
+    ) {
+        return new ResponseEntity<>(
+                authService.getAllSellers(pageNumber),
+                HttpStatus.OK
+        );
     }
 }

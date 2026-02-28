@@ -1,6 +1,7 @@
 package com.ecommerce.project.service;
 
 import com.ecommerce.project.payload.response.AuthenticationResult;
+import com.ecommerce.project.payload.response.UserResponse;
 import com.ecommerce.project.security.request.LoginRequest;
 import com.ecommerce.project.security.request.SignupRequest;
 import com.ecommerce.project.security.response.MessageResponse;
@@ -18,4 +19,6 @@ public interface AuthService {
     ResponseEntity<?> userInfo(Authentication authentication);
 
     ResponseEntity<?> logOut();
+
+    UserResponse getAllSellers(Integer pageNumber);
 }

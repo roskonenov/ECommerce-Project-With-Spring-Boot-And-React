@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
                                 .findAll(spec, PageRequest.of(pageNumber, pageSize, sorting))
                 )
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
+                .orElseThrow(() -> new APIException("No products found!", HttpStatus.NO_CONTENT));
 
         return new ProductResponse()
                 .setContent(productPage

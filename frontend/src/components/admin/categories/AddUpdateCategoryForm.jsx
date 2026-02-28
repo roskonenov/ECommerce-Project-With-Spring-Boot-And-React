@@ -52,7 +52,7 @@ const AddUpdateCategoryForm = ({ setOpen, category, update = false, modalMode })
                         errors={errors}
                         required
                         message='* Name is required'
-                        placeholder='Add product name'
+                        placeholder='Add category name'
                         minLength='3'
                         maxLength='255'
                     />

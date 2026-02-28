@@ -35,7 +35,9 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
                 Map.of(
                         "status", HttpServletResponse.SC_UNAUTHORIZED,
                         "error", "Unauthorized",
-                        "message", authException.getMessage(),
+                        "message", authException.getMessage().equals("Bad credentials")
+                                ? "Username or Password incorrect!"
+                                : authException.getMessage(),
                         "path", request.getServletPath()
                 )
         );
