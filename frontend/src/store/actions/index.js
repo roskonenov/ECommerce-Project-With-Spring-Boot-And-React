@@ -603,3 +603,28 @@ export const deleteCategory = (categoryId, setLoader, setOpen) => async (dispatc
         setLoader(false);
     }
 };
+
+export const getDashboardUsers = (params) => async (dispatch) => {
+    try {
+        dispatch({ type: 'IS_FETCHING' });
+
+        const { data } = await api.get(`/auth/admin/user?${params}`);
+        dispatch({
+            type: 'FETCH_ADMIN_USERS',
+            payload: data.content,
+            pageNumber: data.pageNumber,
+            pageSize: data.pageSize,
+            totalElements: data.totalElements,
+            totalPages: data.totalPages,
+            lastPage: data.lastPage,
+        });
+
+        dispatch({ type: 'IS_SUCCESS' });
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: error?.response?.data?.message || 'Failed to fetch Users!'
+        });
+    }
+};

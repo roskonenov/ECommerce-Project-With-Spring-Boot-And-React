@@ -17,8 +17,9 @@ import AdminLayout from './components/admin/AdminLayout.jsx';
 import Dashboard from './components/admin/dashboard/Dashboard.jsx';
 import Categories from './components/admin/categories/Categories.jsx';
 import AdminProducts from './components/admin/products/AdminProducts.jsx';
-import Seller from './components/admin/seller/Seller.jsx';
+import Seller from './components/admin/user/User.jsx';
 import Orders from './components/admin/orders/Orders.jsx';
+import User from './components/admin/user/User.jsx';
 
 
 function App() {
@@ -52,7 +53,7 @@ function App() {
               <Route path='orders' element={<Orders />} />
               <Route path='categories' element={<Categories />} />
               <Route path='products' element={<AdminProducts />} />
-              <Route path='seller' element={<Seller />} />
+              <Route path='user' element={<User />} />
             </Route>
           </Route>
 

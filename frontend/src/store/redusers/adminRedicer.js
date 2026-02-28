@@ -1,5 +1,7 @@
 const initialState = {
-    analytics: {}
+    analytics: {},
+    users: [],
+    pagination: {}
 };
 
 export const adminReducer = (state = initialState, action) => {
@@ -8,6 +10,20 @@ export const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
                 analytics: action.payload
+            }
+
+        case 'FETCH_ADMIN_USERS':
+            return {
+                ...state,
+                users: action.payload,
+                pagination: {
+                    ...state.pagination,
+                    pageNumber: action.pageNumber,
+                    pageSize: action.pageSize,
+                    totalElements: action.totalElements,
+                    totalPages: action.totalPages,
+                    lastPage: action.lastPage,
+                }
             }
         default:
             return state;

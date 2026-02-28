@@ -1,4 +1,4 @@
-import { FaBoxOpen, FaHome, FaShoppingCart, FaStore, FaThList } from "react-icons/fa";
+import { FaBoxOpen, FaHome, FaShoppingCart, FaThList, FaUserAlt } from "react-icons/fa";
 
 export const slidesData =
     [
@@ -84,8 +84,8 @@ export const adminNavigation = [
         icon: FaThList,
     },
     {
-        name: 'Sellers',
-        href: '/admin/seller',
-        icon: FaStore,
+        name: 'Users',
+        href: '/admin/user',
+        icon: FaUserAlt,
     },
 ];
