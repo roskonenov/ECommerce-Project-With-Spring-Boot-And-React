@@ -1,5 +1,6 @@
 package com.ecommerce.project.service;
 
+import com.ecommerce.project.model.RoleName;
 import com.ecommerce.project.payload.response.AuthenticationResult;
 import com.ecommerce.project.payload.response.UserResponse;
 import com.ecommerce.project.security.request.LoginRequest;
@@ -20,5 +21,5 @@ public interface AuthService {
 
     ResponseEntity<?> logOut();
 
-    UserResponse getAllSellers(Integer pageNumber);
+    UserResponse getAllUsersByRole(RoleName role, Integer pageNumber);
 }

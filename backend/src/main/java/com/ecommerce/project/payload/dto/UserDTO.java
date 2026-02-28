@@ -1,6 +1,7 @@
 package com.ecommerce.project.payload.dto;
 
 import com.ecommerce.project.model.Role;
+import com.ecommerce.project.model.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,5 @@ public class UserDTO {
 
     private String email;
 
-    private Set<Role> roles;
+    private Set<RoleName> roles;
 }

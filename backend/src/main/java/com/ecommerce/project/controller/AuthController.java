@@ -1,6 +1,7 @@
 package com.ecommerce.project.controller;
 
 import com.ecommerce.project.config.AppConstants;
+import com.ecommerce.project.model.RoleName;
 import com.ecommerce.project.payload.response.AuthenticationResult;
 import com.ecommerce.project.payload.response.UserResponse;
 import com.ecommerce.project.security.request.LoginRequest;
@@ -51,12 +52,22 @@ public class AuthController {
         return authService.logOut();
     }
 
-    @GetMapping("/sellers")
+    @GetMapping("/admin/sellers")
     public ResponseEntity<UserResponse> getAllSellers(
             @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber
     ) {
         return new ResponseEntity<>(
-                authService.getAllSellers(pageNumber),
+                authService.getAllUsersByRole(RoleName.ROLE_SELLER, pageNumber),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/admin/user")
+    public ResponseEntity<UserResponse> getAllUsers(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber
+    ) {
+        return new ResponseEntity<>(
+                authService.getAllUsersByRole(RoleName.ROLE_USER, pageNumber),
                 HttpStatus.OK
         );
     }
