@@ -2,6 +2,7 @@ package com.ecommerce.project.controller;
 
 import com.ecommerce.project.config.AppConstants;
 import com.ecommerce.project.model.RoleName;
+import com.ecommerce.project.payload.dto.UserDTO;
 import com.ecommerce.project.payload.response.AuthenticationResult;
 import com.ecommerce.project.payload.response.UserResponse;
 import com.ecommerce.project.security.request.LoginRequest;
@@ -68,6 +69,17 @@ public class AuthController {
     ) {
         return new ResponseEntity<>(
                 authService.getAllUsersByRole(RoleName.ROLE_USER, pageNumber),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/admin/role/add/{userId}")
+    public ResponseEntity<UserDTO> addRole(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = AppConstants.DEFAULT_ROLE, required = false) String role
+    ) {
+        return new ResponseEntity<>(
+                authService.addNewRole(userId, role),
                 HttpStatus.OK
         );
     }

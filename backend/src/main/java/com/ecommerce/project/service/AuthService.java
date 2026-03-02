@@ -1,6 +1,7 @@
 package com.ecommerce.project.service;
 
 import com.ecommerce.project.model.RoleName;
+import com.ecommerce.project.payload.dto.UserDTO;
 import com.ecommerce.project.payload.response.AuthenticationResult;
 import com.ecommerce.project.payload.response.UserResponse;
 import com.ecommerce.project.security.request.LoginRequest;
@@ -22,4 +23,6 @@ public interface AuthService {
     ResponseEntity<?> logOut();
 
     UserResponse getAllUsersByRole(RoleName role, Integer pageNumber);
+
+    UserDTO addNewRole(Long userId, String role);
 }

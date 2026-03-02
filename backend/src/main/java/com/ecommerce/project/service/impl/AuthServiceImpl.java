@@ -1,6 +1,7 @@
 package com.ecommerce.project.service.impl;
 
 import com.ecommerce.project.config.AppConstants;
+import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Role;
 import com.ecommerce.project.model.RoleName;
 import com.ecommerce.project.model.User;
@@ -16,6 +17,7 @@ import com.ecommerce.project.security.response.MessageResponse;
 import com.ecommerce.project.security.response.UserInfoResponse;
 import com.ecommerce.project.security.service.UserDetailsImpl;
 import com.ecommerce.project.service.AuthService;
+import com.ecommerce.project.util.AppUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -43,6 +45,8 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
 
     private final JwtUtils jwtUtils;
+
+    private final AppUtil appUtil;
 
     private final UserRepository userRepository;
 
@@ -96,14 +100,7 @@ public class AuthServiceImpl implements AuthService {
                 :
                 signupRequest.getRoles()
                         .stream()
-                        .map(role -> switch (role) {
-                            case "admin" -> roleRepository.findByName(RoleName.ROLE_ADMIN)
-                                    .orElseThrow(() -> new RuntimeException("Admin role not found!"));
-                            case "seller" -> roleRepository.findByName(RoleName.ROLE_SELLER)
-                                    .orElseThrow(() -> new RuntimeException("Seller role not found!"));
-                            default -> roleRepository.findByName(RoleName.ROLE_USER)
-                                    .orElseThrow(() -> new RuntimeException("User role not found!"));
-                        })
+                        .map(appUtil::getRoleByName)
                         .collect(Collectors.toSet());
 
         userRepository.save(
@@ -173,5 +170,22 @@ public class AuthServiceImpl implements AuthService {
                 .setTotalElements(userPage.getTotalElements())
                 .setTotalPages(userPage.getTotalPages())
                 .setLastPage(userPage.isLast());
+    }
+
+    @Override
+    public UserDTO addNewRole(Long userId, String role) {
+        System.out.println(userId.toString() + role);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        user.getRoles().add(appUtil.getRoleByName(role));
+
+        return modelMapper.map(
+                userRepository.save(user),
+                UserDTO.class
+        ).setRoles(user.getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet()));
     }
 }
