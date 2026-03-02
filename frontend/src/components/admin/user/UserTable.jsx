@@ -2,10 +2,12 @@ import { DataGrid } from '@mui/x-data-grid';
 import React, { useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { adminUsersTableColumns } from '../../helper/TableColumns';
+import { useDispatch } from 'react-redux';
+import { addRoleToUser } from '../../../store/actions';
 
 const UserTable = ({adminUsers, pagination}) => {
-  const [selectedUser, setSelectedUser] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(
     pagination?.pageNumber + 1 || 1
   );
@@ -30,7 +32,10 @@ const UserTable = ({adminUsers, pagination}) => {
     navigate(`${pathname}?${params}`);
   };
 
-  const handleEdit = (order) => {
+  const handleAddRole = (user, roleParam) => {
+    const param = new URLSearchParams();
+    param.set('role', roleParam)
+    dispatch(addRoleToUser(user.id, param.toString()));
   };
 
   return (
@@ -39,7 +44,7 @@ const UserTable = ({adminUsers, pagination}) => {
         <DataGrid
           className='w-full'
           rows={rows}
-          columns={adminUsersTableColumns()}
+          columns={adminUsersTableColumns(handleAddRole)}
           paginationMode='server'
           rowCount={pagination?.totalElements || 0}
           autosizeOptions={{ columns: ['action'], expand: true }}

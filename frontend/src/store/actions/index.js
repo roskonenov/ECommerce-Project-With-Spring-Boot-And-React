@@ -628,3 +628,24 @@ export const getDashboardUsers = (params) => async (dispatch) => {
         });
     }
 };
+
+export const addRoleToUser = (userId, param) => async (dispatch) => {
+    try {
+        dispatch({ type: 'BTN_LOADER' });
+
+        const { data } = await api.put(`http://localhost:8080/api/auth/admin/role/add/${userId}?${param}`);
+        toast.success('User Role Updated!');
+
+        dispatch({ type: 'ADD_USER_ROLE', payload: data });
+        dispatch({ type: 'IS_SUCCESS' });
+
+    } catch (error) {
+        console.log(error);
+        const message = error?.response?.data?.message || 'Failed to Update User Role!';
+        toast.error(message);
+        dispatch({
+            type: 'IS_ERROR',
+            payload: message
+        });
+    }
+}

@@ -25,6 +25,17 @@ export const adminReducer = (state = initialState, action) => {
                     lastPage: action.lastPage,
                 }
             }
+        
+        case 'ADD_USER_ROLE':
+            return {
+                ...state,
+                users: state.users.map(user => (
+                    user.id === action.payload.id
+                    ? action.payload
+                    : user
+                ))
+            }
+
         default:
             return state;
     };

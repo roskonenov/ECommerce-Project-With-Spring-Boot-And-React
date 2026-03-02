@@ -330,7 +330,9 @@ export const adminCategoryTableColumns = (
     },
 ];
 
-export const adminUsersTableColumns = ( ) => [
+export const adminUsersTableColumns = (
+    handleAddRole,
+) => [
     {
         sortable: true,
         disableColumnMenu: true,
@@ -413,7 +415,7 @@ export const adminUsersTableColumns = ( ) => [
                     {!params.row.roles.includes('ADMIN') && 
                     (<button 
                     className='flex justify-center items-center bg-green-600 hover:bg-green-700 transition-colors duration-200 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'
-                    onClick={() => {}}>
+                    onClick={() => handleAddRole(params.row, 'admin')}>
                         <GrUserAdmin className='mr-2' />
                        Give Admin Rights
                     </button>)
@@ -421,7 +423,7 @@ export const adminUsersTableColumns = ( ) => [
                     {!params.row.roles.includes('SELLER') && 
                     (<button 
                     className='flex justify-center items-center bg-blue-500 hover:bg-blue-700 transition-colors duration-200 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'
-                    onClick={() => {}}>
+                    onClick={() => handleAddRole(params.row, 'seller')}>
                         <GrUserExpert className='mr-2' />
                         Give Seller Rights
                     </button>)
