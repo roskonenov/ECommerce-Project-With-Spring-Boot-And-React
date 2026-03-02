@@ -1,4 +1,7 @@
 import { FaEdit, FaEye, FaImage, FaTrashAlt } from "react-icons/fa";
+import { GrUserAdmin, GrUserExpert } from "react-icons/gr";
+import { MdOutlineRemoveModerator } from "react-icons/md";
+import { LuUserRoundX } from "react-icons/lu";
 
 
 export const adminProductsTableColumns = (
@@ -321,6 +324,115 @@ export const adminCategoryTableColumns = (
                         <FaTrashAlt className='mr-2' />
                         Delete
                     </button>
+                </div>
+            );
+        }
+    },
+];
+
+export const adminUsersTableColumns = ( ) => [
+    {
+        sortable: true,
+        disableColumnMenu: true,
+        field: 'id',
+        headerName: 'Id',
+        minWidth: 100,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false,
+        headerClassName: 'text-black font-semibold border',
+        cellClassName: 'text-slate-700 font-normal border',
+        renderHeader: (params) => <span>User ID</span>
+    },
+    {
+        sortable: false,
+        disableColumnMenu: true,
+        field: 'username',
+        headerName: 'Username',
+        minWidth: 300,
+        flex: 0,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false,
+        headerClassName: 'text-black font-semibold border',
+        cellClassName: 'text-slate-700 font-normal border',
+        renderHeader: (params) => <span>Username</span>
+    },
+    {
+        sortable: false,
+        disableColumnMenu: true,
+        field: 'email',
+        headerName: 'Email',
+        minWidth: 300,
+        flex: 0,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false,
+        headerClassName: 'text-black font-semibold border',
+        cellClassName: 'text-slate-700 font-normal border',
+        renderHeader: (params) => <span>Email</span>
+    },
+    {
+        sortable: false,
+        disableColumnMenu: true,
+        field: 'roles',
+        headerName: 'Roles',
+        minWidth: 300,
+        flex: 0,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false,
+        headerClassName: 'text-black font-semibold border',
+        cellClassName: 'text-slate-700 font-normal border',
+        renderHeader: (params) => <span>Roles</span>
+    },
+    {
+        sortable: false,
+        disableColumnMenu: true,
+        field: 'action',
+        headerName: 'action',
+        minWidth: 400,
+        flex: 1,
+        headerAlign: 'center',
+        align: 'center',
+        editable: false,
+        headerClassName: 'text-black font-semibold text-center',
+        cellClassName: 'text-slate-700 font-normal',
+        renderHeader: (params) => <span>Action</span>,
+        renderCell: (params) => {
+            return (
+                <div className='flex justify-start items-center gap-4 ml-3 h-full w-full'>
+                    {params.row.roles.includes('ADMIN') && 
+                    (<button 
+                    className='flex justify-center items-center bg-rose-500 hover:bg-rose-700 transition-colors duration-200 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'
+                    onClick={() => {}}>
+                        <MdOutlineRemoveModerator className='mr-2' />
+                       Remove Admin Rights
+                    </button>)
+                    }
+                    {!params.row.roles.includes('ADMIN') && 
+                    (<button 
+                    className='flex justify-center items-center bg-green-600 hover:bg-green-700 transition-colors duration-200 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'
+                    onClick={() => {}}>
+                        <GrUserAdmin className='mr-2' />
+                       Give Admin Rights
+                    </button>)
+                    }
+                    {!params.row.roles.includes('SELLER') && 
+                    (<button 
+                    className='flex justify-center items-center bg-blue-500 hover:bg-blue-700 transition-colors duration-200 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'
+                    onClick={() => {}}>
+                        <GrUserExpert className='mr-2' />
+                        Give Seller Rights
+                    </button>)
+                    }{params.row.roles.includes('SELLER') && 
+                    (<button 
+                    className='flex justify-center items-center bg-violet-500 hover:bg-violet-700 transition-colors duration-200 text-white px-4 h-9 rounded-md text-shadow-md cursor-pointer'
+                    onClick={() => {}}>
+                        <LuUserRoundX  className='mr-2' />
+                        Remove Seller Rights
+                    </button>)
+                    }
                 </div>
             );
         }
