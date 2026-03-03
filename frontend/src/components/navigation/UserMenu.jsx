@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BiUser } from "react-icons/bi";
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
+import { MdAdminPanelSettings } from "react-icons/md";
 import { IoIosExit } from 'react-icons/io';
 import Backdrop from './Backdrop';
 import { logOut } from '../../store/actions';
@@ -18,6 +19,8 @@ const UserMenu = () => {
     const { user } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const isAdmin = user && user?.roles.includes('ROLE_ADMIN');
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -72,6 +75,15 @@ const UserMenu = () => {
                         <span className='text-[16px] font-semibold'>My Order</span>
                     </MenuItem>
                 </Link>
+
+                {isAdmin && (<Link to='/admin'>
+                    <MenuItem
+                        className='flex gap-2'
+                        onClick={handleClose}>
+                        <MdAdminPanelSettings className='text-xl' />
+                        <span className='text-[16px] font-semibold'>Admin Panel</span>
+                    </MenuItem>
+                </Link>)}
 
                 <MenuItem
                     disabled={loader}
