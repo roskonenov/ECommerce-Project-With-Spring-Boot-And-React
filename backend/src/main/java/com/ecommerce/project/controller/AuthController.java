@@ -83,4 +83,15 @@ public class AuthController {
                 HttpStatus.OK
         );
     }
+
+    @PutMapping("/admin/role/remove/{userId}")
+    public ResponseEntity<UserDTO> removeRole(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = AppConstants.DEFAULT_ROLE, required = false) String role
+    ) {
+        return new ResponseEntity<>(
+                authService.removeRole(userId, role),
+                HttpStatus.OK
+        );
+    }
 }

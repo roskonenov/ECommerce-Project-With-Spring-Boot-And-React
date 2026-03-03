@@ -25,4 +25,6 @@ public interface AuthService {
     UserResponse getAllUsersByRole(RoleName role, Integer pageNumber);
 
     UserDTO addNewRole(Long userId, String role);
+
+    UserDTO removeRole(Long userId, String role);
 }

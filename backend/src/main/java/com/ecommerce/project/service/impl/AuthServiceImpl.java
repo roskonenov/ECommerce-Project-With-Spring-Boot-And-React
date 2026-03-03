@@ -1,6 +1,7 @@
 package com.ecommerce.project.service.impl;
 
 import com.ecommerce.project.config.AppConstants;
+import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Role;
 import com.ecommerce.project.model.RoleName;
@@ -174,11 +175,35 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserDTO addNewRole(Long userId, String role) {
-        System.out.println(userId.toString() + role);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         user.getRoles().add(appUtil.getRoleByName(role));
+
+        return modelMapper.map(
+                userRepository.save(user),
+                UserDTO.class
+        ).setRoles(user.getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet()));
+    }
+
+    @Override
+    public UserDTO removeRole(Long userId, String role) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        Role roleToRemove = appUtil.getRoleByName(role);
+
+        if (!roleToRemove.getName().equals(RoleName.ROLE_USER)) {
+            boolean isRemoved = user.getRoles().remove(roleToRemove);
+            if (!isRemoved) {
+                throw new APIException("User does not have role " + role + "!");
+            }
+        } else {
+            throw new APIException("There is no such role as " + role + "!");
+        }
 
         return modelMapper.map(
                 userRepository.save(user),
