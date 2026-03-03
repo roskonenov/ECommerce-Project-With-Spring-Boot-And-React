@@ -32,10 +32,10 @@ const UserTable = ({adminUsers, pagination}) => {
     navigate(`${pathname}?${params}`);
   };
 
-  const handleAddRole = (user, roleParam) => {
+  const handleChangeRole = (user, roleParam, act) => {
     const param = new URLSearchParams();
     param.set('role', roleParam)
-    dispatch(addRoleToUser(user.id, param.toString()));
+    dispatch(addRoleToUser(user.id, param.toString(), act));
   };
 
   return (
@@ -44,7 +44,7 @@ const UserTable = ({adminUsers, pagination}) => {
         <DataGrid
           className='w-full'
           rows={rows}
-          columns={adminUsersTableColumns(handleAddRole)}
+          columns={adminUsersTableColumns(handleChangeRole)}
           paginationMode='server'
           rowCount={pagination?.totalElements || 0}
           autosizeOptions={{ columns: ['action'], expand: true }}

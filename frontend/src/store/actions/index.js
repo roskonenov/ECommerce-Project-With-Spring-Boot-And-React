@@ -629,14 +629,14 @@ export const getDashboardUsers = (params) => async (dispatch) => {
     }
 };
 
-export const addRoleToUser = (userId, param) => async (dispatch) => {
+export const addRoleToUser = (userId, param, act) => async (dispatch) => {
     try {
         dispatch({ type: 'BTN_LOADER' });
 
-        const { data } = await api.put(`http://localhost:8080/api/auth/admin/role/add/${userId}?${param}`);
+        const { data } = await api.put(`http://localhost:8080/api/auth/admin/role/${act}/${userId}?${param}`);
         toast.success('User Role Updated!');
 
-        dispatch({ type: 'ADD_USER_ROLE', payload: data });
+        dispatch({ type: 'CHANGE_USER_ROLE', payload: data });
         dispatch({ type: 'IS_SUCCESS' });
 
     } catch (error) {

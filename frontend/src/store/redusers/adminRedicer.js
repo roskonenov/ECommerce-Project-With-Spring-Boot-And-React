@@ -26,7 +26,7 @@ export const adminReducer = (state = initialState, action) => {
                 }
             }
         
-        case 'ADD_USER_ROLE':
+        case 'CHANGE_USER_ROLE':
             return {
                 ...state,
                 users: state.users.map(user => (
