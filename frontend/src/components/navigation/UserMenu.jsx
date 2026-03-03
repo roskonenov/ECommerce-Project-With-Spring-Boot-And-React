@@ -21,6 +21,7 @@ const UserMenu = () => {
     const navigate = useNavigate();
 
     const isAdmin = user && user?.roles.includes('ROLE_ADMIN');
+    const isSeller = user && user?.roles.includes('ROLE_SELLER');
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -76,14 +77,18 @@ const UserMenu = () => {
                     </MenuItem>
                 </Link>
 
-                {isAdmin && (<Link to='/admin'>
-                    <MenuItem
-                        className='flex gap-2'
-                        onClick={handleClose}>
-                        <MdAdminPanelSettings className='text-xl' />
-                        <span className='text-[16px] font-semibold'>Admin Panel</span>
-                    </MenuItem>
-                </Link>)}
+                {(isAdmin || isSeller) && (
+                    <Link to={isAdmin ? '/admin' : 'admin/products'}>
+                        <MenuItem
+                            className='flex gap-2'
+                            onClick={handleClose}>
+                            <MdAdminPanelSettings className='text-xl' />
+                            <span className='text-[16px] font-semibold'>
+                                {isAdmin ? 'Admin Panel' : 'Seller Panel'}
+                                </span>
+                        </MenuItem>
+                    </Link>
+                )}
 
                 <MenuItem
                     disabled={loader}
