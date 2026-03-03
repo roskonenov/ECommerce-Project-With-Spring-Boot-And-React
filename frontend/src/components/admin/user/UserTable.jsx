@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { adminUsersTableColumns } from '../../helper/TableColumns';
 import { useDispatch } from 'react-redux';
-import { addRoleToUser } from '../../../store/actions';
+import { changeRoleToUser } from '../../../store/actions';
 
 const UserTable = ({adminUsers, pagination}) => {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const UserTable = ({adminUsers, pagination}) => {
   const handleChangeRole = (user, roleParam, act) => {
     const param = new URLSearchParams();
     param.set('role', roleParam)
-    dispatch(addRoleToUser(user.id, param.toString(), act));
+    dispatch(changeRoleToUser(user.id, param.toString(), act));
   };
 
   return (

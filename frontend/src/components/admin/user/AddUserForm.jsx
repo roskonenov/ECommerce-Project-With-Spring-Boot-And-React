@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import InputField from '../../shared/InputField';
 import { Button } from '@mui/material';
+import { registerUserFromAdminDashboard } from '../../../store/actions';
 
 const AddUserForm = ({ setOpen }) => {
     const { btnLoader } = useSelector(state => state.errors);
@@ -11,6 +12,7 @@ const AddUserForm = ({ setOpen }) => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onTouched' });
 
     const saveUserFromAdminDashboard = (submitData) => {
+        dispatch(registerUserFromAdminDashboard(submitData, reset, setOpen ));
     }
         return (
             <div className='py-5 relative h-full'>
@@ -53,8 +55,8 @@ const AddUserForm = ({ setOpen }) => {
                             required
                             message='* You need Strong Password!'
                             placeholder='Enter Your Password'
-                            minLength='3'
-                            maxLength='255'
+                            minLength='6'
+                            maxLength='40'
                         />
                     </div>
                     

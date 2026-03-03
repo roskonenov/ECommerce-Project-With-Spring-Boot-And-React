@@ -629,7 +629,7 @@ export const getDashboardUsers = (params) => async (dispatch) => {
     }
 };
 
-export const addRoleToUser = (userId, param, act) => async (dispatch) => {
+export const changeRoleToUser = (userId, param, act) => async (dispatch) => {
     try {
         dispatch({ type: 'BTN_LOADER' });
 
@@ -649,3 +649,19 @@ export const addRoleToUser = (userId, param, act) => async (dispatch) => {
         });
     }
 }
+
+export const registerUserFromAdminDashboard = (loginData, reset, setOpen) => async (dispatch) => {
+    try {
+        dispatch({type: 'BTN_LOADER'});
+        const { data } = await api.post('/auth/signup', loginData);
+        reset();
+        toast.success(data?.message || 'User Registered Successfully!');
+        setOpen(false);
+        dispatch({type: 'IS_SUCCESS'});
+        dispatch(getDashboardUsers('pageNumber=0'));
+
+    } catch (error) {
+        dispatch({type: 'IS_ERROR'});
+        toast.error(error?.response?.data?.message || 'Something went wrong! Try again later :(');
+    }
+};
