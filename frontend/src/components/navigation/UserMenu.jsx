@@ -78,7 +78,7 @@ const UserMenu = () => {
                 </Link>
 
                 {(isAdmin || isSeller) && (
-                    <Link to={isAdmin ? '/admin' : 'admin/products'}>
+                    <Link to={isAdmin ? '/admin' : 'admin/orders'}>
                         <MenuItem
                             className='flex gap-2'
                             onClick={handleClose}>

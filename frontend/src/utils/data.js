@@ -1,3 +1,4 @@
+import { current } from "@reduxjs/toolkit";
 import { FaBoxOpen, FaHome, FaShoppingCart, FaThList, FaUserAlt } from "react-icons/fa";
 
 export const slidesData =
@@ -87,5 +88,19 @@ export const adminNavigation = [
         name: 'Users',
         href: '/admin/user',
         icon: FaUserAlt,
+    },
+];
+
+export const sellerNavigation = [
+    {
+        name: 'Orders',
+        href: '/admin/orders',
+        icon: FaShoppingCart,
+        current: true,
+    },
+    {
+        name: 'Products',
+        href: '/admin/products',
+        icon: FaBoxOpen,
     },
 ];

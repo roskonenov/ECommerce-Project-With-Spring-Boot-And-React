@@ -2,21 +2,22 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { FaTachometerAlt } from "react-icons/fa";
-import { adminNavigation } from '../../utils/data';
+import { adminNavigation, sellerNavigation } from '../../utils/data';
 import classNames from 'classnames';
 
 
 const Sidebar = ({ isProfileLayout = false }) => {
     const pathname = useLocation().pathname;
     const { user } = useSelector(state => state.auth);
+    const isAdmin = user && user?.roles.includes('ROLE_ADMIN');
 
-    const sidebarLayout = adminNavigation;
+    const sidebarLayout = isAdmin ? adminNavigation : sellerNavigation;
     return (
         <div className='flex grow flex-col gap-y-7 overflow-y-auto bg-custom-gradient px-6 pb-4'>
             <div className='flex h-16 shrink-0 gap-x-3 pt-2'>
                 <FaTachometerAlt size={28} className='text-indigo-500' />
                 <h1 className='text-white text-xl font-bold'>
-                    Admin Panel
+                    {isAdmin ? 'Admin Panel' : 'Seller Panel'}
                 </h1>
             </div>
             <nav className='flex flex-1 flex-col'>
