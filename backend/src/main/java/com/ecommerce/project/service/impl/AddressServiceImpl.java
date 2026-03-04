@@ -44,12 +44,8 @@ public class AddressServiceImpl implements AddressService {
     public AddressResponse getAllAddresses(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Sort sorting = getSorting(sortBy, sortOrder);
 
-        Page<Address> addressPage = Optional.of(
-                        addressRepository
-                                .findAll(PageRequest.of(pageNumber, pageSize, sorting))
-                )
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No addresses found!", HttpStatus.OK));
+        Page<Address> addressPage = addressRepository
+                                .findAll(PageRequest.of(pageNumber, pageSize, sorting));
 
         return new AddressResponse()
                 .setContent(addressPage

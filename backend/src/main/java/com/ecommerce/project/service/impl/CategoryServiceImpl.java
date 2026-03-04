@@ -35,12 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
 
-        Page<Category> categoryPage = Optional.of(
-                        categoryRepository
-                                .findAll(PageRequest.of(pageNumber, pageSize, sorting))
-                )
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No categories found!", HttpStatus.OK));
+        Page<Category> categoryPage = categoryRepository
+                                .findAll(PageRequest.of(pageNumber, pageSize, sorting));
 
         return new CategoryResponse()
                 .setContent(categoryPage

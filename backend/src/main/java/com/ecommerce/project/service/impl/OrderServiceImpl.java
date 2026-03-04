@@ -63,10 +63,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse getAllOrders(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Sort sorting = getSorting(sortBy, sortOrder);
 
-        Page<Order> orderPage = Optional.of(
-                        orderRepository.findAll(PageRequest.of(pageNumber, pageSize, sorting)))
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No orders found!", HttpStatus.OK));
+        Page<Order> orderPage = orderRepository.findAll(PageRequest.of(pageNumber, pageSize, sorting));
 
         return new OrderResponse()
                 .setContent(orderPage.getContent()
@@ -88,6 +85,27 @@ public class OrderServiceImpl implements OrderService {
                                 .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId))
                                 .setStatus(orderStatusUpdateDTO.getStatus())),
                 OrderDTO.class);
+    }
+
+    @Override
+    public OrderResponse getAllSellerOrders(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sorting = getSorting(sortBy, sortOrder);
+
+        User seller = authUtil.loggedInUser();
+
+        Page<Order> orderPage = orderRepository
+                .findDistinctByOrderItemsProductUserId(seller.getId(), PageRequest.of(pageNumber, pageSize, sorting));
+
+        return new OrderResponse()
+                .setContent(orderPage.getContent()
+                        .stream()
+                        .map(order -> modelMapper.map(order, OrderDTO.class))
+                        .toList())
+                .setTotalPages(orderPage.getTotalPages())
+                .setTotalElements(orderPage.getTotalElements())
+                .setPageNumber(orderPage.getNumber())
+                .setPageSize(orderPage.getSize())
+                .setLastPage(orderPage.isLast());
     }
 
     private List<OrderItem> createOrderItems(Cart cart, Order savedOrder) {

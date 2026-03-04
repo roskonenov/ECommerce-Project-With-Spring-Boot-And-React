@@ -12,6 +12,7 @@ import com.ecommerce.project.repositories.ProductRepository;
 import com.ecommerce.project.service.CartService;
 import com.ecommerce.project.service.ImageService;
 import com.ecommerce.project.service.ProductService;
+import com.ecommerce.project.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
     private final ImageService imageService;
     private final CartService cartService;
     private final CartRepository cartRepository;
+    private final AuthUtil authUtil;
 
     @Override
     public ProductDTO createProduct(Long categoryId, ProductDTO productDTO) {
@@ -48,6 +50,7 @@ public class ProductServiceImpl implements ProductService {
                         modelMapper.map(productDTO, Product.class)
                                 .setImage("https://i.ibb.co/hF7WDtp1/default-product.png")
                                 .setSpecialPrice(calculateSpecialPrice(productDTO.getPrice(), productDTO.getDiscount()))
+                                .setUser(authUtil.loggedInUser())
                                 .setCategory(categoryRepository.findById(categoryId)
                                         .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId)))
                 ),
@@ -61,12 +64,8 @@ public class ProductServiceImpl implements ProductService {
 
         Specification<Product> spec = generateProductQuerySpecification(category, keyword);
 
-        Page<Product> productPage = Optional.of(
-                        productRepository
-                                .findAll(spec, PageRequest.of(pageNumber, pageSize, sorting))
-                )
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No products found!", HttpStatus.NO_CONTENT));
+        Page<Product> productPage = productRepository
+                                .findAll(spec, PageRequest.of(pageNumber, pageSize, sorting));
 
         return new ProductResponse()
                 .setContent(productPage
@@ -87,16 +86,13 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId));
 
-        Page<Product> productPage = Optional.of(
-                        productRepository.findByCategory(
+        Page<Product> productPage = productRepository.findByCategory(
                                 category,
-                                PageRequest.of(pageNumber, pageSize, sorting)
-                        ))
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException(String.format("Category '%s' does not have any products!", category.getName()), HttpStatus.OK));
+                                PageRequest.of(pageNumber, pageSize, sorting));
 
         return new ProductResponse()
                 .setContent(productPage
+                        .getContent()
                         .stream()
                         .map(product -> modelMapper.map(product, ProductDTO.class))
                         .toList()
@@ -112,14 +108,9 @@ public class ProductServiceImpl implements ProductService {
 
         Sort sorting = getSorting(sortBy, sortOrder);
 
-        Page<Product> productPage = Optional.of(
-                        productRepository.findByNameContainingIgnoreCase(
+        Page<Product> productPage = productRepository.findByNameContainingIgnoreCase(
                                 keyword,
-                                PageRequest.of(pageNumber, pageSize, sorting)
-                        )
-                )
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException(String.format("No products found by keyword '%s'!", keyword), HttpStatus.OK));
+                                PageRequest.of(pageNumber, pageSize, sorting));
 
         return new ProductResponse()
                 .setContent(productPage
@@ -191,12 +182,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getAllProductsForAdminDashboard(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Sort sorting = getSorting(sortBy, sortOrder);
-        Page<Product> productPage = Optional.of(
-                        productRepository
-                                .findAll(PageRequest.of(pageNumber, pageSize, sorting))
-                )
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new APIException("No products found!", HttpStatus.OK));
+        Page<Product> productPage = productRepository
+                                .findAll(PageRequest.of(pageNumber, pageSize, sorting));
 
         return new ProductResponse()
                 .setContent(productPage
