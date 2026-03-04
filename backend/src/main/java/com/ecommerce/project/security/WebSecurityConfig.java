@@ -31,12 +31,15 @@ public class WebSecurityConfig {
     UserDetailsServiceImpl userDetailsService;
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/auth/**",
+            "/api/auth/signin",
+            "/api/auth/signout",
+            "/api/auth/signup",
+            "/api/auth/user",
+            "/api/auth/username",
             "/v3/api-docs/**",
             "/h2-console/**",
             "/swagger-ui/**",
             "/api/public/**",
-            "/api/admin/**",
             "/api/test/**",
             "/images/**"
     };
@@ -61,6 +64,10 @@ public class WebSecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(AUTH_WHITELIST).permitAll()
+                                .requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/auth/seller/**").hasAnyRole("SELLER", "ADMIN")
+                                .requestMatchers("/api/seller/**").hasAnyRole("SELLER", "ADMIN")
                                 .anyRequest().authenticated())
                 .headers(headers ->
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
