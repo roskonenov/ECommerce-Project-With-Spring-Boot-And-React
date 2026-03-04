@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { fetchAdminDasboardProducts, fetchProducts } from "../store/actions";
 
@@ -21,7 +21,7 @@ const useProductFilter = () => {
         if (sortOrder) params.set('sortBy', 'price');
         if (categoryParam) params.set('category', categoryParam);
         if (keyword) params.set('keyword', keyword);
-        
+
         dispatch(fetchProducts(params.toString()));
 
     }, [searchParams, dispatch]);
@@ -30,6 +30,8 @@ const useProductFilter = () => {
 export const useAdminDashboardProductFilter = () => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
+    const { user } = useSelector(state => state.auth);
+    const isAdmin = user && user?.roles.includes('ROLE_ADMIN');
 
     useEffect(() => {
         const params = new URLSearchParams();
@@ -37,10 +39,10 @@ export const useAdminDashboardProductFilter = () => {
         const currentPage = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
 
         params.set('pageNumber', currentPage - 1);
-        
-        dispatch(fetchAdminDasboardProducts(params.toString()));
 
-    }, [searchParams, dispatch]);
+        dispatch(fetchAdminDasboardProducts(params.toString(), isAdmin));
+
+    }, [searchParams, dispatch, isAdmin]);
 };
 
 export default useProductFilter;

@@ -1,11 +1,14 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { getDashboardOrders } from "../store/actions";
 
 const useOrdersFilter = () => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
+
+    const { user } = useSelector(state => state.auth);
+    const isAdmin = user && user?.roles.includes('ROLE_ADMIN');
 
     useEffect(() => {
         const params = new URLSearchParams();
@@ -14,9 +17,9 @@ const useOrdersFilter = () => {
 
         params.set('pageNumber', currentPage - 1);
 
-        dispatch(getDashboardOrders(params.toString()));
+        dispatch(getDashboardOrders(params.toString(), isAdmin));
 
-    }, [searchParams, dispatch]);
+    }, [searchParams, dispatch, isAdmin]);
 };
 
 export default useOrdersFilter;
