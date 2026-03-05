@@ -67,7 +67,7 @@ public class OrderController {
         );
     }
 
-    @PutMapping("admin/orders/{orderId}/status")
+    @PutMapping("/admin/orders/{orderId}/status")
     public ResponseEntity<OrderDTO> updateOrderStatus(
             @PathVariable Long orderId,
             @RequestBody OrderStatusUpdateDTO orderStatusUpdateDTO

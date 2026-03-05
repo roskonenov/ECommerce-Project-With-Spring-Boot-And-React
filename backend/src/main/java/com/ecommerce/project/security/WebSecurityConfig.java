@@ -53,6 +53,14 @@ public class WebSecurityConfig {
             "/webjars/**"
     };
 
+    private static final String[] ADMIN_SELLER_WHITELIST = {
+            "/api/auth/seller/**",
+            "/api/seller/**",
+            "/api/admin/orders/*/status",
+            "/api/admin/orders",
+            "/api/admin/products/**"
+    };
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -64,10 +72,9 @@ public class WebSecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(AUTH_WHITELIST).permitAll()
+                                .requestMatchers(ADMIN_SELLER_WHITELIST).hasAnyRole("SELLER", "ADMIN")
                                 .requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/api/auth/seller/**").hasAnyRole("SELLER", "ADMIN")
-                                .requestMatchers("/api/seller/**").hasAnyRole("SELLER", "ADMIN")
                                 .anyRequest().authenticated())
                 .headers(headers ->
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
