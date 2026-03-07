@@ -58,7 +58,8 @@ public class WebSecurityConfig {
             "/api/seller/**",
             "/api/admin/orders/*/status",
             "/api/admin/orders",
-            "/api/admin/products/**"
+            "/api/admin/products/**",
+            "/api/admin/categories/*/product"
     };
 
     @Bean

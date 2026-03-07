@@ -4,6 +4,7 @@ import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
+import com.ecommerce.project.model.User;
 import com.ecommerce.project.payload.dto.ProductDTO;
 import com.ecommerce.project.payload.response.ProductResponse;
 import com.ecommerce.project.repositories.CartRepository;
@@ -184,6 +185,25 @@ public class ProductServiceImpl implements ProductService {
         Sort sorting = getSorting(sortBy, sortOrder);
         Page<Product> productPage = productRepository
                                 .findAll(PageRequest.of(pageNumber, pageSize, sorting));
+
+        return new ProductResponse()
+                .setContent(productPage
+                        .stream()
+                        .map(product -> modelMapper.map(product, ProductDTO.class))
+                        .toList()
+                ).setPageNumber(productPage.getNumber())
+                .setPageSize(productPage.getSize())
+                .setTotalElements(productPage.getTotalElements())
+                .setTotalPages(productPage.getTotalPages())
+                .setLastPage(productPage.isLast());
+    }
+
+    @Override
+    public ProductResponse getAllProductsForSellerDashboard(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sorting = getSorting(sortBy, sortOrder);
+        User user = authUtil.loggedInUser();
+        Page<Product> productPage = productRepository
+                .findByUser(user, PageRequest.of(pageNumber, pageSize, sorting));
 
         return new ProductResponse()
                 .setContent(productPage

@@ -385,7 +385,7 @@ export const getAdminAnalytics = () => async (dispatch) => {
 export const getDashboardOrders = (params, isAdmin) => async (dispatch) => {
     try {
         dispatch({ type: 'IS_FETCHING' });
-        const endpoint = isAdmin ? '/admin/orders' : '/seller/orders'
+        const endpoint = isAdmin ? '/admin/orders' : '/seller/orders';
 
         const { data } = await api.get(`${endpoint}?${params}`);
         dispatch({
@@ -430,10 +430,11 @@ export const updateOrderStatusFromAdminDashboard = (orderId, orderStatus, toast,
     }
 }
 
-export const fetchAdminDasboardProducts = (params) => async (dispatch) => {
+export const fetchAdminDasboardProducts = (params, isAdmin) => async (dispatch) => {
     try {
         dispatch({ type: 'IS_FETCHING' });
-        const { data } = await api.get(`/admin/products?${params}`);
+        const endpoint = isAdmin ? '/admin/products' : '/seller/products';
+        const { data } = await api.get(`${endpoint}?${params}`);
 
         dispatch({
             type: 'FETCH_PRODUCTS',

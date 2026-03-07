@@ -112,4 +112,17 @@ public class ProductController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/seller/products")
+    public ResponseEntity<ProductResponse> getProductsForSellerDashboard(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder
+    ) {
+        return new ResponseEntity<>(
+                productService.getAllProductsForSellerDashboard(pageNumber, pageSize, sortBy, sortOrder),
+                HttpStatus.OK
+        );
+    }
 }
