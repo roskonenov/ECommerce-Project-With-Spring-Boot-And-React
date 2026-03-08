@@ -1,4 +1,11 @@
 steps:
+  - name: 'eclipse-temurin:17-jdk'
+    entrypoint: bash
+    dir: 'backend'
+    args:
+      - -c
+      - chmod +x mvnw && ./mvnw test
+
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
