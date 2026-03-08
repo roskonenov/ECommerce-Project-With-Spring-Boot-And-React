@@ -1,9 +1,8 @@
 import { DataGrid } from '@mui/x-data-grid'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { adminProductsTableColumns } from '../../helper/TableColumns';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Modal from '../../shared/Modal';
-import AddUpdateProductForm from './AddUpdateProductForm';
 import DeleteModal from '../../shared/DeleteModal';
 import { useDispatch } from 'react-redux';
 import { deleteProduct } from '../../../store/actions';
@@ -11,9 +10,15 @@ import toast from 'react-hot-toast';
 import ImageUploadForm from './ImageUploadForm';
 import ProductViewModal from '../../shared/ProductViewModal';
 
-const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal, modalMode, setModalMode }) => {
-  const [selectedProduct, setSelectedProduct] = useState('');
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+const ProductsTable = ({
+  products,
+  pagination,
+  selectedProduct, 
+  setSelectedProduct,
+  setOpenUpdateModal,
+  setModalMode
+}) => {
+
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
   const [openProductViewModal, setOpenProductViewModal] = useState(false);
@@ -49,7 +54,7 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal, mo
     setOpenUpdateModal(true);
     setModalMode('edit');
     console.log('Modal mode set to edit');
-    
+
   }
 
   const handleDelete = (product) => {
@@ -108,17 +113,6 @@ const ProductsTable = ({ products, pagination, openAddModal, setOpenAddModal, mo
           }}
         />
       </div>
-
-      <Modal
-        open={openUpdateModal || openAddModal}
-        setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
-        title={modalMode === 'edit' ? 'Update Product' : 'Add Product'}>
-        <AddUpdateProductForm
-          setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
-          product={selectedProduct}
-          update={openUpdateModal}
-          modalMode={modalMode} />
-      </Modal>
 
       <Modal
         open={openImageUploadModal}

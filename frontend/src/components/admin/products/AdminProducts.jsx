@@ -1,16 +1,20 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux';
 import Spinner from '../../shared/Spinner';
 import { FaBoxOpen } from 'react-icons/fa';
 import { MdAddShoppingCart } from "react-icons/md";
 import ProductsTable from './ProductsTable';
 import { useAdminDashboardProductFilter } from '../../../hooks/useProductsFilter';
+import Modal from '../../shared/Modal';
+import AddUpdateProductForm from './AddUpdateProductForm';
 
 const AdminProducts = () => {
   const { isLoading } = useSelector(state => state.errors);
   const { products, pagination } = useSelector(state => state.products);
   const [openAddModal, setOpenAddModal] = useState(false);
-    const [modalMode, setModalMode] = useState('');
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState('');
+  const [modalMode, setModalMode] = useState('');
 
   useAdminDashboardProductFilter();
 
@@ -18,8 +22,6 @@ const AdminProducts = () => {
   const handleOpenAddModal = () => {
     setOpenAddModal(true);
     setModalMode('add');
-    console.log('Modal mode changed to add');
-    
   }
 
   return (
@@ -51,16 +53,27 @@ const AdminProducts = () => {
                 All Products
               </h1>
               <div>
-                <ProductsTable 
-                products={products} 
-                pagination={pagination} 
-                openAddModal={openAddModal} 
-                setOpenAddModal={setOpenAddModal}
-                modalMode={modalMode}
-                setModalMode={setModalMode} />
+                <ProductsTable
+                  products={products}
+                  pagination={pagination}
+                  selectedProduct={selectedProduct}
+                  setSelectedProduct={setSelectedProduct}
+                  setModalMode={setModalMode} />
               </div>
             </div>
           ))}
+
+      <Modal
+        open={openUpdateModal || openAddModal}
+        setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
+        title={modalMode === 'edit' ? 'Update Product' : 'Add Product'}>
+        <AddUpdateProductForm
+          setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
+          product={selectedProduct}
+          update={openUpdateModal}
+          modalMode={modalMode} />
+      </Modal>
+
     </div>
   )
 }
