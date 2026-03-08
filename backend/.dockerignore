@@ -1,0 +1,26 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE - IntelliJ IDEA
+.idea
+*.iml
+
+# Maven
+target
+.mvn/wrapper/maven-wrapper.jar
+
+# Documentation
+README.md
+
+# Docker
+Dockerfile
+docker-compose*.yml
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

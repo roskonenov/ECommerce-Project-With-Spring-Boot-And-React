@@ -29,6 +29,15 @@ public class JwtUtils {
     @Value("${jwt.cookie}")
     private String jwtCookie;
 
+    @Value("${jwt.cookie.secure}")
+    private boolean jwtCookieSecure;
+
+    @Value("${jwt.cookie.http-only}")
+    private boolean jwtCookieHttpOnly;
+
+    @Value("${jwt.cookie.same-site}")
+    private String jwtCookieSameSite;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
 
     private SecretKey getSigningKey() {
@@ -65,8 +74,9 @@ public class JwtUtils {
     public ResponseCookie generateJwtCookie(UserDetailsImpl userDetails) {
         return ResponseCookie
                 .from(jwtCookie, generateJwtFromUsername(userDetails))
-                .httpOnly(false)
-                .secure(false)
+                .httpOnly(jwtCookieHttpOnly)
+                .secure(jwtCookieSecure)
+                .sameSite(jwtCookieSameSite)
                 .path("/api")
                 .maxAge(JWT_EXPIRATION_MS / 1000)
                 .build();
@@ -91,7 +101,11 @@ public class JwtUtils {
     public ResponseCookie getCleanJwtCookie() {
         return ResponseCookie
                 .from(jwtCookie, null)
+                .httpOnly(jwtCookieHttpOnly)
+                .secure(jwtCookieSecure)
+                .sameSite(jwtCookieSameSite)
                 .path("/api")
+                .maxAge(0)
                 .build();
     }
 }
