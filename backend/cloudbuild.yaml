@@ -35,3 +35,6 @@ steps:
 
 images:
   - 'gcr.io/$PROJECT_ID/sb-ecom-backend:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
