@@ -5,7 +5,6 @@ import { FaUserAltSlash, FaUserPlus } from 'react-icons/fa';
 import UserTable from './UserTable';
 import Spinner from '../../shared/Spinner';
 import AddUserForm from './AddUserForm';
-// use shared Modal rather than MUI's, so we can pass setOpen prop safely
 import Modal from '../../shared/Modal';
 
 const User = () => {

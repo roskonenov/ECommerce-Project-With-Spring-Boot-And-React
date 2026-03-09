@@ -58,6 +58,7 @@ const AdminProducts = () => {
                   pagination={pagination}
                   selectedProduct={selectedProduct}
                   setSelectedProduct={setSelectedProduct}
+                  setOpenUpdateModal={setOpenUpdateModal}
                   setModalMode={setModalMode} />
               </div>
             </div>

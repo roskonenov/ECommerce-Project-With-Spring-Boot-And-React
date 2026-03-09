@@ -4,13 +4,13 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ItemContent from './ItemContent'
 import EmptyCart from './EmptyCart'
-import { currencyFormatter } from '../../utils/CurrencyFormatter'
+import { currencyFormatter } from '../../utils/currencyFormatter'
 
 const Cart = () => {
     const { cart } = useSelector(state => state.carts);
     const cartCopy = { ...cart };
 
-    cartCopy.totalPrice = cart.reduce((acc, current) => {
+    cartCopy.totalPrice = cart?.reduce((acc, current) => {
         return acc + Number(current?.specialPrice) * Number(current?.cartQuantity);
     }, 0);
 
@@ -49,7 +49,7 @@ const Cart = () => {
             </div>
 
             <div>
-                {cart?.length > 0 && cart.map((product, i) => <ItemContent key={i} item={product} />)}
+                {cart?.length > 0 && cart?.map((product, i) => <ItemContent key={i} item={product} />)}
             </div>
 
             <div className='border-t-2 border-slate-300 py-4 flex sm:flex-row flex-col sm:px-0 px-2 sm:justify-between gap-4'>
@@ -58,7 +58,7 @@ const Cart = () => {
                 <div className='flex text-sm gap-1 flex-col'>
                     <div className='flex justify-between w-full md:text-lg text-sm font-semibold'>
                         <span>Subtotal</span>
-                        <span>{currencyFormatter(cartCopy.totalPrice)}</span>
+                        <span>{currencyFormatter(cartCopy?.totalPrice)}</span>
                     </div>
                     <p className='text-slate-500'>
                         Taxes and shipping calculated at checkout

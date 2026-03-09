@@ -13,7 +13,7 @@ const PrivateRoute = ({ publicPage = false, adminOnly = false }) => {
 
     if (adminOnly && !isAdmin && !isSeller) return <Navigate to='/' />
 
-    if (isSeller && !isAdmin) return sellerAlowedPaths.some(path => (
+    if (adminOnly && isSeller && !isAdmin) return sellerAlowedPaths.some(path => (
         location.pathname.startsWith(path)
     ))
         ? <Outlet />

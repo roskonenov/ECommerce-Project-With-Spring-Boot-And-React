@@ -15,8 +15,6 @@ const ImageUploadForm = ({ setOpen, product }) => {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        console.log(file.type);
-
 
         if (!file) {
             return;
@@ -61,8 +59,6 @@ const ImageUploadForm = ({ setOpen, product }) => {
         <div className='relative h-full py-4'>
             <form onSubmit={handleImageUpload}>
                 <div className='flex flex-col gap-4 w-full'>
-
-
 
                     <label
                         className='mx-auto my-4 w-4/5 flex flex-wrap justify-center items-center gap-2 font-semibold text-gray-600 border-2 border-dashed border-custom-blue p-2 rounded-md cursor-pointer'

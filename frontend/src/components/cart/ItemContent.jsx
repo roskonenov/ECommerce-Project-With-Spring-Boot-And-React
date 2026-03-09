@@ -4,7 +4,7 @@ import { HiOutlineTrash } from "react-icons/hi";
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { decreaseCartItemQuantity, increaseCartItemQuantity, removeFromCart } from '../../store/actions';
-import { currencyFormatter } from '../../utils/CurrencyFormatter';
+import { currencyFormatter } from '../../utils/currencyFormatter';
 import truncateText from '../../utils/truncateText';
 
 
@@ -37,7 +37,7 @@ const ItemContent = ({ item }) => {
 
                 <div className='flex md:flex-row flex-col lg:gap-4 sm:gap-3 gap-0 items-start'>
                     <h3 className='lg:text-lg text-sm font-semibold text-slate-600'>
-                        {truncateText(item.name)}
+                        {truncateText(item.name, 25)}
                     </h3>
                 </div>
 
@@ -66,7 +66,7 @@ const ItemContent = ({ item }) => {
 
             <div className='justify-self-center'>
                 <SetQuantity
-                    quantity={item.quantity}
+                    quantity={item.cartQuantity}
                     cartQuantity={currentQuantity}
                     cardCounter={true}
                     handleQtyIncrease={() => handleQtyIncrease(item)}
@@ -75,7 +75,7 @@ const ItemContent = ({ item }) => {
             </div>
 
             <div className='justify-self-center lg:text-lg text-sm text-slate-600 font-semibold'>
-                {currencyFormatter(item.specialPrice * item.cartQuantity)}
+                {currencyFormatter(item.specialPrice * currentQuantity)}
             </div>
         </div>
     )
