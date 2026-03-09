@@ -58,6 +58,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartDTO addAllProductsToCart(List<CartItemDTO> cartItems) {
         Cart cart = getLoggedUsersCart();
+        cart.setTotalPrice(0.0);
 
         cartItemRepository.deleteCartItemByCartId(cart.getId());
         cartItems
