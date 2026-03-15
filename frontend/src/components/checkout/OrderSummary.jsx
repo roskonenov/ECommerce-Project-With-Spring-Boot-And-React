@@ -62,7 +62,7 @@ const OrderSummary = () => {
                                         <div className='text-gray-700'>
                                             <p>{item.name}</p>
                                             <p>
-                                                {item?.quantity} x €{amountFormatter(1, item?.specialPrice)} = €{amountFormatter(item?.quantity, item?.specialPrice)}
+                                                {item?.cartQuantity} x €{amountFormatter(1, item?.specialPrice)} = €{amountFormatter(item?.cartQuantity, item?.specialPrice)}
                                             </p>
                                         </div>
                                     </div>

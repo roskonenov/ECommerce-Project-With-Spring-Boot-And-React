@@ -1,34 +1,26 @@
-import React, { useState, useEffect } from 'react'
 import SetQuantity from './SetQuantity';
 import { HiOutlineTrash } from "react-icons/hi";
 import { useDispatch } from 'react-redux';
-import toast from 'react-hot-toast';
 import { decreaseCartItemQuantity, increaseCartItemQuantity, removeFromCart } from '../../store/actions';
 import { currencyFormatter } from '../../utils/currencyFormatter';
 import truncateText from '../../utils/truncateText';
 
 
 const ItemContent = ({ item }) => {
-    const [currentQuantity, setCurrentQuantity] = useState(item.cartQuantity);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        setCurrentQuantity(item.cartQuantity);
-    }, [item.cartQuantity, item.id]);
-
-    const handleQtyIncrease = (cartItem) => {
-        dispatch(increaseCartItemQuantity(cartItem, toast, currentQuantity, setCurrentQuantity));
+    const handleQtyIncrease = () => {
+        dispatch(increaseCartItemQuantity(item));
     }
 
-    const handleQtyDecrease = (cartItem) => {
-        const newQuantity = cartItem.cartQuantity - 1;
+    const handleQtyDecrease = () => {
+        const newQuantity = item.cartQuantity - 1;
         if (newQuantity <= 0) return;
-        setCurrentQuantity(newQuantity);
-        dispatch(decreaseCartItemQuantity(cartItem, newQuantity))
+        dispatch(decreaseCartItemQuantity(item, newQuantity))
     }
 
-    const removeItemFromCart = (item) => {
-        dispatch(removeFromCart(item, toast));
+    const removeItemFromCart = () => {
+        dispatch(removeFromCart(item));
     }
 
     return (
@@ -50,7 +42,7 @@ const ItemContent = ({ item }) => {
 
                 <div>
                     <button
-                        onClick={() => removeItemFromCart(item)}
+                        onClick={removeItemFromCart}
                         className='flex items-center font-semibold space-x-2 px-3 py-1 text-xs border border-rose-600 text-rose-600 rounded-md hover:bg-red-100 transition-colors duration-200 cursor-pointer'
                     >
                         <HiOutlineTrash size={16} className='text-rose-600' />
@@ -66,16 +58,16 @@ const ItemContent = ({ item }) => {
 
             <div className='justify-self-center'>
                 <SetQuantity
-                    quantity={item.cartQuantity}
-                    cartQuantity={currentQuantity}
+                    quantity={item.quantity}
+                    cartQuantity={item.cartQuantity}
                     cardCounter={true}
-                    handleQtyIncrease={() => handleQtyIncrease(item)}
-                    handleQtyDecrease={() => handleQtyDecrease(item)}
+                    handleQtyIncrease={handleQtyIncrease}
+                    handleQtyDecrease={handleQtyDecrease}
                 />
             </div>
 
             <div className='justify-self-center lg:text-lg text-sm text-slate-600 font-semibold'>
-                {currencyFormatter(item.specialPrice * currentQuantity)}
+                {currencyFormatter(item.specialPrice * item.cartQuantity)}
             </div>
         </div>
     )

@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import api from "../../api/api";
+import getCartSignature from "../../utils/getCartSignature";
 
 const CACHE_TTL = 60 * 10000 // 10 minutes
 
@@ -99,7 +100,7 @@ export const addToCart = (data, toast, qty = 1) =>
         }
     };
 
-export const increaseCartItemQuantity = (data, toast, currentQuantity, setCurrentQuantity) =>
+export const increaseCartItemQuantity = (data) =>
     (dispatch, getState) => {
 
         const { cart } = getState().carts;
@@ -107,11 +108,10 @@ export const increaseCartItemQuantity = (data, toast, currentQuantity, setCurren
             item => item.id === data.id
         );
 
-        const newQuantity = currentQuantity + 1;
+        const newQuantity = getProduct.cartQuantity + 1;
         const isQuantityExist = getProduct.quantity >= newQuantity;
 
         if (isQuantityExist) {
-            setCurrentQuantity(newQuantity);
 
             dispatch({
                 type: 'ADD_CART',
@@ -133,7 +133,7 @@ export const decreaseCartItemQuantity = (data, newQuantity) =>
         localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
     }
 
-export const removeFromCart = (data, toast) => (dispatch, getState) => {
+export const removeFromCart = (data) => (dispatch, getState) => {
     dispatch({
         type: 'REMOVE_CART',
         payload: data
@@ -287,6 +287,8 @@ export const createUsersCart = (cartItemsData) => async (dispatch, getState) => 
         });
         dispatch({ type: 'IS_SUCCESS' });
         localStorage.setItem('cartItems', JSON.stringify(getState().carts.cart));
+        localStorage.setItem('cartSignature', getCartSignature(getState().carts.cart));
+
 
     } catch (error) {
         console.log(error);
@@ -653,16 +655,16 @@ export const changeRoleToUser = (userId, param, act) => async (dispatch) => {
 
 export const registerUserFromAdminDashboard = (loginData, reset, setOpen) => async (dispatch) => {
     try {
-        dispatch({type: 'BTN_LOADER'});
+        dispatch({ type: 'BTN_LOADER' });
         const { data } = await api.post('/auth/signup', loginData);
         reset();
         toast.success(data?.message || 'User Registered Successfully!');
         setOpen(false);
-        dispatch({type: 'IS_SUCCESS'});
+        dispatch({ type: 'IS_SUCCESS' });
         dispatch(getDashboardUsers('pageNumber=0'));
 
     } catch (error) {
-        dispatch({type: 'IS_ERROR'});
+        dispatch({ type: 'IS_ERROR' });
         toast.error(error?.response?.data?.message || 'Something went wrong! Try again later :(');
     }
 };

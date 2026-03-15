@@ -15,7 +15,7 @@ export const cartReducer = (state = initialState, action) => {
             if (isProductExistInCart) {
                 const updatedCart = state.cart.map(product => {
                     return product.id === productToAdd.id
-                        ? productToAdd
+                        ? {...product, ...productToAdd}
                         : product
                 });
                 return {
@@ -38,13 +38,23 @@ export const cartReducer = (state = initialState, action) => {
                 )),
             };
 
-        case 'SET_USER_CART_PRODUCTS':
+        case 'SET_USER_CART_PRODUCTS': {
+            const updatedCart = action.payload.map(product => {
+                const existing = state.cart.find(item => item.id === product.id);
+
+                return {
+                    ...product,
+                    cartQuantity: existing?.cartQuantity || 1
+                };
+            });
+
             return {
                 ...state,
-                cart: action.payload,
+                cart: updatedCart,
                 totalPrice: action.totalPrice,
                 cartId: action.cartId
             };
+        }
 
         case 'CLEAR_CART':
             return initialState;

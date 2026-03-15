@@ -1,26 +1,28 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
-import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { createUsersCart, setPaymentMethod } from '../../store/actions';
+import { useEffect } from 'react';
+import getCartSignature from '../../utils/getCartSignature';
 
 const PaymentMethod = () => {
     const dispatch = useDispatch();
     const { paymentMethod } = useSelector(state => state.payment);
-    const { cart, cartId } = useSelector(state => state.carts);
-    const { errorMessage } = useSelector(state => state.errors);
-    
+    const { cart } = useSelector(state => state.carts);
+
+    const cartUpdate = getCartSignature(cart) !== localStorage.getItem('cartSignature');
+
     useEffect(() => {
-        if (cart.length > 0 && !cartId && !errorMessage) {
-            
-            const sentCartItems = cart.map(item => {
-                return {
-                    productId: item.id,
-                    quantity: item.cartQuantity
-                };
-            });
+        if (cart.length === 0) return;
+
+        const sentCartItems = cart.map(item => ({
+            productId: item.id,
+            quantity: item.cartQuantity
+        }));
+
+        if (cartUpdate) {
             dispatch(createUsersCart(sentCartItems));
         }
-    }, [dispatch, cart, cartId, errorMessage]);
+    }, [dispatch, cartUpdate, cart]);
 
     const changePaymentMethodHandler = (method) => {
         dispatch(setPaymentMethod(method));
