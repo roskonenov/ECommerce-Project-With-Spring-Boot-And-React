@@ -28,6 +28,8 @@ public class CartItem {
 
     private Integer quantity;
 
+    private Integer cartQuantity;
+
     private Double discount;
 
     private Double productPrice;

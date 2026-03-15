@@ -63,6 +63,7 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.deleteCartItemByCartId(cart.getId());
         cartItems
                 .forEach(item -> {
+                    System.out.println("The item is " + item.toString());
                     Product product = getValidProduct(item.getProductId(), item.getQuantity());
                     validateCartItem(product.getId(), cart);
                     CartItem cartItem = saveNewCartItem(item.getQuantity(), cart, product);
@@ -71,7 +72,7 @@ public class CartServiceImpl implements CartService {
 //                    product.setQuantity(product.getQuantity() - item.getQuantity());
 
                     cart.getCartItems().add(cartItem);
-                    cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProductPrice() * item.getQuantity()));
+                    cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProductPrice() * cartItem.getCartQuantity()));
                 });
         return mapCartToDTO(cartRepository.save(cart));
     }
@@ -181,7 +182,8 @@ public class CartServiceImpl implements CartService {
                 .save(new CartItem()
                         .setCart(cart)
                         .setProduct(product)
-                        .setQuantity(quantity)
+                        .setCartQuantity(quantity)
+                        .setQuantity(product.getQuantity())
                         .setDiscount(product.getDiscount())
                         .setProductPrice(product.getSpecialPrice()));
     }
@@ -198,8 +200,7 @@ public class CartServiceImpl implements CartService {
                 .setProducts(cart
                         .getCartItems()
                         .stream()
-                        .map(item -> modelMapper.map(item.getProduct(), ProductDTO.class)
-                                .setQuantity(item.getQuantity()))
+                        .map(item -> modelMapper.map(item.getProduct(), ProductDTO.class))
                         .toList());
     }
 }
