@@ -171,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
         cart.getCartItems()
                 .forEach(item -> {
                     productRepository.save(item.getProduct()
-                            .setQuantity(item.getProduct().getQuantity() - item.getQuantity()));
+                            .setQuantity(item.getProduct().getQuantity() - item.getCartQuantity()));
                 });
     }
 }
