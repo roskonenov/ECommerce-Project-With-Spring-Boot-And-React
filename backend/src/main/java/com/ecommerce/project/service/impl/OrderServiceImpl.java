@@ -117,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
                         .map(cartItem ->
                                 new OrderItem()
                                         .setProduct(cartItem.getProduct())
-                                        .setQuantity(cartItem.getQuantity())
+                                        .setQuantity(cartItem.getCartQuantity())
                                         .setDiscount(cartItem.getDiscount())
                                         .setOrderedProductPrice(cartItem.getProductPrice())
                                         .setOrder(savedOrder))
