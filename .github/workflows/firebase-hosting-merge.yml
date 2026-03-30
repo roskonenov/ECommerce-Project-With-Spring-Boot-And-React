@@ -23,3 +23,4 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SB_ECOM_489613 }}
           projectId: sb-ecom-489613
+          entryPoint: ./frontend

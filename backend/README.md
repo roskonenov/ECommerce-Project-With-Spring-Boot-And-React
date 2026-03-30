@@ -2,22 +2,6 @@
 
 A full-featured RESTful e-commerce backend application built with Spring Boot 3.5.6, demonstrating modern enterprise Java development practices and clean architecture principles.
 
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-- [API Documentation](#api-documentation)
-- [Security](#security)
-- [Database Schema](#database-schema)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## 🎯 Overview
 
 This project is a comprehensive e-commerce backend solution that provides REST APIs for managing products, categories, shopping carts, orders, user authentication, and address management. Built with industry-standard practices, it showcases proficiency in Spring ecosystem, security implementation, and scalable application design.
