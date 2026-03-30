@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: ./frontend
-      - run: npm ci && npm run build
-        working-directory: ./frontend
+      - name: setup and deploy
+        working directory: ./frontend
+        run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SB_ECOM_489613 }}
           projectId: sb-ecom-489613
+          entryPoint: ./frontend
